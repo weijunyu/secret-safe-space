@@ -1,14 +1,18 @@
 import * as functions from "firebase-functions";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-export const helloWorld = functions
+import { firestore } from "./lib/firebase";
+
+export const checkSecretPath = functions
   .region("asia-southeast2")
-  .https.onCall((request, response) => {
-    functions.logger.info(request.body);
-    functions.logger.info("Hello logs!", { structuredData: true });
-    return {
-      message: "hello there!",
-    };
+  .https.onCall((path: string, context) => {
+    return true;
+  });
+
+export const reserveSecretPath = functions
+  .region("asia-southeast2")
+  .https.onCall(async (path: string, context) => {
+    const addResult = await firestore.collection("testcollection").add({
+      message: path,
+    });
+    return addResult;
   });

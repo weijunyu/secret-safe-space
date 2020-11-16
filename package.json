@@ -1,0 +1,13 @@
+{
+  "name": "shhh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:client": "pushd client && npm run start",
+    "deploy:functions": "firebase deploy --only functions"
+  },
+  "author": "",
+  "license": "ISC"
+}
