@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "./styles/normalize.css";
-import "./styles/main.css";
 
 import App from "./App";
 

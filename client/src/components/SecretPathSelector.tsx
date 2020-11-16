@@ -8,25 +8,31 @@ export default function SecretPathSelector() {
   const [secretPathAvailable, setSecretPathAvailable] = useState<boolean>(
     false
   );
+  const [secretPathReserved, setSecretPathReserved] = useState(false);
 
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSecretPath(e.target.value);
+    const newPath = e.target.value;
+
+    setSecretPath(newPath);
 
     setCheckingSecretPath(true);
-    checkPathAvailability(e.target.value)
-      .then((availability) => {
-        setSecretPathAvailable(availability);
-      })
-      .finally(() => {
-        setCheckingSecretPath(false);
-      });
+    if (newPath) {
+      checkPathAvailability(newPath)
+        .then((availability) => {
+          setSecretPathAvailable(availability);
+        })
+        .finally(() => {
+          setCheckingSecretPath(false);
+        });
+    }
   }
 
   function onSelectPath(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("Submitting path: " + secretPath);
     reserveSecretPath(secretPath).then((res) => {
-      console.log(res);
+      if (res.data?.success) {
+        setSecretPathReserved(true);
+      }
     });
   }
 
@@ -50,7 +56,12 @@ export default function SecretPathSelector() {
           </small>
         </p>
         <button type="submit">Use this path</button>
+        {secretPathReserved && <SecretsEditor />}
       </form>
     </div>
   );
+}
+
+function SecretsEditor() {
+  return <div>Secrets editor!</div>;
 }
