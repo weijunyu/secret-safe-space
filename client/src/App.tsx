@@ -7,12 +7,13 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import { Light, Accent, Dark } from "./lib/colors";
 
 import SecretPathSelector from "./components/SecretPathSelector";
+import SecretPathViewer from "./components/SecretPathViewer";
 
 const StyledApp = styled.div`
   min-height: 100vh;
   padding: 0 15vw;
   @media screen and (max-width: 768px) {
-    padding: 0;
+    padding: 0 1rem;
   }
   background-color: ${Light};
   font-family: nunito sans, sans-serif;
@@ -25,6 +26,7 @@ const StyledHeader = styled.header`
 
 const StyledLink = styled(Link)`
   padding: 3px 4px;
+  text-decoration: none;
   :link,
   :visited {
     color: ${Dark};
@@ -54,11 +56,13 @@ function App() {
     <BrowserRouter>
       <StyledApp>
         <StyledHeader>
-          <h1 style={{ textAlign: "center" }}>Secrits!</h1>
+          <h1 style={{ textAlign: "center" }}>
+            <StyledLink to="/">Secrits!</StyledLink>
+          </h1>
           <StyledNav>
             <ul>
               <li>
-                <StyledLink to="/">Home</StyledLink>
+                <StyledLink to="/">Help</StyledLink>
               </li>
               <li>
                 <StyledLink to="/add">Add secrets</StyledLink>
@@ -76,8 +80,12 @@ function App() {
                 <Route path="/add">
                   <SecretPathSelector />
                 </Route>
-                <Route path="/view">view secrets</Route>
-                <Route path="/">nothing</Route>
+                <Route path="/view">
+                  <SecretPathViewer />
+                </Route>
+                <Route path="/">
+                  <h2>How it works</h2>
+                </Route>
               </Switch>
             </section>
           </div>

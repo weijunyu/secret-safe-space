@@ -1,8 +1,9 @@
 import * as functions from "firebase-functions";
 
 import { SECRET_PATH_COLLECTION } from "./lib/constants";
-
 import { firebaseAdmin, firestore } from "./lib/firebase";
+
+import apiApp from "./api";
 
 // todo: change functions to https requests to circumvent blocking of POST/PUTs etc...
 export const checkSecretPath = functions.region("asia-southeast2").https.onCall(
@@ -42,3 +43,5 @@ export const reserveSecretPath = functions
       success: true,
     };
   });
+
+export const api = functions.region("asia-southeast2").https.onRequest(apiApp);

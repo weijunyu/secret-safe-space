@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 
+import FormField from "./common/FormField";
+import { AccentButton } from "./common/Button";
+
+import SecretsEditor from "./SecretsEditor";
+
 import { checkPathAvailability, reserveSecretPath } from "../lib";
 
 export default function SecretPathSelector() {
@@ -27,7 +32,7 @@ export default function SecretPathSelector() {
     }
   }
 
-  function onSelectPath(e: React.FormEvent<HTMLFormElement>) {
+  function onSelectSecretPath(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     reserveSecretPath(secretPath).then((res) => {
       if (res.data?.success) {
@@ -38,30 +43,26 @@ export default function SecretPathSelector() {
 
   return (
     <div>
-      <form onSubmit={onSelectPath}>
-        <label htmlFor="secret-path-selector">
-          Enter URL path for your secret
-        </label>
-        <input
-          id="secret-path-selector"
-          type="text"
-          value={secretPath}
-          onChange={onSecretPathChange}
-        ></input>
-        <p>
-          <small>
-            {checkingSecretPath
-              ? "please wait..."
-              : `Path available: ${secretPathAvailable}`}
-          </small>
-        </p>
-        <button type="submit">Use this path</button>
+      <form onSubmit={onSelectSecretPath}>
+        <FormField>
+          <label htmlFor="secret-path">Enter URL path for your secret</label>
+          <input
+            id="secret-path"
+            type="text"
+            value={secretPath}
+            onChange={onSecretPathChange}
+          ></input>
+          <p>
+            <small>
+              {checkingSecretPath
+                ? "please wait..."
+                : `Path available: ${secretPathAvailable}`}
+            </small>
+          </p>
+        </FormField>
+        <AccentButton type="submit">Use this path</AccentButton>
         {secretPathReserved && <SecretsEditor />}
       </form>
     </div>
   );
-}
-
-function SecretsEditor() {
-  return <div>Secrets editor!</div>;
 }
