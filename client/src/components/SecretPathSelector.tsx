@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { firebaseFunctions } from "../firebase";
 export default function SecretPathSelector() {
   const [secretPath, setSecretPath] = useState("");
+  useEffect(() => {
+    const testFunction = firebaseFunctions.httpsCallable("helloWorld");
+    testFunction({ message: "hello!" }).then((response) =>
+      console.log(response)
+    );
+  }, []);
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSecretPath(e.target.value);
   }
