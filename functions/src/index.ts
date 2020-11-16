@@ -4,6 +4,7 @@ import { SECRET_PATH_COLLECTION } from "./lib/constants";
 
 import { firebaseAdmin, firestore } from "./lib/firebase";
 
+// todo: change functions to https requests to circumvent blocking of POST/PUTs etc...
 export const checkSecretPath = functions.region("asia-southeast2").https.onCall(
   async (path: string, context): Promise<boolean> => {
     if (!path) return false;
