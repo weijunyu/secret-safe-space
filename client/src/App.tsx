@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Link, NavLink } from "react-router-dom";
 
 import { Light, Accent, Dark } from "./lib/colors";
 
@@ -27,7 +27,7 @@ const StyledHeader = styled.header`
   padding: 1.5rem 0;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NavLink)`
   padding: 3px 4px;
   text-decoration: none;
   :link,
@@ -36,7 +36,8 @@ const StyledLink = styled(Link)`
   }
   :hover,
   :link:hover,
-  :visited:hover {
+  :visited:hover,
+  &.active {
     color: white;
     background-color: ${Accent};
   }
@@ -60,12 +61,16 @@ function App() {
       <StyledApp>
         <StyledHeader>
           <h1 style={{ textAlign: "center" }}>
-            <StyledLink to="/">Secrits!</StyledLink>
+            <StyledLink exact to="/">
+              Secrits!
+            </StyledLink>
           </h1>
           <StyledNav>
             <ul>
               <li>
-                <StyledLink to="/">Help</StyledLink>
+                <StyledLink exact to="/">
+                  Help
+                </StyledLink>
               </li>
               <li>
                 <StyledLink to="/add">Add secrets</StyledLink>
@@ -86,7 +91,7 @@ function App() {
                 <Route path="/view">
                   <SecretPathViewer />
                 </Route>
-                <Route path="/">
+                <Route exact path="/">
                   <h2>How it works</h2>
                 </Route>
               </Switch>
