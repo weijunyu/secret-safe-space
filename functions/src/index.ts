@@ -41,6 +41,7 @@ export const reserveSecretPath = functions
       });
     return {
       success: true,
+      secretPath: path,
     };
   });
 

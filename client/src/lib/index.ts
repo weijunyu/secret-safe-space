@@ -1,20 +1,22 @@
 import axios from "axios";
-import { firebaseFunctions } from "../firebase";
 
 const httpClient = axios.create({
   baseURL: "https://asia-southeast2-shh-xyz.cloudfunctions.net/api",
 });
 
 export async function checkPathAvailability(path: string): Promise<boolean> {
-  const checkSecretPath = firebaseFunctions.httpsCallable("checkSecretPath");
-  const availability = await checkSecretPath(path);
-  return availability.data;
+  return httpClient("/secret-path/availability", { params: { path } }).then(
+    (res) => res.data
+  );
 }
 
 export async function reserveSecretPath(path: string): Promise<any> {
-  const reservePath = firebaseFunctions.httpsCallable("reserveSecretPath");
-  const reserveResults = await reservePath(path);
-  return reserveResults;
+  return httpClient("/secret-path", {
+    method: "POST",
+    data: {
+      path,
+    },
+  }).then((res) => res.data);
 }
 
 export async function getSecretPath(path: string): Promise<any> {
