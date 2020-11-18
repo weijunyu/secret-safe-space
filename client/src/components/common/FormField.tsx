@@ -8,11 +8,18 @@ const StyledFormField = styled.div`
     display: block;
     padding-bottom: 0.5rem;
   }
-  input {
+  input,
+  textarea {
     width: 100%;
   }
 `;
 
-export default function FormField({ children }: { children: React.ReactNode }) {
-  return <StyledFormField>{children}</StyledFormField>;
+export default function FormField({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+  props?: any;
+}) {
+  return <StyledFormField {...props}>{children}</StyledFormField>;
 }

@@ -24,3 +24,16 @@ export async function getSecretPath(path: string): Promise<any> {
     (res) => res.data
   );
 }
+
+export async function setSecretAtPath({
+  secret,
+  path,
+}: {
+  secret: string;
+  path: string;
+}): Promise<any> {
+  return httpClient("/secret", {
+    method: "post",
+    data: { secret, path },
+  }).then((res) => res.data);
+}

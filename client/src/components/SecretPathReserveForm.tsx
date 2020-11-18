@@ -7,15 +7,16 @@ import { checkPathAvailability } from "../lib";
 
 export default function SecretPathReserveForm({
   onSubmit,
+  active,
 }: {
   onSubmit: (secretPath: string) => void;
+  active: boolean;
 }) {
   const [secretPath, setSecretPath] = useState<string>("");
   const [checkingSecretPath, setCheckingSecretPath] = useState<boolean>(false);
   const [secretPathAvailable, setSecretPathAvailable] = useState<boolean>(
     false
   );
-
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPath = e.target.value;
     setSecretPath(newPath);
@@ -52,6 +53,7 @@ export default function SecretPathReserveForm({
           type="text"
           value={secretPath}
           onChange={onSecretPathChange}
+          disabled={!active}
         ></input>
       </FormField>
       <AccentButton type="submit">Use this path</AccentButton>

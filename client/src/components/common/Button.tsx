@@ -1,6 +1,12 @@
 import styled from "styled-components";
 
-import { Accent, AccentLight, Primary, PrimaryLight } from "../../lib/colors";
+import {
+  Accent,
+  AccentLight,
+  AccentAlt,
+  Primary,
+  PrimaryLight,
+} from "../../lib/colors";
 
 export const Button = styled.button`
   padding: 4px 6px;
@@ -24,4 +30,8 @@ export const AccentButton = styled(Button)`
   :hover {
     background-color: ${AccentLight};
   }
+`;
+
+export const AccentAltButton = styled(Button)`
+  background-color: ${AccentAlt};
 `;

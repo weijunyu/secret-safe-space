@@ -18,6 +18,9 @@ const StyledApp = styled.div`
   background-color: ${Light};
   font-family: nunito sans, sans-serif;
   color: ${Dark};
+  code {
+    font-family: monospace;
+  }
 `;
 
 const StyledHeader = styled.header`
