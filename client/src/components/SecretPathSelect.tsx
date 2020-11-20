@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AES } from "crypto-js";
 
 import SecretsEditor from "./SecretsEditor";
 
@@ -21,8 +22,11 @@ export default function SecretPathSelect() {
     });
   }
 
-  async function onSubmitSecret(secret: string) {
-    await setSecretAtPath({ path: secretPathFinal, secret });
+  async function onSubmitSecret(secret: string, passphrase: string) {
+    // 1. encrypt secret with passphrase
+    const ciphertext = AES.encrypt(secret, passphrase).toString();
+    // 2. set secret ciphertext at path
+    await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
     setHasSetSecret(true);
   }
 
