@@ -15,6 +15,8 @@ const app = express();
 app.use(cors());
 app.use(pino);
 
+app.get("/", (req, res) => res.send("OK"));
+
 app.get("/secret-path/availability", checkSecretAvailability);
 
 app.get("/secret-path", getSecretAtPath);
