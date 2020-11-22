@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { AES, enc } from "crypto-js";
 
@@ -7,15 +8,15 @@ import { AccentButton } from "./common/Button";
 
 import { getSecretEncrypted } from "../lib";
 
+type SecretPathViewerParams = {
+  secretPath: string;
+};
+
 export default function SecretPathViewer() {
-  const [secretPath, setSecretPath] = useState<string>("");
+  const { secretPath } = useParams<SecretPathViewerParams>();
   const [secretPassword, setSecretPassword] = useState("");
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
 
-  function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newPath = e.target.value;
-    setSecretPath(newPath);
-  }
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPassword = e.target.value;
     setSecretPassword(newPassword);
@@ -47,16 +48,8 @@ export default function SecretPathViewer() {
 
   return (
     <div>
+      <p>Your secret path: {secretPath}</p>
       <form onSubmit={getSecretsAtPath}>
-        <FormField>
-          <label htmlFor="secret-path">Enter URL path for your secret</label>
-          <input
-            id="secret-path"
-            type="text"
-            value={secretPath}
-            onChange={onSecretPathChange}
-          ></input>
-        </FormField>
         <FormField>
           <label htmlFor="secret-password">
             Enter the passphrase you received when you created this secret

@@ -75,9 +75,6 @@ function App() {
               <li>
                 <StyledLink to="/add">Add secrets</StyledLink>
               </li>
-              <li>
-                <StyledLink to="/view">View secrets</StyledLink>
-              </li>
             </ul>
           </StyledNav>
         </StyledHeader>
@@ -88,7 +85,7 @@ function App() {
                 <Route path="/add">
                   <SecretPathSelect />
                 </Route>
-                <Route path="/view">
+                <Route path="/view/:secretPath">
                   <SecretPathViewer />
                 </Route>
                 <Route exact path="/">
