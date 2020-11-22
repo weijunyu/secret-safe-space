@@ -7,6 +7,7 @@ import {
   reserveSecretPath,
   setSecretAtPath,
 } from "./controllers";
+import { healthCheckRoute } from "./controllers/health";
 
 import * as Pino from "pino-http";
 const pino = Pino();
@@ -15,17 +16,17 @@ const app = express();
 app.use(cors());
 app.use(pino);
 
-app.get("/", (req, res) => res.send("OK"));
+app.get("/", healthCheckRoute);
 
 app.get("/secret-path/availability", checkSecretAvailability);
-
-app.get("/secret-path", getSecretAtPath);
 
 app.post("/secret-path", reserveSecretPath);
 app.get("/secret-path/reserve", reserveSecretPath);
 
 app.get("/secret/set", setSecretAtPath);
 app.post("/secret", setSecretAtPath);
+
+app.get("/secret", getSecretAtPath);
 
 const requestErrorHandler: express.ErrorRequestHandler = (
   err,

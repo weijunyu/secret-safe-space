@@ -52,6 +52,7 @@ export default function SecretsEditor({
             id="secret-text-input"
             onChange={onSecretInputChange}
             disabled={!active}
+            rows={20}
           ></SecretInputTextarea>
         </FormField>
         <FormField>

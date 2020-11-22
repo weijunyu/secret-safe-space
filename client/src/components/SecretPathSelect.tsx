@@ -11,6 +11,7 @@ export default function SecretPathSelect() {
   const [secretPathReserved, setSecretPathReserved] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
   const [hasSetSecret, setHasSetSecret] = useState(false);
+  const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
 
   function onSelectSecretPath(secretPath: string) {
     reserveSecretPath(secretPath).then((data) => {
@@ -27,6 +28,7 @@ export default function SecretPathSelect() {
     const ciphertext = AES.encrypt(secret, passphrase).toString();
     // 2. set secret ciphertext at path
     await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
+    setSecretPassphraseFinal(passphrase);
     setHasSetSecret(true);
   }
 
@@ -44,8 +46,7 @@ export default function SecretPathSelect() {
       />
 
       <div>
-        <p>You have set your secret! Here's your passphrase: </p>
-        <code>something</code>
+  Secret set. You can access it at <code>/{secretPathFinal}</code>, with your passphrase: <code>{secretPassphraseFinal}</code>
       </div>
     </div>
   );
