@@ -15,21 +15,49 @@ type SecretPathViewerParams = {
 export default function SecretPathViewer() {
   const { secretPath } = useParams<SecretPathViewerParams>();
 
-  const [secretPassword, setSecretPassword] = useState("");
-  const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>(null);
-  const [decryptedSecrets, setDecryptedSecrets] = useState("");
+  const [loadingEncryptedSecrets, setLoadingEncryptedSecrets] = useState(false);
+  const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
 
   useEffect(() => {
-    getSecretEncrypted(secretPath).then((ciphertext) =>
-      setEncryptedSecrets(ciphertext)
-    );
+    setLoadingEncryptedSecrets(true);
+    getSecretEncrypted(secretPath)
+      .then((ciphertext) => {
+        if (!ciphertext) {
+          setEncryptedSecrets(null);
+        } else {
+          setEncryptedSecrets(ciphertext);
+        }
+      })
+      .finally(() => setLoadingEncryptedSecrets(false));
   }, [secretPath]);
 
+  return (
+    <div>
+      <p>Your secret path: {secretPath}</p>
+      {loadingEncryptedSecrets ? (
+        <span>Loading...</span>
+      ) : (
+        <>
+          {encryptedSecrets === null && (
+            <p>This path doesn't contain any data!</p>
+          )}
+          {encryptedSecrets && <p>Your encrypted secret: {encryptedSecrets}</p>}
+          {encryptedSecrets && (
+            <SecretPathDecryptForm secretPath={secretPath} />
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function SecretPathDecryptForm({ secretPath }: { secretPath: string }) {
+  const [secretPassword, setSecretPassword] = useState("");
+  const [decryptedSecrets, setDecryptedSecrets] = useState("");
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPassword = e.target.value;
     setSecretPassword(newPassword);
   }
-
   async function getSecretsAtPath(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -41,7 +69,6 @@ export default function SecretPathViewer() {
       setDecryptedSecrets(decryptedSecrets);
     }
   }
-
   async function getDecryptedSecrets(secretPath: string, passphrase: string) {
     try {
       const encryptedSecret = await getSecretEncrypted(secretPath);
@@ -53,11 +80,8 @@ export default function SecretPathViewer() {
       return "";
     }
   }
-
   return (
     <div>
-      <p>Your secret path: {secretPath}</p>
-      {encryptedSecrets && <p>Your encrypted secret: {encryptedSecrets}</p>}
       <form onSubmit={getSecretsAtPath}>
         <FormField>
           <label htmlFor="secret-password">
@@ -72,7 +96,6 @@ export default function SecretPathViewer() {
         </FormField>
         <AccentButton type="submit">Go</AccentButton>
       </form>
-
       <section>Your decrypted secrets: {decryptedSecrets}</section>
     </div>
   );

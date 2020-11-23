@@ -27,8 +27,11 @@ export const getSecretAtPath: express.RequestHandler = async (req, res) => {
       .collection(SECRET_PATH_COLLECTION)
       .doc(secretPath)
       .get();
-    const secretDocData = secretDoc.data() as SecretDocument;
-    return res.send(secretDocData.secret);
+    if (secretDoc.exists) {
+      const secretDocData = secretDoc.data() as SecretDocument;
+      return res.send(secretDocData.secret);
+    }
+    return res.send(null);
   } else {
     return res.send(null);
   }
