@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import { AES, enc } from "crypto-js";
 
@@ -73,15 +74,19 @@ function SecretPathDecryptForm({ secretPath }: { secretPath: string }) {
     try {
       const encryptedSecret = await getSecretEncrypted(secretPath);
       const decryptedBytes = AES.decrypt(encryptedSecret, passphrase);
+      if (decryptedBytes.sigBytes < 0) {
+        throw new Error("Decryption failed.");
+      }
       const decryptedSecret = decryptedBytes.toString(enc.Utf8);
       return decryptedSecret;
     } catch (err) {
-      console.error(err);
+      toast.error(err.message);
       return "";
     }
   }
   return (
     <div>
+      <ToastContainer />
       <form onSubmit={getSecretsAtPath}>
         <FormField>
           <label htmlFor="secret-password">
