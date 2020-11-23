@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { AES, enc } from "crypto-js";
@@ -14,8 +14,16 @@ type SecretPathViewerParams = {
 
 export default function SecretPathViewer() {
   const { secretPath } = useParams<SecretPathViewerParams>();
+
   const [secretPassword, setSecretPassword] = useState("");
+  const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>(null);
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
+
+  useEffect(() => {
+    getSecretEncrypted(secretPath).then((ciphertext) =>
+      setEncryptedSecrets(ciphertext)
+    );
+  }, [secretPath]);
 
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPassword = e.target.value;
@@ -49,6 +57,7 @@ export default function SecretPathViewer() {
   return (
     <div>
       <p>Your secret path: {secretPath}</p>
+      {encryptedSecrets && <p>Your encrypted secret: {encryptedSecrets}</p>}
       <form onSubmit={getSecretsAtPath}>
         <FormField>
           <label htmlFor="secret-password">
