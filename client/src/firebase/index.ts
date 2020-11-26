@@ -11,16 +11,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFvEUThHw8DvbOHCFXO5AiAGDrRn9HSHQ",
-  authDomain: "shh-xyz.firebaseapp.com",
-  databaseURL: "https://shh-xyz.firebaseio.com",
-  projectId: "shh-xyz",
-  storageBucket: "shh-xyz.appspot.com",
-  messagingSenderId: "227655520477",
-  appId: "1:227655520477:web:5739a7f2027e86c15fcb34",
-  measurementId: "G-GFV44QGE0R",
-};
+import { firebaseConfig } from "../config";
 
 // Initialize Firebase
 export const firebaseApp = firebase.initializeApp(firebaseConfig);

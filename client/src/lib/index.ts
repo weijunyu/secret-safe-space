@@ -1,9 +1,9 @@
 import axios from "axios";
 
-import config from "../config";
+import { apiBaseUrl } from "../config";
 
 const httpClient = axios.create({
-  baseURL: config.apiBaseUrl,
+  baseURL: apiBaseUrl,
 });
 
 export async function checkPathAvailability(path: string): Promise<boolean> {

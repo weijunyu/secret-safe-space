@@ -21,3 +21,5 @@ jobs:
           args: deploy --only hosting,functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          REACT_APP_API_BASE_URL: https://asia-southeast2-shh-xyz.cloudfunctions.net/api
+          REACT_APP_FIREBASE_CONFIG: '{"apiKey":"AIzaSyAFvEUThHw8DvbOHCFXO5AiAGDrRn9HSHQ","authDomain":"shh-xyz.firebaseapp.com","databaseURL":"https://shh-xyz.firebaseio.com","projectId":"shh-xyz","storageBucket":"shh-xyz.appspot.com","messagingSenderId":"227655520477","appId":"1:227655520477:web:5739a7f2027e86c15fcb34","measurementId":"G-GFV44QGE0R"}'
