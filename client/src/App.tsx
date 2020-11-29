@@ -43,6 +43,14 @@ const StyledLink = styled(NavLink)`
   }
 `;
 
+const StyledHeaderLink = styled(NavLink)`
+  text-decoration: none;
+  :link,
+  :visited {
+    color: ${Dark};
+  }
+`;
+
 const StyledNav = styled.nav`
   ul {
     display: flex;
@@ -61,9 +69,9 @@ function App() {
       <StyledApp>
         <StyledHeader>
           <h1 style={{ textAlign: "center" }}>
-            <StyledLink exact to="/">
-              Secrits!
-            </StyledLink>
+            <StyledHeaderLink exact to="/">
+              <i className="fas fa-key" /> Secrits!
+            </StyledHeaderLink>
           </h1>
           <StyledNav>
             <ul>

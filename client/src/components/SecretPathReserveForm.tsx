@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import debounce from "lodash/debounce";
 
 import FormField from "./common/FormField";
 import { AccentButton } from "./common/Button";
@@ -17,19 +18,26 @@ export default function SecretPathReserveForm({
   const [secretPathAvailable, setSecretPathAvailable] = useState<boolean>(
     false
   );
-  function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newPath = e.target.value;
-    setSecretPath(newPath);
-
-    if (newPath) {
-      setCheckingSecretPath(true);
-      checkPathAvailability(newPath)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedPathCheck = useCallback(
+    debounce((newPath: string) => {
+      return checkPathAvailability(newPath)
         .then((availability) => {
           setSecretPathAvailable(availability);
         })
         .finally(() => {
           setCheckingSecretPath(false);
         });
+    }, 500),
+    [setCheckingSecretPath, checkPathAvailability, setSecretPathAvailable]
+  );
+  function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newPath = e.target.value;
+    setSecretPath(newPath);
+
+    if (newPath) {
+      setCheckingSecretPath(true);
+      debouncedPathCheck(newPath);
     }
   }
   function onSubmitForm(e: React.FormEvent<HTMLFormElement>) {
@@ -44,7 +52,7 @@ export default function SecretPathReserveForm({
           <small>
             {secretPath &&
               (checkingSecretPath
-                ? "please wait..."
+                ? "checking path availability..."
                 : `Path available: ${secretPathAvailable}`)}
           </small>
         </p>

@@ -8,7 +8,8 @@
     "dev:client": "pushd client && npm run start",
     "build:client": "pushd client && npm run build",
     "deploy:functions": "firebase deploy --only functions",
-    "deploy:client": "npm run build:client && firebase deploy --only hosting"
+    "deploy:client": "npm run build:client && firebase deploy --only hosting",
+    "emulators": "firebase emulators:start"
   },
   "author": "",
   "license": "ISC"
