@@ -4,7 +4,6 @@ import * as cors from "cors";
 import {
   checkSecretAvailability,
   getSecretAtPath,
-  reserveSecretPath,
   setSecretAtPath,
 } from "./controllers";
 import { healthCheckRoute } from "./controllers/health";
@@ -19,9 +18,6 @@ app.use(pino);
 app.get("/", healthCheckRoute);
 
 app.get("/secret-path/availability", checkSecretAvailability);
-
-app.post("/secret-path", reserveSecretPath);
-app.get("/secret-path/reserve", reserveSecretPath);
 
 app.get("/secret/set", setSecretAtPath);
 app.post("/secret", setSecretAtPath);

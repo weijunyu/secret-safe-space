@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AES } from "crypto-js";
+import { Link } from "react-router-dom";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -9,9 +10,9 @@ import CardContent from "@material-ui/core/CardContent";
 
 import SecretsEditor from "./SecretsEditor";
 
-import { reserveSecretPath, setSecretAtPath } from "../lib";
+import { setSecretAtPath } from "../lib";
 
-import SecretPathReserveForm from "./SecretPathReserveForm";
+import SecretPathSelectForm from "./SecretPathSelectForm";
 
 enum SecretPathSelectionAccordions {
   None,
@@ -77,10 +78,10 @@ export default function SecretPathSelect() {
         onChange={onAccordionExpand(SecretPathSelectionAccordions.ReservePath)}
       >
         <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
-          1.Reserve a path
+          1. Choose a path
         </AccordionSummary>
         <AccordionDetails>
-          <SecretPathReserveForm
+          <SecretPathSelectForm
             onSubmit={onSelectSecretPath}
             active={!secretPathReserved}
           />
@@ -110,8 +111,11 @@ export default function SecretPathSelect() {
               <strong>Secret set!</strong>
             </p>
             <p>
-              You can access it at <code>/view/{secretPathFinal}</code>, with
-              your passphrase: <code>{secretPassphraseFinal}</code>.
+              You can access it at{" "}
+              <Link to={`/view/${secretPathFinal}`}>
+                /view/{secretPathFinal}
+              </Link>
+              , with your passphrase: <code>{secretPassphraseFinal}</code>.
             </p>
           </CardContent>
         </Card>

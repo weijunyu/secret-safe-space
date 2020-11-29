@@ -37,43 +37,6 @@ export const getSecretAtPath: express.RequestHandler = async (req, res) => {
   }
 };
 
-export const reserveSecretPath: express.RequestHandler = async (
-  req,
-  res,
-  next
-) => {
-  let secretPath;
-  const requestMethod = req.method.toLowerCase();
-  if (requestMethod === "post") {
-    secretPath = req.body.path;
-  }
-  if (requestMethod === "get" && typeof req.query.path === "string") {
-    secretPath = req.query.path;
-  }
-  if (!secretPath) {
-    return next(new Error("Missing argument: specify your secret path!"));
-  }
-  // todo: wrap this check + write in a transaction
-  const existingPath = await firestore
-    .collection(SECRET_PATH_COLLECTION)
-    .doc(secretPath)
-    .get();
-  if (existingPath.exists) {
-    // todo: also check if path's creation time has expired
-    return next(new Error("Path already exists"));
-  }
-  const secretDoc: SecretDocument = {
-    reserveTime: firebaseAdmin.firestore.Timestamp.now(),
-  };
-  await firestore
-    .collection(SECRET_PATH_COLLECTION)
-    .doc(secretPath)
-    .set(secretDoc);
-  return res.send({
-    secretPath,
-  });
-};
-
 export const setSecretAtPath: express.RequestHandler = async (
   req,
   res,

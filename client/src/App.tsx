@@ -16,11 +16,8 @@ const StyledApp = styled.div`
     padding: 0 1rem;
   }
   background-color: ${Light};
-  font-family: nunito sans, sans-serif;
+  font-family: Courier Prime, monospace;
   color: ${Dark};
-  code {
-    font-family: monospace;
-  }
 `;
 
 const StyledHeader = styled.header`

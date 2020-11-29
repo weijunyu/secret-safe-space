@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Divider from "./common/Divider";
 
 import SecretPathDecryptForm from "./SecretPathDecryptForm";
 
@@ -8,6 +13,10 @@ import { getSecretEncrypted } from "../lib";
 type SecretPathViewerParams = {
   secretPath: string;
 };
+
+const CipherViewer = styled.span`
+  overflow-wrap: break-word;
+`;
 
 export default function SecretPathViewer() {
   const { secretPath } = useParams<SecretPathViewerParams>();
@@ -29,21 +38,30 @@ export default function SecretPathViewer() {
   }, [secretPath]);
 
   return (
-    <div>
-      <p>Your secret path: {secretPath}</p>
-      {loadingEncryptedSecrets ? (
-        <span>Loading...</span>
-      ) : (
-        <>
-          {encryptedSecrets === null && (
-            <p>This path doesn't contain any data!</p>
+    <>
+      <Card>
+        <CardContent>
+          <p>Your secret path: {secretPath}</p>
+          {loadingEncryptedSecrets ? (
+            <span>Loading...</span>
+          ) : (
+            <>
+              {encryptedSecrets === null && (
+                <p>This path doesn't contain any data!</p>
+              )}
+              {encryptedSecrets && (
+                <>
+                  <CipherViewer>
+                    Your encrypted secret: {encryptedSecrets}
+                  </CipherViewer>
+                  <Divider />
+                  <SecretPathDecryptForm secretPath={secretPath} />
+                </>
+              )}
+            </>
           )}
-          {encryptedSecrets && <p>Your encrypted secret: {encryptedSecrets}</p>}
-          {encryptedSecrets && (
-            <SecretPathDecryptForm secretPath={secretPath} />
-          )}
-        </>
-      )}
-    </div>
+        </CardContent>
+      </Card>
+    </>
   );
 }

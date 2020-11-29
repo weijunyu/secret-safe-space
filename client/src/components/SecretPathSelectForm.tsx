@@ -6,7 +6,7 @@ import { AccentButton } from "./common/Button";
 
 import { checkPathAvailability } from "../lib";
 
-export default function SecretPathReserveForm({
+export default function SecretPathSelectForm({
   onSubmit,
   active,
 }: {

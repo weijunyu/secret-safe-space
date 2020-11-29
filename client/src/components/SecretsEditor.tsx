@@ -50,7 +50,7 @@ export default function SecretsEditor({
 
       <form onSubmit={onSubmit}>
         <FormField>
-          <label htmlFor="secret-text-input">Enter your secret text:</label>
+          <label htmlFor="secret-text-input">Secret text</label>
           <SecretInputTextarea
             id="secret-text-input"
             onChange={onSecretInputChange}
