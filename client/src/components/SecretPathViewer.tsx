@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Divider from "./common/Divider";
 
 import SecretPathDecryptForm from "./SecretPathDecryptForm";
+import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
 
 import { getSecretEncrypted } from "../lib";
 
@@ -23,6 +24,7 @@ export default function SecretPathViewer() {
 
   const [loadingEncryptedSecrets, setLoadingEncryptedSecrets] = useState(false);
   const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
+  const [decryptedSecrets, setDecryptedSecrets] = useState("");
 
   useEffect(() => {
     setLoadingEncryptedSecrets(true);
@@ -36,6 +38,10 @@ export default function SecretPathViewer() {
       })
       .finally(() => setLoadingEncryptedSecrets(false));
   }, [secretPath]);
+
+  function onDecrypt(plaintext: string) {
+    setDecryptedSecrets(plaintext);
+  }
 
   return (
     <>
@@ -55,7 +61,15 @@ export default function SecretPathViewer() {
                     Your encrypted secret: {encryptedSecrets}
                   </CipherViewer>
                   <Divider />
-                  <SecretPathDecryptForm secretPath={secretPath} />
+                  <SecretPathDecryptForm
+                    secretPath={secretPath}
+                    onDecrypt={onDecrypt}
+                  />
+                  {decryptedSecrets && (
+                    <DecryptedSecretDisplay
+                      decryptedSecrets={decryptedSecrets}
+                    />
+                  )}
                 </>
               )}
             </>

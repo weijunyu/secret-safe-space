@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { AES, enc } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 
-import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
-
 import FormField from "./common/FormField";
 import { AccentButton } from "./common/Button";
 
@@ -11,11 +9,12 @@ import { getSecretEncrypted } from "../lib";
 
 export default function SecretPathDecryptForm({
   secretPath,
+  onDecrypt,
 }: {
   secretPath: string;
+  onDecrypt: (plaintext: string) => any;
 }) {
   const [secretPassword, setSecretPassword] = useState("");
-  const [decryptedSecrets, setDecryptedSecrets] = useState("");
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPassword = e.target.value;
     setSecretPassword(newPassword);
@@ -28,7 +27,7 @@ export default function SecretPathDecryptForm({
         secretPath,
         secretPassword
       );
-      setDecryptedSecrets(decryptedSecrets);
+      onDecrypt(decryptedSecrets);
     }
   }
   async function getDecryptedSecrets(secretPath: string, passphrase: string) {
@@ -53,7 +52,7 @@ export default function SecretPathDecryptForm({
       <form onSubmit={getSecretsAtPath}>
         <FormField>
           <label htmlFor="secret-password">
-            Enter the passphrase you received when you created this secret
+            Enter the passphrase you used to create this secret
           </label>
           <input
             id="secret-password"
@@ -64,7 +63,6 @@ export default function SecretPathDecryptForm({
         </FormField>
         <AccentButton type="submit">Go</AccentButton>
       </form>
-      <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />
     </div>
   );
 }
