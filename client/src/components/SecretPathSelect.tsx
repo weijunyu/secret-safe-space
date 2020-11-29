@@ -29,26 +29,31 @@ export default function SecretPathSelect() {
   );
 
   function onSelectSecretPath(secretPath: string) {
-    reserveSecretPath(secretPath).then((data) => {
-      if (data.secretPath) {
-        setSecretPathFinal(data.secretPath);
-        setSecretPathReserved(true);
+    setSecretPathFinal(secretPath);
+    setSecretPathReserved(true);
 
-        setExpandedAccordion(SecretPathSelectionAccordions.SetSecret);
-        return;
-      }
-    });
+    setExpandedAccordion(SecretPathSelectionAccordions.SetSecret);
   }
 
   async function onSubmitSecret(secret: string, passphrase: string) {
     // 1. encrypt secret with passphrase
     const ciphertext = AES.encrypt(secret, passphrase).toString();
     // 2. set secret ciphertext at path
-    await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
-    setSecretPassphraseFinal(passphrase);
-    setHasSetSecret(true);
+    try {
+      await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
+      setSecretPassphraseFinal(passphrase);
+      setHasSetSecret(true);
 
-    setExpandedAccordion(SecretPathSelectionAccordions.None);
+      setExpandedAccordion(SecretPathSelectionAccordions.None);
+    } catch (err) {
+      // Couldn't set ciphertext, go back to path selection
+      console.error(err);
+
+      setSecretPathFinal("");
+      setSecretPathReserved(false);
+
+      setExpandedAccordion(SecretPathSelectionAccordions.ReservePath);
+    }
   }
 
   const onAccordionExpand = (accordionName: SecretPathSelectionAccordions) => (

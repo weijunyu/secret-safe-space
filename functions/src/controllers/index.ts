@@ -95,14 +95,16 @@ export const setSecretAtPath: express.RequestHandler = async (
       new Error("Missing argument(s): specify secret path and text!")
     );
   }
+  // todo: wrap this check + write in a transaction
   const existingPath = await firestore
     .collection(SECRET_PATH_COLLECTION)
     .doc(secretPath)
     .get();
-  if (!existingPath.exists) {
-    return next(
-      new Error("Can't set a secret at this path; it hasn't been reserved yet.")
-    );
+  if (existingPath.exists) {
+    return next({
+      status: 400,
+      message: "Can't set a secret at this path. It has already been used.",
+    });
   }
   const secretDoc: SecretDocument = {
     secretWriteTime: firebaseAdmin.firestore.Timestamp.now(),
@@ -111,7 +113,7 @@ export const setSecretAtPath: express.RequestHandler = async (
   await firestore
     .collection(SECRET_PATH_COLLECTION)
     .doc(secretPath)
-    .set(secretDoc, { merge: true });
+    .set(secretDoc);
   return res.send({
     success: true,
     secretPath,
