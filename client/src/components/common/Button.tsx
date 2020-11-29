@@ -6,6 +6,7 @@ import {
   AccentAlt,
   Primary,
   PrimaryLight,
+  LightGrey,
 } from "../../lib/colors";
 
 export const Button = styled.button`
@@ -13,6 +14,11 @@ export const Button = styled.button`
   border: none;
   :hover {
     cursor: pointer;
+  }
+  :disabled,
+  :disabled:hover {
+    background-color: ${LightGrey};
+    cursor: not-allowed;
   }
 `;
 

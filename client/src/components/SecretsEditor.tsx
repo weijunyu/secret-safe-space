@@ -43,8 +43,11 @@ export default function SecretsEditor({
 
   return (
     <div>
-      <p>Enter your secret text here. You will be able to access it at:</p>
-      <code>{secretPath}</code>
+      <p>
+        Enter your secret text here. You will be able to access it at:{" "}
+        <code>/view/{secretPath}</code>
+      </p>
+
       <form onSubmit={onSubmit}>
         <FormField>
           <label htmlFor="secret-text-input">Enter your secret text:</label>

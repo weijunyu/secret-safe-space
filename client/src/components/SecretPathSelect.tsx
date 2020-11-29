@@ -13,17 +13,28 @@ import { reserveSecretPath, setSecretAtPath } from "../lib";
 
 import SecretPathReserveForm from "./SecretPathReserveForm";
 
+enum SecretPathSelectionAccordions {
+  None,
+  ReservePath,
+  SetSecret,
+}
+
 export default function SecretPathSelect() {
   const [secretPathReserved, setSecretPathReserved] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
   const [hasSetSecret, setHasSetSecret] = useState(false);
   const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
+  const [expandedAccordion, setExpandedAccordion] = useState(
+    SecretPathSelectionAccordions.None
+  );
 
   function onSelectSecretPath(secretPath: string) {
     reserveSecretPath(secretPath).then((data) => {
       if (data.secretPath) {
         setSecretPathFinal(data.secretPath);
         setSecretPathReserved(true);
+
+        setExpandedAccordion(SecretPathSelectionAccordions.SetSecret);
         return;
       }
     });
@@ -36,13 +47,32 @@ export default function SecretPathSelect() {
     await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
     setSecretPassphraseFinal(passphrase);
     setHasSetSecret(true);
+
+    setExpandedAccordion(SecretPathSelectionAccordions.None);
   }
+
+  const onAccordionExpand = (accordionName: SecretPathSelectionAccordions) => (
+    event: React.ChangeEvent<{}>,
+    expanded: boolean
+  ) => {
+    if (expanded) {
+      setExpandedAccordion(accordionName);
+    } else {
+      setExpandedAccordion(SecretPathSelectionAccordions.None);
+    }
+  };
 
   return (
     <div>
-      <Accordion>
+      <Accordion
+        disabled={secretPathReserved}
+        expanded={
+          expandedAccordion === SecretPathSelectionAccordions.ReservePath
+        }
+        onChange={onAccordionExpand(SecretPathSelectionAccordions.ReservePath)}
+      >
         <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
-          Reserve a path
+          1.Reserve a path
         </AccordionSummary>
         <AccordionDetails>
           <SecretPathReserveForm
@@ -52,9 +82,13 @@ export default function SecretPathSelect() {
         </AccordionDetails>
       </Accordion>
 
-      <Accordion>
+      <Accordion
+        disabled={!secretPathReserved || hasSetSecret}
+        expanded={expandedAccordion === SecretPathSelectionAccordions.SetSecret}
+        onChange={onAccordionExpand(SecretPathSelectionAccordions.SetSecret)}
+      >
         <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
-          Enter your secret(s)
+          2. Enter your secret(s)
         </AccordionSummary>
         <AccordionDetails>
           <SecretsEditor
@@ -64,15 +98,19 @@ export default function SecretPathSelect() {
           />
         </AccordionDetails>
       </Accordion>
-      <Card>
-        <CardContent>
-          <p>
-            Secret set. You can access it at{" "}
-            <code>/view/{secretPathFinal}</code>, with your passphrase:{" "}
-            <code>{secretPassphraseFinal}</code>.
-          </p>
-        </CardContent>
-      </Card>
+      {hasSetSecret && (
+        <Card>
+          <CardContent>
+            <p>
+              <strong>Secret set!</strong>
+            </p>
+            <p>
+              You can access it at <code>/view/{secretPathFinal}</code>, with
+              your passphrase: <code>{secretPassphraseFinal}</code>.
+            </p>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

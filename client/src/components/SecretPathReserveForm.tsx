@@ -64,7 +64,9 @@ export default function SecretPathReserveForm({
           disabled={!active}
         ></input>
       </FormField>
-      <AccentButton type="submit">Use this path</AccentButton>
+      <AccentButton type="submit" disabled={!secretPathAvailable}>
+        Use this path
+      </AccentButton>
     </form>
   );
 }
