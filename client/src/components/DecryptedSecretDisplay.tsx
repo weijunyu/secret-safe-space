@@ -3,14 +3,20 @@ import styled from "styled-components";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
-import { Primary } from "../lib/colors";
+import { Primary, SuccessLight } from "../lib/colors";
 
 const StyledSuccessIcon = styled.i`
   color: ${Primary};
 `;
 
-const StyledDecryptedSecretDisplay = styled.section`
+const StyledDecryptedSecretDisplayContainer = styled.section`
   margin: 1rem 0;
+`;
+
+const StyledDecryptedSecretCard = styled(Card)`
+  && {
+    background-color: ${SuccessLight};
+  }
 `;
 
 export default function DecryptedSecretDisplay({
@@ -19,14 +25,14 @@ export default function DecryptedSecretDisplay({
   decryptedSecrets: string;
 }) {
   return (
-    <StyledDecryptedSecretDisplay>
+    <StyledDecryptedSecretDisplayContainer>
       {decryptedSecrets && (
         <StyledSuccessIcon className="fas fa-check-circle"></StyledSuccessIcon>
       )}{" "}
       Your decrypted secrets:
-      <Card>
+      <StyledDecryptedSecretCard>
         <CardContent>{decryptedSecrets}</CardContent>
-      </Card>
-    </StyledDecryptedSecretDisplay>
+      </StyledDecryptedSecretCard>
+    </StyledDecryptedSecretDisplayContainer>
   );
 }

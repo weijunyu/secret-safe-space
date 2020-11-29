@@ -7,3 +7,4 @@ export const AccentAlt = "#f7d1ba";
 export const Light = "#f4f4f4";
 export const Dark = "#373737";
 export const LightGrey = "#9e9e9e";
+export const SuccessLight = "#d1e4e2";
