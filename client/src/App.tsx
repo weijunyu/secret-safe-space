@@ -87,21 +87,17 @@ function App() {
           </StyledNav>
         </StyledHeader>
         <main>
-          <div>
-            <section>
-              <Switch>
-                <Route path="/add">
-                  <SecretPathSelect />
-                </Route>
-                <Route path="/view/:secretPath">
-                  <SecretPathViewer />
-                </Route>
-                <Route exact path="/">
-                  <h2>How it works</h2>
-                </Route>
-              </Switch>
-            </section>
-          </div>
+          <Switch>
+            <Route path="/add">
+              <SecretPathSelect />
+            </Route>
+            <Route path="/view/:secretPath">
+              <SecretPathViewer />
+            </Route>
+            <Route exact path="/">
+              <h2>How it works</h2>
+            </Route>
+          </Switch>
         </main>
       </StyledApp>
     </BrowserRouter>

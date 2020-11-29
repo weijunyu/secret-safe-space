@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { AES } from "crypto-js";
 
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+
 import SecretsEditor from "./SecretsEditor";
 
 import { reserveSecretPath, setSecretAtPath } from "../lib";
@@ -34,20 +40,39 @@ export default function SecretPathSelect() {
 
   return (
     <div>
-      <SecretPathReserveForm
-        onSubmit={onSelectSecretPath}
-        active={!secretPathReserved}
-      />
+      <Accordion>
+        <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
+          Reserve a path
+        </AccordionSummary>
+        <AccordionDetails>
+          <SecretPathReserveForm
+            onSubmit={onSelectSecretPath}
+            active={!secretPathReserved}
+          />
+        </AccordionDetails>
+      </Accordion>
 
-      <SecretsEditor
-        secretPath={secretPathFinal}
-        onSubmitSecret={onSubmitSecret}
-        active={secretPathReserved && !hasSetSecret}
-      />
-
-      <div>
-  Secret set. You can access it at <code>/{secretPathFinal}</code>, with your passphrase: <code>{secretPassphraseFinal}</code>
-      </div>
+      <Accordion>
+        <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
+          Enter your secret(s)
+        </AccordionSummary>
+        <AccordionDetails>
+          <SecretsEditor
+            secretPath={secretPathFinal}
+            onSubmitSecret={onSubmitSecret}
+            active={secretPathReserved && !hasSetSecret}
+          />
+        </AccordionDetails>
+      </Accordion>
+      <Card>
+        <CardContent>
+          <p>
+            Secret set. You can access it at{" "}
+            <code>/view/{secretPathFinal}</code>, with your passphrase:{" "}
+            <code>{secretPassphraseFinal}</code>.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
