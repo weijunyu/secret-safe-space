@@ -14,26 +14,26 @@ import { setSecretAtPath } from "../lib";
 
 import SecretPathSelectForm from "./SecretPathSelectForm";
 
-enum SecretPathSelectionAccordions {
+enum SecretPathAddAccordions {
   None,
   ReservePath,
   SetSecret,
 }
 
-export default function SecretPathSelect() {
+export default function SecretPathAdd() {
   const [secretPathReserved, setSecretPathReserved] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
   const [hasSetSecret, setHasSetSecret] = useState(false);
   const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
   const [expandedAccordion, setExpandedAccordion] = useState(
-    SecretPathSelectionAccordions.None
+    SecretPathAddAccordions.None
   );
 
   function onSelectSecretPath(secretPath: string) {
     setSecretPathFinal(secretPath);
     setSecretPathReserved(true);
 
-    setExpandedAccordion(SecretPathSelectionAccordions.SetSecret);
+    setExpandedAccordion(SecretPathAddAccordions.SetSecret);
   }
 
   async function onSubmitSecret(secret: string, passphrase: string) {
@@ -45,7 +45,7 @@ export default function SecretPathSelect() {
       setSecretPassphraseFinal(passphrase);
       setHasSetSecret(true);
 
-      setExpandedAccordion(SecretPathSelectionAccordions.None);
+      setExpandedAccordion(SecretPathAddAccordions.None);
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
       console.error(err);
@@ -53,18 +53,18 @@ export default function SecretPathSelect() {
       setSecretPathFinal("");
       setSecretPathReserved(false);
 
-      setExpandedAccordion(SecretPathSelectionAccordions.ReservePath);
+      setExpandedAccordion(SecretPathAddAccordions.ReservePath);
     }
   }
 
-  const onAccordionExpand = (accordionName: SecretPathSelectionAccordions) => (
+  const onAccordionExpand = (accordionName: SecretPathAddAccordions) => (
     event: React.ChangeEvent<{}>,
     expanded: boolean
   ) => {
     if (expanded) {
       setExpandedAccordion(accordionName);
     } else {
-      setExpandedAccordion(SecretPathSelectionAccordions.None);
+      setExpandedAccordion(SecretPathAddAccordions.None);
     }
   };
 
@@ -72,10 +72,8 @@ export default function SecretPathSelect() {
     <div>
       <Accordion
         disabled={secretPathReserved}
-        expanded={
-          expandedAccordion === SecretPathSelectionAccordions.ReservePath
-        }
-        onChange={onAccordionExpand(SecretPathSelectionAccordions.ReservePath)}
+        expanded={expandedAccordion === SecretPathAddAccordions.ReservePath}
+        onChange={onAccordionExpand(SecretPathAddAccordions.ReservePath)}
       >
         <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
           1. Choose a path
@@ -90,8 +88,8 @@ export default function SecretPathSelect() {
 
       <Accordion
         disabled={!secretPathReserved || hasSetSecret}
-        expanded={expandedAccordion === SecretPathSelectionAccordions.SetSecret}
-        onChange={onAccordionExpand(SecretPathSelectionAccordions.SetSecret)}
+        expanded={expandedAccordion === SecretPathAddAccordions.SetSecret}
+        onChange={onAccordionExpand(SecretPathAddAccordions.SetSecret)}
       >
         <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
           2. Enter your secret(s)

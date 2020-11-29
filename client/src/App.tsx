@@ -6,7 +6,7 @@ import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
 
 import { Light, Accent, Dark } from "./lib/colors";
 
-import SecretPathSelect from "./components/SecretPathSelect";
+import SecretPathAdd from "./components/SecretPathAdd";
 import SecretPathViewer from "./components/SecretPathViewer";
 
 const StyledApp = styled.div`
@@ -86,7 +86,7 @@ function App() {
         <main>
           <Switch>
             <Route path="/add">
-              <SecretPathSelect />
+              <SecretPathAdd />
             </Route>
             <Route path="/view/:secretPath">
               <SecretPathViewer />
