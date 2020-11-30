@@ -1,5 +1,7 @@
 import * as express from "express";
 import * as cors from "cors";
+import * as expressValidator from "express-validator";
+import * as Pino from "pino-http";
 
 import {
   checkSecretAvailability,
@@ -7,8 +9,8 @@ import {
   setSecretAtPath,
 } from "./controllers";
 import { healthCheckRoute } from "./controllers/health";
+import { validateRequestParams } from "./lib/validation";
 
-import * as Pino from "pino-http";
 const pino = Pino();
 const app = express();
 
@@ -17,10 +19,22 @@ app.use(pino);
 
 app.get("/", healthCheckRoute);
 
-app.get("/secret-path/availability", checkSecretAvailability);
+app.get(
+  "/secret-path/availability",
+  [expressValidator.query("path").isAlphanumeric()],
+  validateRequestParams,
+  checkSecretAvailability
+);
 
-app.get("/secret/set", setSecretAtPath);
-app.post("/secret", setSecretAtPath);
+app.post(
+  "/secret",
+  [
+    expressValidator.body("path").isAlphanumeric(),
+    expressValidator.body("secret"),
+  ],
+  validateRequestParams,
+  setSecretAtPath
+);
 
 app.get("/secret", getSecretAtPath);
 

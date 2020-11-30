@@ -8,6 +8,8 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 
+import { ToastContainer, toast } from "react-toastify";
+
 import SecretsEditor from "./SecretsEditor";
 
 import { setSecretAtPath } from "../lib";
@@ -21,20 +23,29 @@ enum SecretPathAddAccordions {
 }
 
 export default function SecretPathAdd() {
-  const [secretPathReserved, setSecretPathReserved] = useState(false);
+  const [secretPathChosen, setSecretPathChosen] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
+
   const [hasSetSecret, setHasSetSecret] = useState(false);
   const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
+
   const [expandedAccordion, setExpandedAccordion] = useState(
     SecretPathAddAccordions.None
   );
 
   function onSelectSecretPath(secretPath: string) {
     setSecretPathFinal(secretPath);
-    setSecretPathReserved(true);
+    setSecretPathChosen(true);
 
     setExpandedAccordion(SecretPathAddAccordions.SetSecret);
   }
+
+  const onCancelSecretEdit = () => {
+    setSecretPathFinal("");
+    setSecretPathChosen(false);
+
+    setExpandedAccordion(SecretPathAddAccordions.ReservePath);
+  };
 
   async function onSubmitSecret(secret: string, passphrase: string) {
     // 1. encrypt secret with passphrase
@@ -49,9 +60,10 @@ export default function SecretPathAdd() {
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
       console.error(err);
+      toast.error(err.message);
 
       setSecretPathFinal("");
-      setSecretPathReserved(false);
+      setSecretPathChosen(false);
 
       setExpandedAccordion(SecretPathAddAccordions.ReservePath);
     }
@@ -70,8 +82,9 @@ export default function SecretPathAdd() {
 
   return (
     <div>
+      <ToastContainer />
       <Accordion
-        disabled={secretPathReserved}
+        disabled={secretPathChosen}
         expanded={expandedAccordion === SecretPathAddAccordions.ReservePath}
         onChange={onAccordionExpand(SecretPathAddAccordions.ReservePath)}
       >
@@ -81,13 +94,13 @@ export default function SecretPathAdd() {
         <AccordionDetails>
           <SecretPathSelectForm
             onSubmit={onSelectSecretPath}
-            active={!secretPathReserved}
+            active={!secretPathChosen}
           />
         </AccordionDetails>
       </Accordion>
 
       <Accordion
-        disabled={!secretPathReserved || hasSetSecret}
+        disabled={!secretPathChosen || hasSetSecret}
         expanded={expandedAccordion === SecretPathAddAccordions.SetSecret}
         onChange={onAccordionExpand(SecretPathAddAccordions.SetSecret)}
       >
@@ -98,7 +111,8 @@ export default function SecretPathAdd() {
           <SecretsEditor
             secretPath={secretPathFinal}
             onSubmitSecret={onSubmitSecret}
-            active={secretPathReserved && !hasSetSecret}
+            active={secretPathChosen && !hasSetSecret}
+            onCancel={onCancelSecretEdit}
           />
         </AccordionDetails>
       </Accordion>

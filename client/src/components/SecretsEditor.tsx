@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { AccentButton } from "./common/Button";
+import { AccentButton, Button } from "./common/Button";
 import FormField from "./common/FormField";
 
 const SecretInputTextarea = styled.textarea`
@@ -16,10 +16,12 @@ export default function SecretsEditor({
   secretPath,
   onSubmitSecret,
   active,
+  onCancel,
 }: {
   secretPath: string;
   onSubmitSecret: (secret: string, passphrase: string) => Promise<any>;
   active: boolean;
+  onCancel: () => void;
 }) {
   const [secretText, setSecretText] = useState("");
   const [secretPassphrase, setSecretPassphrase] = useState("");
@@ -42,34 +44,33 @@ export default function SecretsEditor({
   }
 
   return (
-    <div>
-      <p>
-        Enter your secret text here. You will be able to access it at:{" "}
-        <code>/view/{secretPath}</code>
-      </p>
-
-      <form onSubmit={onSubmit}>
-        <FormField>
-          <label htmlFor="secret-text-input">Secret text</label>
-          <SecretInputTextarea
-            id="secret-text-input"
-            onChange={onSecretInputChange}
-            disabled={!active}
-            rows={20}
-          ></SecretInputTextarea>
-        </FormField>
-        <FormField>
-          <label htmlFor="secret-passphrase-input">
-            Enter the password you would use to retrieve this secret:
-          </label>
-          <SecretPassphraseInput
-            id="secret-passphrase-input"
-            type="password"
-            onChange={onSecretPassphraseChange}
-          />
-        </FormField>
-        <AccentButton type="submit">Save</AccentButton>
-      </form>
-    </div>
+    <form onSubmit={onSubmit}>
+      <FormField>
+        <label htmlFor="secret-text-input">
+          Enter your secret text here. You will be able to access it at:{" "}
+          <code>/view/{secretPath}</code>
+        </label>
+        <SecretInputTextarea
+          id="secret-text-input"
+          onChange={onSecretInputChange}
+          disabled={!active}
+          rows={20}
+        ></SecretInputTextarea>
+      </FormField>
+      <FormField>
+        <label htmlFor="secret-passphrase-input">
+          Enter the password you would use to retrieve this secret:
+        </label>
+        <SecretPassphraseInput
+          id="secret-passphrase-input"
+          type="password"
+          onChange={onSecretPassphraseChange}
+        />
+      </FormField>
+      <AccentButton type="submit">Save</AccentButton>
+      <Button type="button" onClick={onCancel}>
+        Back
+      </Button>
+    </form>
   );
 }

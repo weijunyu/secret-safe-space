@@ -1,4 +1,5 @@
 import * as express from "express";
+
 import { firebaseAdmin, firestore } from "../lib/firebase";
 import { SECRET_PATH_COLLECTION } from "../lib/constants";
 
@@ -42,43 +43,38 @@ export const setSecretAtPath: express.RequestHandler = async (
   res,
   next
 ) => {
-  let secretPath;
-  let secretText;
-  const requestMethod = req.method.toLowerCase();
-  if (requestMethod === "get") {
-    secretPath = req.query.path;
-    secretText = req.query.secret;
-  }
-  if (requestMethod === "post") {
-    secretPath = req.body.path;
-    secretText = req.body.secret;
-  }
+  const secretPath = req.body.path;
+  const secretText = req.body.secret;
   if (!secretPath || !secretText) {
     return next(
       new Error("Missing argument(s): specify secret path and text!")
     );
   }
-  // todo: wrap this check + write in a transaction
-  const existingPath = await firestore
-    .collection(SECRET_PATH_COLLECTION)
-    .doc(secretPath)
-    .get();
-  if (existingPath.exists) {
-    return next({
-      status: 400,
-      message: "Can't set a secret at this path. It has already been used.",
+  try {
+    // todo: wrap this check + write in a transaction
+    const existingPath = await firestore
+      .collection(SECRET_PATH_COLLECTION)
+      .doc(secretPath)
+      .get();
+    if (existingPath.exists) {
+      return next({
+        status: 400,
+        message: "Can't set a secret at this path. It has already been used.",
+      });
+    }
+    const secretDoc: SecretDocument = {
+      secretWriteTime: firebaseAdmin.firestore.Timestamp.now(),
+      secret: secretText,
+    };
+    await firestore
+      .collection(SECRET_PATH_COLLECTION)
+      .doc(secretPath)
+      .set(secretDoc);
+    return res.send({
+      success: true,
+      secretPath,
     });
+  } catch (err) {
+    next(err);
   }
-  const secretDoc: SecretDocument = {
-    secretWriteTime: firebaseAdmin.firestore.Timestamp.now(),
-    secret: secretText,
-  };
-  await firestore
-    .collection(SECRET_PATH_COLLECTION)
-    .doc(secretPath)
-    .set(secretDoc);
-  return res.send({
-    success: true,
-    secretPath,
-  });
 };

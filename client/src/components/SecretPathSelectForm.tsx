@@ -18,6 +18,7 @@ export default function SecretPathSelectForm({
   const [secretPathAvailable, setSecretPathAvailable] = useState<boolean>(
     false
   );
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedPathCheck = useCallback(
     debounce((newPath: string) => {
@@ -25,12 +26,21 @@ export default function SecretPathSelectForm({
         .then((availability) => {
           setSecretPathAvailable(availability);
         })
+        .catch(() => {
+          setSecretPathAvailable(false); // rejected from BE. no need to notify for now
+        })
         .finally(() => {
           setCheckingSecretPath(false);
         });
     }, 500),
-    [setCheckingSecretPath, checkPathAvailability, setSecretPathAvailable]
+    [
+      debounce,
+      checkPathAvailability,
+      setSecretPathAvailable,
+      setCheckingSecretPath,
+    ]
   );
+
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPath = e.target.value;
     setSecretPath(newPath);
@@ -40,6 +50,7 @@ export default function SecretPathSelectForm({
       debouncedPathCheck(newPath);
     }
   }
+
   function onSubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     onSubmit(secretPath);
@@ -64,7 +75,10 @@ export default function SecretPathSelectForm({
           disabled={!active}
         ></input>
       </FormField>
-      <AccentButton type="submit" disabled={!secretPathAvailable}>
+      <AccentButton
+        type="submit"
+        disabled={!secretPathAvailable || !secretPath}
+      >
         Use this path
       </AccentButton>
     </form>
