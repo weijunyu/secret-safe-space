@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
 import { AccentButton, Button } from "./common/Button";
 import FormField from "./common/FormField";
+
+import { Warn } from "../lib/colors";
 
 const SecretInputTextarea = styled.textarea`
   font-family: monospace;
@@ -12,6 +15,19 @@ const SecretInputTextarea = styled.textarea`
 const SecretPassphraseInput = styled.input`
   font-family: monospace;
 `;
+
+const FormHintWarning = styled.small`
+  display: block;
+  color: ${Warn};
+  padding: 6px 0;
+`;
+
+const DefaultExpiryDuration = {
+  hours: 0,
+  minutes: 5,
+};
+
+const MinimumExpiryDuration = 60000; // 60000 ms = 1 min
 
 export default function SecretsEditor({
   secretPath,
@@ -26,7 +42,9 @@ export default function SecretsEditor({
 }) {
   const [secretText, setSecretText] = useState("");
   const [secretPassphrase, setSecretPassphrase] = useState("");
-  const [secretExpiryDuration, setSecretExpiryDuration] = useState(-1);
+  const [secretExpiryDuration, setSecretExpiryDuration] = useState(
+    Duration.fromObject(DefaultExpiryDuration).as("milliseconds")
+  );
 
   function onSecretInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     event.preventDefault();
@@ -70,13 +88,32 @@ export default function SecretsEditor({
         />
       </FormField>
       <FormField>
-        <span>Secret expiry time</span>
+        <div style={{ marginBottom: "0.5rem" }}>
+          <strong>Secret expiry time</strong>
+        </div>
         {/* 1 - 60 min, 1 - 24 hrs */}
         <DurationPicker
-          onConfirm={(duration: number) => setSecretExpiryDuration(duration)}
+          initialDuration={DefaultExpiryDuration}
+          onChange={(durationInMs: number) =>
+            setSecretExpiryDuration(durationInMs)
+          }
         />
+        {secretExpiryDuration < MinimumExpiryDuration && (
+          <FormHintWarning>
+            A minimum expiry duration of 1 minute is required.
+          </FormHintWarning>
+        )}
       </FormField>
-      <AccentButton type="submit">Save</AccentButton>
+      <AccentButton
+        type="submit"
+        disabled={
+          secretText === "" ||
+          secretPassphrase === "" ||
+          secretExpiryDuration < MinimumExpiryDuration
+        }
+      >
+        Save
+      </AccentButton>
       <Button type="button" onClick={onCancel}>
         Back
       </Button>

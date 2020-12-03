@@ -1,17 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
-// From date-fns:
-// Format full duration
-// formatDuration({
-//   years: 2,
-//   months: 9,
-//   weeks: 1,
-//   days: 7,
-//   hours: 5,
-//   minutes: 9,
-//   seconds: 30
-// })
+import { Duration } from "luxon";
 
 const StyledDurationPickerContainer = styled.div`
   display: flex;
@@ -32,16 +21,61 @@ for (let m = 0; m < 60; m++) {
   Minutes.push(m + 1);
 }
 
-export default function DurationPicker({
-  onConfirm,
-}: {
-  onConfirm: (duration: number) => void;
-}) {
+enum DurationType {
+  Hour,
+  Minute,
+}
+
+export default function DurationPicker(
+  {
+    initialDuration,
+    onChange,
+  }: {
+    initialDuration: { hours: number; minutes: number };
+    onChange: (duration: number) => void;
+  } = {
+    initialDuration: {
+      hours: 0,
+      minutes: 0,
+    },
+    onChange: () => {},
+  }
+) {
+  const [hours, setHours] = useState(initialDuration.hours);
+  const [minutes, setMinutes] = useState(initialDuration.minutes);
+
+  function onDurationChange(durationType: DurationType) {
+    return function (e: React.ChangeEvent<HTMLSelectElement>) {
+      const newValue = parseInt(e.target.value);
+
+      let newDurationInMs = 0;
+      if (durationType === DurationType.Hour) {
+        setHours(newValue);
+        newDurationInMs = Duration.fromObject({
+          hours: newValue,
+          minutes,
+        }).as("milliseconds");
+      }
+      if (durationType === DurationType.Minute) {
+        setMinutes(newValue);
+        newDurationInMs = Duration.fromObject({
+          hours,
+          minutes: newValue,
+        }).as("milliseconds");
+      }
+      onChange(newDurationInMs);
+    };
+  }
+
   return (
     <StyledDurationPickerContainer>
       <StyledDurationSelection>
-        <label htmlFor="duration-pocker-hours">Hours</label>
-        <select id="duration-picker-hours">
+        <label htmlFor="duration-picker-hours">Hours</label>
+        <select
+          id="duration-picker-hours"
+          value={hours}
+          onChange={onDurationChange(DurationType.Hour)}
+        >
           {Hours.map((h) => (
             <option value={h} key={h}>
               {h}
@@ -50,8 +84,12 @@ export default function DurationPicker({
         </select>
       </StyledDurationSelection>
       <StyledDurationSelection>
-        <label htmlFor="duration-pocker-minutes">Minutes</label>
-        <select id="duration-picker-minutes">
+        <label htmlFor="duration-picker-minutes">Minutes</label>
+        <select
+          id="duration-picker-minutes"
+          value={minutes}
+          onChange={onDurationChange(DurationType.Minute)}
+        >
           {Minutes.map((m) => (
             <option value={m} key={m}>
               {m}
