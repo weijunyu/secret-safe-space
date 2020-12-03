@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import DurationPicker from "./DurationPicker";
 import { AccentButton, Button } from "./common/Button";
 import FormField from "./common/FormField";
 
@@ -25,6 +26,7 @@ export default function SecretsEditor({
 }) {
   const [secretText, setSecretText] = useState("");
   const [secretPassphrase, setSecretPassphrase] = useState("");
+  const [secretExpiryDuration, setSecretExpiryDuration] = useState(-1);
 
   function onSecretInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     event.preventDefault();
@@ -65,6 +67,13 @@ export default function SecretsEditor({
           id="secret-passphrase-input"
           type="password"
           onChange={onSecretPassphraseChange}
+        />
+      </FormField>
+      <FormField>
+        <span>Secret expiry time</span>
+        {/* 1 - 60 min, 1 - 24 hrs */}
+        <DurationPicker
+          onConfirm={(duration: number) => setSecretExpiryDuration(duration)}
         />
       </FormField>
       <AccentButton type="submit">Save</AccentButton>
