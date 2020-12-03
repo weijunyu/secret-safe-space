@@ -67,7 +67,7 @@ function App() {
         <StyledHeader>
           <h1 style={{ textAlign: "center" }}>
             <StyledHeaderLink exact to="/">
-              <i className="fas fa-key" /> Secrits!
+              <i className="fas fa-key" /> Secrets!
             </StyledHeaderLink>
           </h1>
           <StyledNav>
