@@ -32,8 +32,8 @@ export default function SecretPathDecryptForm({
   }
   async function getDecryptedSecrets(secretPath: string, passphrase: string) {
     try {
-      const encryptedSecret = await getSecretEncrypted(secretPath);
-      const decryptedBytes = AES.decrypt(encryptedSecret, passphrase);
+      const secretData = await getSecretEncrypted(secretPath);
+      const decryptedBytes = AES.decrypt(secretData.value, passphrase);
       if (decryptedBytes.sigBytes < 0) {
         throw new Error(
           "Decryption failed. Please check your passphrase and try again."

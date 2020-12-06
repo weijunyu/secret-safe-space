@@ -20,7 +20,7 @@ app.use(pino);
 app.get("/", healthCheckRoute);
 
 app.get(
-  "/secret-path/availability",
+  "/secret/availability",
   [expressValidator.query("path").isAlphanumeric()],
   validateRequestParams,
   checkSecretAvailability

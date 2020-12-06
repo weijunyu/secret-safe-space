@@ -29,11 +29,11 @@ export default function SecretPathViewer() {
   useEffect(() => {
     setLoadingEncryptedSecrets(true);
     getSecretEncrypted(secretPath)
-      .then((ciphertext) => {
-        if (!ciphertext) {
+      .then((secretData) => {
+        if (!secretData.value) {
           setEncryptedSecrets(null);
         } else {
-          setEncryptedSecrets(ciphertext);
+          setEncryptedSecrets(secretData.value);
         }
       })
       .finally(() => setLoadingEncryptedSecrets(false));

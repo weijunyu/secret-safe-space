@@ -1,10 +1,6 @@
 import * as express from "express";
 
-import { firebaseAdmin, firestore } from "../lib/firebase";
-import {
-  SECRET_PATH_COLLECTION,
-  DEFAULT_SECRET_EXPIRY_DURATION,
-} from "../lib/constants";
+import Secret from "../models/Secret";
 
 import { SecretDocument } from "../interfaces";
 
@@ -12,30 +8,22 @@ export const checkSecretAvailability: express.RequestHandler = async (
   req,
   res
 ) => {
-  const secretPath = req.query.path;
-  if (secretPath && typeof secretPath === "string") {
-    const pathDetails = await firestore
-      .collection(SECRET_PATH_COLLECTION)
-      .doc(secretPath)
-      .get();
-    return res.send(!pathDetails.exists);
-  } else {
-    return res.send(false);
+  const secretPath = req.query.path?.toString();
+  if (secretPath) {
+    const availability = await Secret.getAvailability(secretPath);
+    return res.send(availability);
   }
+  return res.send(false);
 };
 
 export const getSecretAtPath: express.RequestHandler = async (req, res) => {
   const secretPath = req.query.path;
   if (secretPath && typeof secretPath === "string") {
-    const secretDoc = await firestore
-      .collection(SECRET_PATH_COLLECTION)
-      .doc(secretPath)
-      .get();
-    if (secretDoc.exists) {
-      const secretDocData = secretDoc.data() as SecretDocument;
-      return res.send(secretDocData.secret);
-    }
-    return res.send(null);
+    const secretDocument: SecretDocument | null = await Secret.fetch(
+      secretPath
+    );
+
+    return res.send(secretDocument);
   } else {
     return res.send(null);
   }
@@ -48,41 +36,27 @@ export const setSecretAtPath: express.RequestHandler = async (
 ) => {
   const secretPath: string = req.body.path;
   const secretText: string = req.body.secret;
-  const expiryDuration: number =
-    req.body.expiryDuration || DEFAULT_SECRET_EXPIRY_DURATION;
+  const expiryDuration: number = req.body.expiryDuration;
   if (!secretPath || !secretText) {
     return next(
       new Error("Missing argument(s): specify secret path and text!")
     );
   }
-  try {
-    // todo: wrap this check + write in a transaction
-    const existingPath = await firestore
-      .collection(SECRET_PATH_COLLECTION)
-      .doc(secretPath)
-      .get();
-    if (existingPath.exists) {
-      return next({
-        status: 400,
-        message: "Can't set a secret at this path. It has already been used.",
-      });
-    }
 
-    const expiryTimestamp = "todo" + expiryDuration; // todo: calculate expiry duration here
-    console.log(expiryTimestamp);
-    const secretDoc: SecretDocument = {
-      secretWriteTime: firebaseAdmin.firestore.Timestamp.now(),
-      secret: secretText,
-    };
-    await firestore
-      .collection(SECRET_PATH_COLLECTION)
-      .doc(secretPath)
-      .set(secretDoc);
-    return res.send({
-      success: true,
-      secretPath,
-    });
+  const secret = new Secret({
+    path: secretPath,
+    value: secretText,
+    expiryDuration,
+  });
+
+  try {
+    const savedSecret: SecretDocument = await secret.saveIfValid();
+    return res.send(savedSecret);
   } catch (err) {
-    next(err);
+    console.error(err);
+    return next({
+      status: 500,
+      message: "Couldn't create secret.",
+    });
   }
 };

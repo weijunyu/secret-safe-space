@@ -7,7 +7,7 @@ const httpClient = axios.create({
 });
 
 export async function checkPathAvailability(path: string): Promise<boolean> {
-  return httpClient("/secret-path/availability", { params: { path } }).then(
+  return httpClient("/secret/availability", { params: { path } }).then(
     (res) => res.data
   );
 }
@@ -21,7 +21,9 @@ export async function reserveSecretPath(path: string): Promise<any> {
   }).then((res) => res.data);
 }
 
-export async function getSecretEncrypted(path: string): Promise<string> {
+export async function getSecretEncrypted(
+  path: string
+): Promise<{ value: string }> {
   return httpClient("/secret", { params: { path } }).then((res) => res.data);
 }
 
