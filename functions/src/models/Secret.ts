@@ -20,8 +20,11 @@ class Secret {
       return true;
     }
     const secretDoc = docSnapshot.data() as SecretDocument;
-    const currentTime = firebaseAdmin.firestore.Timestamp.fromDate(new Date());
-    return currentTime > secretDoc.expiryTime;
+    return (
+      // current time already past expiry
+      firebaseAdmin.firestore.Timestamp.fromDate(new Date()) >
+      secretDoc.expiryTime
+    );
   }
 
   static async fetch(path: string): Promise<SecretDocument | null> {
@@ -32,6 +35,7 @@ class Secret {
     const secretDocData = secretDoc.data() as SecretDocument;
     const validSecret =
       secretDoc.exists &&
+      // current time not yet past expiry
       secretDocData.expiryTime >
         firebaseAdmin.firestore.Timestamp.fromDate(new Date());
     if (validSecret) {
@@ -66,6 +70,7 @@ class Secret {
         const secretDoc = doc.data() as SecretDocument;
         const canWrite =
           !doc.exists ||
+          // current time already past expiry
           secretDoc.expiryTime <
             firebaseAdmin.firestore.Timestamp.fromDate(new Date());
         if (canWrite) {

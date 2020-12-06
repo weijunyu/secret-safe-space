@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { AES } from "crypto-js";
-import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-
-import { ToastContainer, toast } from "react-toastify";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import SecretsEditor from "./SecretsEditor";
+import SecretPathAdded from "./SecretPathAdded";
 
 import { setSecretAtPath } from "../lib";
 
@@ -26,12 +26,17 @@ export default function SecretPathAdd() {
   const [secretPathChosen, setSecretPathChosen] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
 
+  const [submittingSecret, setSubmittingSecret] = useState(false);
   const [hasSetSecret, setHasSetSecret] = useState(false);
   const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
 
   const [expandedAccordion, setExpandedAccordion] = useState(
-    SecretPathAddAccordions.None
+    SecretPathAddAccordions.ReservePath
   );
+
+  function reset(): void {
+    window.location.reload(); // works ¯\_(ツ)_/¯
+  }
 
   function onSelectSecretPath(secretPath: string) {
     setSecretPathFinal(secretPath);
@@ -54,6 +59,10 @@ export default function SecretPathAdd() {
   ) {
     // 1. encrypt secret with passphrase
     const ciphertext = AES.encrypt(secret, passphrase).toString();
+
+    setSubmittingSecret(true);
+    setExpandedAccordion(SecretPathAddAccordions.None);
+
     // 2. set secret ciphertext at path
     try {
       await setSecretAtPath({
@@ -63,18 +72,15 @@ export default function SecretPathAdd() {
       });
       setSecretPassphraseFinal(passphrase);
       setHasSetSecret(true);
-
-      setExpandedAccordion(SecretPathAddAccordions.None);
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
       console.error(err);
       toast.error(err.message);
 
-      setSecretPathFinal("");
-      setSecretPathChosen(false);
-
-      setExpandedAccordion(SecretPathAddAccordions.ReservePath);
+      reset();
     }
+
+    setSubmittingSecret(false);
   }
 
   const onAccordionExpand = (accordionName: SecretPathAddAccordions) => (
@@ -124,19 +130,15 @@ export default function SecretPathAdd() {
           />
         </AccordionDetails>
       </Accordion>
+      {submittingSecret && <LinearProgress />}
       {hasSetSecret && (
         <Card>
           <CardContent>
-            <p>
-              <strong>Secret set!</strong>
-            </p>
-            <p>
-              You can access it at{" "}
-              <Link to={`/view/${secretPathFinal}`}>
-                /view/{secretPathFinal}
-              </Link>
-              , with your passphrase: <code>{secretPassphraseFinal}</code>.
-            </p>
+            <SecretPathAdded
+              secretPath={secretPathFinal}
+              secretPassphrase={secretPassphraseFinal}
+              onAddNewSecret={reset}
+            />
           </CardContent>
         </Card>
       )}

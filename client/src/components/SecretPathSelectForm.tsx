@@ -33,12 +33,7 @@ export default function SecretPathSelectForm({
           setCheckingSecretPath(false);
         });
     }, 500),
-    [
-      debounce,
-      checkPathAvailability,
-      setSecretPathAvailable,
-      setCheckingSecretPath,
-    ]
+    []
   );
 
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
