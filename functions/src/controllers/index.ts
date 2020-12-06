@@ -1,7 +1,10 @@
 import * as express from "express";
 
 import { firebaseAdmin, firestore } from "../lib/firebase";
-import { SECRET_PATH_COLLECTION } from "../lib/constants";
+import {
+  SECRET_PATH_COLLECTION,
+  DEFAULT_SECRET_EXPIRY_DURATION,
+} from "../lib/constants";
 
 import { SecretDocument } from "../interfaces";
 
@@ -43,8 +46,10 @@ export const setSecretAtPath: express.RequestHandler = async (
   res,
   next
 ) => {
-  const secretPath = req.body.path;
-  const secretText = req.body.secret;
+  const secretPath: string = req.body.path;
+  const secretText: string = req.body.secret;
+  const expiryDuration: number =
+    req.body.expiryDuration || DEFAULT_SECRET_EXPIRY_DURATION;
   if (!secretPath || !secretText) {
     return next(
       new Error("Missing argument(s): specify secret path and text!")
@@ -62,6 +67,9 @@ export const setSecretAtPath: express.RequestHandler = async (
         message: "Can't set a secret at this path. It has already been used.",
       });
     }
+
+    const expiryTimestamp = "todo" + expiryDuration; // todo: calculate expiry duration here
+    console.log(expiryTimestamp);
     const secretDoc: SecretDocument = {
       secretWriteTime: firebaseAdmin.firestore.Timestamp.now(),
       secret: secretText,

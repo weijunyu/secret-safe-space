@@ -47,12 +47,20 @@ export default function SecretPathAdd() {
     setExpandedAccordion(SecretPathAddAccordions.ReservePath);
   };
 
-  async function onSubmitSecret(secret: string, passphrase: string) {
+  async function onSubmitSecret(
+    secret: string,
+    passphrase: string,
+    secretExpiryDuration: number
+  ) {
     // 1. encrypt secret with passphrase
     const ciphertext = AES.encrypt(secret, passphrase).toString();
     // 2. set secret ciphertext at path
     try {
-      await setSecretAtPath({ path: secretPathFinal, secret: ciphertext });
+      await setSecretAtPath({
+        path: secretPathFinal,
+        secret: ciphertext,
+        expiryDuration: secretExpiryDuration,
+      });
       setSecretPassphraseFinal(passphrase);
       setHasSetSecret(true);
 

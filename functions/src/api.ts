@@ -30,7 +30,8 @@ app.post(
   "/secret",
   [
     expressValidator.body("path").isAlphanumeric(),
-    expressValidator.body("secret"),
+    expressValidator.body("secret").isString(),
+    expressValidator.body("expiryDuration").isNumeric(),
   ],
   validateRequestParams,
   setSecretAtPath

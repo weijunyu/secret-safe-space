@@ -28,12 +28,14 @@ export async function getSecretEncrypted(path: string): Promise<string> {
 export async function setSecretAtPath({
   secret,
   path,
+  expiryDuration,
 }: {
   secret: string;
   path: string;
+  expiryDuration: number;
 }): Promise<any> {
   return httpClient("/secret", {
     method: "post",
-    data: { secret, path },
+    data: { secret, path, expiryDuration },
   }).then((res) => res.data);
 }
