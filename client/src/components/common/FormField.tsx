@@ -14,11 +14,11 @@ const StyledFormField = styled.div`
   }
 `;
 
-export default function FormField({
+export function TextFormField({
   children,
   ...props
 }: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   props?: any;
 }) {
   return <StyledFormField {...props}>{children}</StyledFormField>;

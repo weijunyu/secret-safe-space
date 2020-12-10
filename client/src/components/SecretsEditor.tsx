@@ -4,7 +4,7 @@ import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
 import { AccentButton, Button } from "./common/Button";
-import FormField from "./common/FormField";
+import { TextFormField } from "./common/FormField";
 
 import { Warn } from "../lib/colors";
 
@@ -49,6 +49,7 @@ export default function SecretsEditor({
   const [secretExpiryDuration, setSecretExpiryDuration] = useState(
     Duration.fromObject(DefaultExpiryDuration).as("milliseconds")
   );
+  const [encryptionDisabled, setEncryptionDisabled] = useState(false);
 
   function onSecretInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     event.preventDefault();
@@ -62,6 +63,10 @@ export default function SecretsEditor({
     setSecretPassphrase(event.target.value);
   }
 
+  function onToggleEncryption() {
+    setEncryptionDisabled(!encryptionDisabled);
+  }
+
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     onSubmitSecret(secretText, secretPassphrase, secretExpiryDuration);
@@ -69,7 +74,7 @@ export default function SecretsEditor({
 
   return (
     <form onSubmit={onSubmit}>
-      <FormField>
+      <TextFormField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at:{" "}
           <code>/view/{secretPath}</code>
@@ -80,8 +85,8 @@ export default function SecretsEditor({
           disabled={!active}
           rows={20}
         ></SecretInputTextarea>
-      </FormField>
-      <FormField>
+      </TextFormField>
+      <TextFormField>
         <label htmlFor="secret-passphrase-input">
           Enter the password you would use to retrieve this secret:
         </label>
@@ -90,8 +95,17 @@ export default function SecretsEditor({
           type="password"
           onChange={onSecretPassphraseChange}
         />
-      </FormField>
-      <FormField>
+      </TextFormField>
+
+      <input
+        type="checkbox"
+        checked={encryptionDisabled}
+        onChange={onToggleEncryption}
+        id="encryption-toggle"
+      ></input>
+      <label htmlFor="encryption-toggle">Do not encrypt</label>
+
+      <TextFormField>
         <div style={{ marginBottom: "0.5rem" }}>
           <strong>Secret expiry time</strong>
         </div>
@@ -107,7 +121,7 @@ export default function SecretsEditor({
             A minimum expiry duration of 1 minute is required.
           </FormHintWarning>
         )}
-      </FormField>
+      </TextFormField>
       <AccentButton
         type="submit"
         disabled={
