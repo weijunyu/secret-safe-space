@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 
-import { TextFormField } from "./common/FormField";
+import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
 
 import { checkPathAvailability } from "../lib";
@@ -52,7 +52,7 @@ export default function SecretPathSelectForm({
   }
   return (
     <form onSubmit={onSubmitForm}>
-      <TextFormField>
+      <TextField>
         <label htmlFor="secret-path">Enter URL path for your secret</label>
         <p>
           <small>
@@ -69,7 +69,7 @@ export default function SecretPathSelectForm({
           onChange={onSecretPathChange}
           disabled={!active}
         ></input>
-      </TextFormField>
+      </TextField>
       <AccentButton
         type="submit"
         disabled={!secretPathAvailable || !secretPath}

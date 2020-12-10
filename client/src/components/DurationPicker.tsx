@@ -7,6 +7,9 @@ const StyledDurationPickerContainer = styled.div`
 `;
 
 const StyledDurationSelection = styled.div`
+  label {
+    padding-right: 0.5rem;
+  }
   :not(:last-child) {
     margin-right: 1rem;
   }

@@ -4,7 +4,7 @@ import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
 import { AccentButton, Button } from "./common/Button";
-import { TextFormField } from "./common/FormField";
+import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
 import { Warn } from "../lib/colors";
 
@@ -14,6 +14,9 @@ const SecretInputTextarea = styled.textarea`
 
 const SecretPassphraseInput = styled.input`
   font-family: monospace;
+  :disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const FormHintWarning = styled.small`
@@ -74,7 +77,7 @@ export default function SecretsEditor({
 
   return (
     <form onSubmit={onSubmit}>
-      <TextFormField>
+      <TextField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at:{" "}
           <code>/view/{secretPath}</code>
@@ -85,8 +88,8 @@ export default function SecretsEditor({
           disabled={!active}
           rows={20}
         ></SecretInputTextarea>
-      </TextFormField>
-      <TextFormField>
+      </TextField>
+      <TextField>
         <label htmlFor="secret-passphrase-input">
           Enter the password you would use to retrieve this secret:
         </label>
@@ -94,18 +97,22 @@ export default function SecretsEditor({
           id="secret-passphrase-input"
           type="password"
           onChange={onSecretPassphraseChange}
+          disabled={encryptionDisabled}
         />
-      </TextFormField>
+      </TextField>
 
-      <input
-        type="checkbox"
-        checked={encryptionDisabled}
-        onChange={onToggleEncryption}
-        id="encryption-toggle"
-      ></input>
-      <label htmlFor="encryption-toggle">Do not encrypt</label>
+      <FieldSet>
+        <Legend>Additional Options</Legend>
+        <CheckField>
+          <input
+            type="checkbox"
+            checked={encryptionDisabled}
+            onChange={onToggleEncryption}
+            id="encryption-toggle"
+          ></input>
+          <label htmlFor="encryption-toggle">Do not encrypt</label>
+        </CheckField>
 
-      <TextFormField>
         <div style={{ marginBottom: "0.5rem" }}>
           <strong>Secret expiry time</strong>
         </div>
@@ -121,7 +128,8 @@ export default function SecretsEditor({
             A minimum expiry duration of 1 minute is required.
           </FormHintWarning>
         )}
-      </TextFormField>
+      </FieldSet>
+
       <AccentButton
         type="submit"
         disabled={

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AES, enc } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 
-import { TextFormField } from "./common/FormField";
+import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
 
 import { getSecretEncrypted } from "../lib";
@@ -50,7 +50,7 @@ export default function SecretPathDecryptForm({
     <div>
       <ToastContainer />
       <form onSubmit={getSecretsAtPath}>
-        <TextFormField>
+        <TextField>
           <label htmlFor="secret-password">
             Enter the passphrase you used to create this secret
           </label>
@@ -60,7 +60,7 @@ export default function SecretPathDecryptForm({
             value={secretPassword}
             onChange={onSecretPasswordChange}
           ></input>
-        </TextFormField>
+        </TextField>
         <AccentButton type="submit">Go</AccentButton>
       </form>
     </div>
