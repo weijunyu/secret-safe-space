@@ -21,5 +21,5 @@ jobs:
           args: deploy --only hosting,functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          REACT_APP_API_BASE_URL: https://asia-southeast2-shhh-83b92.cloudfunctions.net/api
-          REACT_APP_FIREBASE_CONFIG: '{"apiKey":"AIzaSyA_D2uaIdMWS2-AbsSQIE_qdJSpEWMJ4eE","authDomain":"shhh-83b92.firebaseapp.com","databaseURL":"https://shhh-83b92.firebaseio.com","projectId":"shhh-83b92","storageBucket":"shhh-83b92.appspot.com","messagingSenderId":"395856542674","appId":"1:395856542674:web:13954f8453acc0885f660b","measurementId":"G-B64FK00HLZ"}'
+          REACT_APP_API_BASE_URL: https://asia-southeast2-luan-loot.cloudfunctions.net/api
+          REACT_APP_FIREBASE_CONFIG: '{"apiKey":"AIzaSyCdjdzDShf1_uQsCeCjQfKew2YzlzgbRJM","authDomain":"luan-loot.firebaseapp.com","projectId":"luan-loot","storageBucket":"luan-loot.appspot.com","messagingSenderId":"139896930796","appId":"1:139896930796:web:1cf8564ae0bfc90223c0c9","measurementId":"G-NBBJWHQXNC"}'
