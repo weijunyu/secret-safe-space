@@ -28,7 +28,8 @@ export default function SecretPathAdd() {
 
   const [submittingSecret, setSubmittingSecret] = useState(false);
   const [hasSetSecret, setHasSetSecret] = useState(false);
-  const [secretPassphraseFinal, setSecretPassphraseFinal] = useState("");
+
+  const [encryptionDisabledFinal, setEncryptionDisabledFinal] = useState(false);
 
   const [expandedAccordion, setExpandedAccordion] = useState(
     SecretPathAddAccordions.ReservePath
@@ -58,6 +59,7 @@ export default function SecretPathAdd() {
     secretExpiryDuration: number,
     encryptionDisabled = false
   ) {
+    setEncryptionDisabledFinal(encryptionDisabled);
     // 1. encrypt secret with passphrase
     const ciphertext = encryptionDisabled
       ? secret
@@ -74,7 +76,7 @@ export default function SecretPathAdd() {
         expiryDuration: secretExpiryDuration,
         encryptionDisabled,
       });
-      setSecretPassphraseFinal(passphrase);
+
       setHasSetSecret(true);
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
@@ -140,8 +142,8 @@ export default function SecretPathAdd() {
           <CardContent>
             <SecretPathAdded
               secretPath={secretPathFinal}
-              secretPassphrase={secretPassphraseFinal}
               onAddNewSecret={reset}
+              encryptionDisabled={encryptionDisabledFinal}
             />
           </CardContent>
         </Card>

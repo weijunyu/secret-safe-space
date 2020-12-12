@@ -5,24 +5,43 @@ import { AccentButton } from "./common/Button";
 
 export default function SecretPathAdded({
   secretPath,
-  secretPassphrase,
   onAddNewSecret,
+  encryptionDisabled,
 }: {
   secretPath: string;
-  secretPassphrase: string;
   onAddNewSecret: () => void;
+  encryptionDisabled: boolean;
 }) {
   return (
     <div>
       <p>
         <strong>Secret set!</strong>
       </p>
-      <p>
-        You can access it at{" "}
-        <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link>, with your
-        passphrase: <code>{secretPassphrase}</code>.
-      </p>
+      {encryptionDisabled ? (
+        <MessageForUnencryptedText secretPath={secretPath} />
+      ) : (
+        <MessageForEncryptedText secretPath={secretPath} />
+      )}
       <AccentButton onClick={onAddNewSecret}>Add another secret</AccentButton>
     </div>
+  );
+}
+
+function MessageForEncryptedText({ secretPath }: { secretPath: string }) {
+  return (
+    <p>
+      You can view and decrypt your secret text at{" "}
+      <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link> using your
+      passphrase.
+    </p>
+  );
+}
+
+function MessageForUnencryptedText({ secretPath }: { secretPath: string }) {
+  return (
+    <p>
+      You can view your unencrypted text at{" "}
+      <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link>.
+    </p>
   );
 }
