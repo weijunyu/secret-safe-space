@@ -42,7 +42,8 @@ export default function SecretsEditor({
   onSubmitSecret: (
     secret: string,
     passphrase: string,
-    secretExpiryDuration: number
+    secretExpiryDuration: number,
+    encryptionDisabled: boolean
   ) => Promise<any>;
   active: boolean;
   onCancel: () => void;
@@ -72,7 +73,12 @@ export default function SecretsEditor({
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSubmitSecret(secretText, secretPassphrase, secretExpiryDuration);
+    onSubmitSecret(
+      secretText,
+      secretPassphrase,
+      secretExpiryDuration,
+      encryptionDisabled
+    );
   }
 
   return (
@@ -135,7 +141,7 @@ export default function SecretsEditor({
         type="submit"
         disabled={
           secretText === "" ||
-          secretPassphrase === "" ||
+          (secretPassphrase === "" && !encryptionDisabled) ||
           secretExpiryDuration < MinimumExpiryDuration
         }
       >

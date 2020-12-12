@@ -2,6 +2,7 @@ import { firebaseAdmin, firestore } from "../lib/firebase";
 import {
   SECRET_PATH_COLLECTION,
   DEFAULT_SECRET_EXPIRY_DURATION,
+  DEFAULT_ENCRYPTION_DISABLED,
 } from "../lib/constants";
 import { SecretDocument } from "../interfaces";
 
@@ -9,6 +10,8 @@ class Secret {
   private path: string;
   private value: string;
   private expiryDuration: number;
+  private encryptionDisabled: boolean;
+
   private document: SecretDocument | null = null;
 
   static async getAvailability(path: string): Promise<boolean> {
@@ -49,14 +52,17 @@ class Secret {
     path,
     value,
     expiryDuration,
+    encryptionDisabled,
   }: {
     path: string;
     value: string;
     expiryDuration: number;
+    encryptionDisabled: boolean;
   }) {
     this.path = path;
     this.value = value;
     this.expiryDuration = expiryDuration || DEFAULT_SECRET_EXPIRY_DURATION;
+    this.encryptionDisabled = encryptionDisabled || DEFAULT_ENCRYPTION_DISABLED;
   }
 
   public async saveIfValid(): Promise<SecretDocument> {
@@ -82,6 +88,7 @@ class Secret {
             expiryTime: firebaseAdmin.firestore.Timestamp.fromMillis(
               expiryTime
             ),
+            encryptionDisabled: this.encryptionDisabled,
           };
           transaction.set(docRef, secretDocument);
           return secretDocument;

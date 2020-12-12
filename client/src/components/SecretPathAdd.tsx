@@ -55,10 +55,13 @@ export default function SecretPathAdd() {
   async function onSubmitSecret(
     secret: string,
     passphrase: string,
-    secretExpiryDuration: number
+    secretExpiryDuration: number,
+    encryptionDisabled = false
   ) {
     // 1. encrypt secret with passphrase
-    const ciphertext = AES.encrypt(secret, passphrase).toString();
+    const ciphertext = encryptionDisabled
+      ? secret
+      : AES.encrypt(secret, passphrase).toString();
 
     setSubmittingSecret(true);
     setExpandedAccordion(SecretPathAddAccordions.None);
@@ -69,6 +72,7 @@ export default function SecretPathAdd() {
         path: secretPathFinal,
         secret: ciphertext,
         expiryDuration: secretExpiryDuration,
+        encryptionDisabled,
       });
       setSecretPassphraseFinal(passphrase);
       setHasSetSecret(true);

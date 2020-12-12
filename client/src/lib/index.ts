@@ -31,13 +31,15 @@ export async function setSecretAtPath({
   secret,
   path,
   expiryDuration,
+  encryptionDisabled = false,
 }: {
   secret: string;
   path: string;
   expiryDuration: number;
+  encryptionDisabled: boolean;
 }): Promise<any> {
   return httpClient("/secret", {
     method: "post",
-    data: { secret, path, expiryDuration },
+    data: { secret, path, expiryDuration, encryptionDisabled },
   }).then((res) => res.data);
 }
