@@ -37,9 +37,12 @@ export const setSecretAtPath: express.RequestHandler = async (
   const secretPath: string = req.body.path;
   const secretText: string = req.body.secret;
   const expiryDuration: number = req.body.expiryDuration;
-  if (!secretPath || !secretText) {
+  const encrypted: boolean = req.body.encrypted;
+  if (!secretPath || !secretText || encrypted == null) {
     return next(
-      new Error("Missing argument(s): specify secret path and text!")
+      new Error(
+        "Missing argument(s): specify secret path, text and encryption status."
+      )
     );
   }
 
