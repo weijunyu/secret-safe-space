@@ -1,7 +1,7 @@
 import { firebaseAdmin, firestore } from "../lib/firebase";
 import { SECRET_PATH_COLLECTION } from "../lib/constants";
 export async function removeExpiredSecrets() {
-  const expiredDocs = firestore
+  const expiredDocs = await firestore
     .collection(SECRET_PATH_COLLECTION)
     .where(
       "expiryTime",
@@ -9,5 +9,7 @@ export async function removeExpiredSecrets() {
       firebaseAdmin.firestore.Timestamp.fromDate(new Date())
     )
     .get();
-  console.log(expiredDocs);
+  expiredDocs.forEach((doc) => {
+    console.log(doc.data());
+  });
 }
