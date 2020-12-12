@@ -12,5 +12,5 @@ export const scheduledCleanUp = functions
     console.log(
       `[${ctx.eventType}] Removing expired secrets at ${ctx.timestamp}`
     );
-    removeExpiredSecrets();
+    removeExpiredSecrets().catch(console.error);
   });
