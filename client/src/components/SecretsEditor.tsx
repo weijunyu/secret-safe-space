@@ -87,6 +87,7 @@ export default function SecretsEditor({
           onChange={onSecretInputChange}
           disabled={!active}
           rows={20}
+          autoCapitalize="off"
         ></SecretInputTextarea>
       </TextField>
       <TextField>

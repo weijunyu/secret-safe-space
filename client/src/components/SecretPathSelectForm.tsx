@@ -68,6 +68,7 @@ export default function SecretPathSelectForm({
           value={secretPath}
           onChange={onSecretPathChange}
           disabled={!active}
+          autoCapitalize="off"
         ></input>
       </TextField>
       <AccentButton
