@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { AES, enc } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 
 import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
+
+import { decrypt } from "../lib/cryptography";
 
 export default function SecretPathDecryptForm({
   encryptedSecrets,
@@ -21,11 +22,8 @@ export default function SecretPathDecryptForm({
   async function decryptSecrets(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const decryptedBytes = AES.decrypt(encryptedSecrets, secretPassword);
-      if (decryptedBytes.sigBytes < 0) {
-        throw new Error("Passphrase incorrect.");
-      }
-      onDecrypt(decryptedBytes.toString(enc.Utf8));
+      const decrypted = decrypt(encryptedSecrets, secretPassword);
+      onDecrypt(decrypted);
     } catch (err) {
       toast.error(
         "Decryption failed. Please check your passphrase and try again."

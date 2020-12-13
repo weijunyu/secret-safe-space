@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 
 import Accordion from "@material-ui/core/Accordion";
@@ -12,7 +11,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import SecretsEditor from "./SecretsEditor";
 import SecretPathAdded from "./SecretPathAdded";
 
-import { setSecretAtPath } from "../lib";
+import { setSecretAtPath } from "../lib/api";
+import { encrypt } from "../lib/cryptography";
 
 import SecretPathSelectForm from "./SecretPathSelectForm";
 
@@ -64,8 +64,7 @@ export default function SecretPathAdd() {
     // 1. encrypt secret with passphrase
     const ciphertext = encryptionDisabled
       ? secret
-      : AES.encrypt(secret, passphrase).toString();
-
+      : encrypt(secret, passphrase);
     setSubmittingSecret(true);
     setExpandedAccordion(SecretPathAddAccordions.None);
 

@@ -6,7 +6,7 @@ import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
 import { Success } from "../lib/colors";
 
-import { checkPathAvailability } from "../lib";
+import { checkPathAvailability } from "../lib/api";
 
 export default function SecretPathSelectForm({
   onSubmit,

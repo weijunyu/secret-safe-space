@@ -9,7 +9,8 @@ import Divider from "./common/Divider";
 import SecretPathDecryptForm from "./SecretPathDecryptForm";
 import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
 
-import { getSecretAtPath } from "../lib";
+import { getSecretAtPath } from "../lib/api";
+import { getCiphertextFromCipher } from "../lib/cryptography";
 
 type SecretPathViewerParams = {
   secretPath: string;
@@ -57,7 +58,9 @@ export default function SecretPathViewer() {
     } else if (!encryptionDisabled && encryptedSecrets) {
       return (
         <>
-          <CipherViewer>Your encrypted secret: {encryptedSecrets}</CipherViewer>
+          <CipherViewer>
+            Your encrypted secret: {getCiphertextFromCipher(encryptedSecrets)}
+          </CipherViewer>
 
           <Divider />
 

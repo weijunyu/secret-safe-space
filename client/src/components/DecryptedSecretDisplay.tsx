@@ -17,6 +17,7 @@ const StyledDecryptedSecretCard = styled(Card)`
   && {
     background-color: ${SuccessLight};
   }
+  overflow-wrap: break-word;
 `;
 
 export default function DecryptedSecretDisplay({
