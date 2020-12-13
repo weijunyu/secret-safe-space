@@ -23,13 +23,13 @@ export default function SecretPathDecryptForm({
     try {
       const decryptedBytes = AES.decrypt(encryptedSecrets, secretPassword);
       if (decryptedBytes.sigBytes < 0) {
-        throw new Error(
-          "Decryption failed. Please check your passphrase and try again."
-        );
+        throw new Error("Passphrase incorrect.");
       }
       onDecrypt(decryptedBytes.toString(enc.Utf8));
     } catch (err) {
-      toast.error(err.message);
+      toast.error(
+        "Decryption failed. Please check your passphrase and try again."
+      );
       return "";
     }
   }

@@ -48,6 +48,7 @@ export default function SecretPathViewer() {
 
   function onDecrypt(plaintext: string) {
     setDecryptedSecrets(plaintext);
+    // todo: one-time view option: call server to delete document?
   }
 
   function renderSecrets() {

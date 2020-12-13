@@ -104,7 +104,7 @@ export default function SecretsEditor({
       </TextField>
       <TextField>
         <label htmlFor="secret-passphrase-input">
-          Enter the password you would use to retrieve this secret:
+          Enter the passphrase you would use to retrieve this secret:
         </label>
         <SecretPassphraseInput
           id="secret-passphrase-input"
