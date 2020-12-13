@@ -16,7 +16,10 @@ type SecretPathViewerParams = {
 };
 
 const CipherViewer = styled.span`
-  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
 `;
 
 export default function SecretPathViewer() {

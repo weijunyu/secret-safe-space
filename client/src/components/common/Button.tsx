@@ -7,6 +7,7 @@ import {
   Primary,
   PrimaryLight,
   LightGrey,
+  Light,
 } from "../../lib/colors";
 
 export const Button = styled.button`
@@ -14,6 +15,7 @@ export const Button = styled.button`
   border: none;
   :hover {
     cursor: pointer;
+    background-color: ${Light};
   }
   :disabled,
   :disabled:hover {

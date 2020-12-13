@@ -83,9 +83,15 @@ export default function SecretsEditor({
 
   return (
     <form onSubmit={onSubmit}>
+      <div style={{ marginBottom: "1rem" }}>
+        <Button type="button" onClick={onCancel}>
+          <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
+          Go back
+        </Button>
+      </div>
       <TextField>
         <label htmlFor="secret-text-input">
-          Enter your secret text here. You will be able to access it at:{" "}
+          Enter your secret text here. You will be able to access it at{" "}
           <code>/view/{secretPath}</code>
         </label>
         <SecretInputTextarea
@@ -147,9 +153,6 @@ export default function SecretsEditor({
       >
         Save
       </AccentButton>
-      <Button type="button" onClick={onCancel}>
-        Back
-      </Button>
     </form>
   );
 }

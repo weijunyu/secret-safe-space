@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
+import { Link } from "react-router-dom";
 
 import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
+import { Success } from "../lib/colors";
 
 import { checkPathAvailability } from "../lib";
 
@@ -53,14 +55,29 @@ export default function SecretPathSelectForm({
   return (
     <form onSubmit={onSubmitForm}>
       <TextField>
-        <label htmlFor="secret-path">Enter URL path for your secret</label>
+        <label htmlFor="secret-path">Enter the URL path for your secret.</label>
         <p>
-          <small>
-            {secretPath &&
-              (checkingSecretPath
-                ? "checking path availability..."
-                : `Path available: ${secretPathAvailable}`)}
-          </small>
+          {secretPath &&
+            (checkingSecretPath ? (
+              <small>checking path availability...</small>
+            ) : (
+              <small>
+                Path available:{" "}
+                {secretPathAvailable ? (
+                  <>
+                    yes{" "}
+                    <i
+                      className="fas fa-check-circle"
+                      style={{ color: Success }}
+                    ></i>
+                  </>
+                ) : (
+                  <>
+                    no <i className="fas fa-times-circle"></i>
+                  </>
+                )}
+              </small>
+            ))}
         </p>
         <input
           id="secret-path"
@@ -71,6 +88,12 @@ export default function SecretPathSelectForm({
           autoCapitalize="off"
         ></input>
       </TextField>
+      <p>
+        <small>
+          Your secret text would be available at{" "}
+          <Link to={`/view/${secretPath}`}>{"/view/" + secretPath}</Link>.
+        </small>
+      </p>
       <AccentButton
         type="submit"
         disabled={!secretPathAvailable || !secretPath}
