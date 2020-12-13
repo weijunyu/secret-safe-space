@@ -8,10 +8,10 @@ export const scheduledCleanUp = functions
   .region("asia-southeast2")
   .pubsub.schedule("0 * * * *") // m h d m d(w)
   .timeZone("Asia/Singapore")
-  .onRun((ctx: functions.EventContext) => {
+  .onRun(async (ctx: functions.EventContext) => {
     console.log(
       `[${ctx.eventType}] Removing expired secrets at ${ctx.timestamp}`
     );
-    removeExpiredSecrets().catch(console.error);
+    await removeExpiredSecrets().catch(console.error);
     return null;
   });
