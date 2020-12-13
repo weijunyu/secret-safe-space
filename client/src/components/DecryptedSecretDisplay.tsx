@@ -26,10 +26,12 @@ export default function DecryptedSecretDisplay({
 }) {
   return (
     <StyledDecryptedSecretDisplayContainer>
-      {decryptedSecrets && (
-        <StyledSuccessIcon className="fas fa-check-circle"></StyledSuccessIcon>
-      )}{" "}
-      Your decrypted secrets:
+      <p>
+        {decryptedSecrets && (
+          <StyledSuccessIcon className="fas fa-check-circle"></StyledSuccessIcon>
+        )}{" "}
+        Your decrypted secrets:
+      </p>
       <StyledDecryptedSecretCard>
         <CardContent>{decryptedSecrets}</CardContent>
       </StyledDecryptedSecretCard>
