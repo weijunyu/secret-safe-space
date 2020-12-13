@@ -6,6 +6,7 @@ import DurationPicker from "./DurationPicker";
 import { AccentButton, Button } from "./common/Button";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
+import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
 import { Warn } from "../lib/colors";
 
 const SecretInputTextarea = styled.textarea`
@@ -24,13 +25,6 @@ const FormHintWarning = styled.small`
   color: ${Warn};
   padding: 6px 0;
 `;
-
-const DefaultExpiryDuration = {
-  hours: 0,
-  minutes: 5,
-};
-
-const MinimumExpiryDuration = 60000; // 60000 ms = 1 min
 
 export default function SecretsEditor({
   secretPath,

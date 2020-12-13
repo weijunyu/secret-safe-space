@@ -30,6 +30,7 @@ export default function SecretPathAdd() {
   const [hasSetSecret, setHasSetSecret] = useState(false);
 
   const [encryptionDisabledFinal, setEncryptionDisabledFinal] = useState(false);
+  const [secretExpiryTime, setSecretExpiryTime] = useState(-1);
 
   const [expandedAccordion, setExpandedAccordion] = useState(
     SecretPathAddAccordions.ReservePath
@@ -70,13 +71,14 @@ export default function SecretPathAdd() {
 
     // 2. set secret ciphertext at path
     try {
-      await setSecretAtPath({
+      const secretDocument = await setSecretAtPath({
         path: secretPathFinal,
         secret: ciphertext,
         expiryDuration: secretExpiryDuration,
         encryptionDisabled,
       });
 
+      setSecretExpiryTime(secretDocument.expiryTime._seconds);
       setHasSetSecret(true);
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
@@ -144,6 +146,7 @@ export default function SecretPathAdd() {
               secretPath={secretPathFinal}
               onAddNewSecret={reset}
               encryptionDisabled={encryptionDisabledFinal}
+              secretExpiryTime={secretExpiryTime}
             />
           </CardContent>
         </Card>
