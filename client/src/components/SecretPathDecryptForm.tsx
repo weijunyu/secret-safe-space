@@ -30,6 +30,7 @@ export default function SecretPathDecryptForm({
       toast.error(
         "Decryption failed. Please check your passphrase and try again."
       );
+      onDecrypt("");
       return "";
     }
   }

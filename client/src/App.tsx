@@ -8,6 +8,7 @@ import { Light, Accent, Dark } from "./lib/colors";
 
 import SecretPathAdd from "./components/SecretPathAdd";
 import SecretPathViewer from "./components/SecretPathViewer";
+import HowItWorks from "./components/HowItWorks";
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -92,7 +93,7 @@ function App() {
               <SecretPathViewer />
             </Route>
             <Route exact path="/">
-              <h2>How it works</h2>
+              <HowItWorks />
             </Route>
           </Switch>
         </main>
