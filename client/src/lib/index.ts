@@ -22,9 +22,9 @@ export async function reserveSecretPath(path: string): Promise<any> {
   }).then((res) => res.data);
 }
 
-export async function getSecretEncrypted(
+export async function getSecretAtPath(
   path: string
-): Promise<{ value: string }> {
+): Promise<SecretDocumentJsonResponse> {
   return httpClient("/secret", { params: { path } }).then((res) => res.data);
 }
 

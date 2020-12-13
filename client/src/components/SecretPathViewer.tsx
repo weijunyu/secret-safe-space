@@ -9,7 +9,7 @@ import Divider from "./common/Divider";
 import SecretPathDecryptForm from "./SecretPathDecryptForm";
 import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
 
-import { getSecretEncrypted } from "../lib";
+import { getSecretAtPath } from "../lib";
 
 type SecretPathViewerParams = {
   secretPath: string;
@@ -25,60 +25,67 @@ const CipherViewer = styled.span`
 export default function SecretPathViewer() {
   const { secretPath } = useParams<SecretPathViewerParams>();
 
-  const [loadingEncryptedSecrets, setLoadingEncryptedSecrets] = useState(false);
+  const [loadingSecrets, setLoadingSecrets] = useState(false);
   const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
+  const [encryptionDisabled, setEncryptionDisabled] = useState(false);
 
   useEffect(() => {
-    setLoadingEncryptedSecrets(true);
-    getSecretEncrypted(secretPath)
+    setLoadingSecrets(true);
+    getSecretAtPath(secretPath)
       .then((secretData) => {
         if (!secretData.value) {
           setEncryptedSecrets(null);
+        } else if (secretData.encryptionDisabled) {
+          setDecryptedSecrets(secretData.value);
         } else {
           setEncryptedSecrets(secretData.value);
         }
+        setEncryptionDisabled(secretData.encryptionDisabled);
       })
-      .finally(() => setLoadingEncryptedSecrets(false));
+      .finally(() => setLoadingSecrets(false));
   }, [secretPath]);
 
   function onDecrypt(plaintext: string) {
     setDecryptedSecrets(plaintext);
   }
 
-  return (
-    <>
-      <Card>
-        <CardContent>
-          <p>Your secret path: {secretPath}</p>
-          {loadingEncryptedSecrets ? (
-            <span>Loading...</span>
-          ) : (
-            <>
-              {encryptedSecrets === null && (
-                <p>This path doesn't contain any data!</p>
-              )}
-              {encryptedSecrets && (
-                <>
-                  <CipherViewer>
-                    Your encrypted secret: {encryptedSecrets}
-                  </CipherViewer>
-                  <Divider />
-                  <SecretPathDecryptForm
-                    secretPath={secretPath}
-                    onDecrypt={onDecrypt}
-                  />
-                  {decryptedSecrets && (
-                    <DecryptedSecretDisplay
-                      decryptedSecrets={decryptedSecrets}
-                    />
-                  )}
-                </>
-              )}
-            </>
+  function renderSecrets() {
+    if (encryptionDisabled && decryptedSecrets) {
+      return <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />;
+    } else if (!encryptionDisabled && encryptedSecrets) {
+      return (
+        <>
+          <CipherViewer>Your encrypted secret: {encryptedSecrets}</CipherViewer>
+
+          <Divider />
+
+          <SecretPathDecryptForm
+            encryptedSecrets={encryptedSecrets}
+            onDecrypt={onDecrypt}
+          />
+          {decryptedSecrets && (
+            <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />
           )}
-        </CardContent>
-      </Card>
-    </>
+        </>
+      );
+    }
+  }
+
+  return (
+    <Card>
+      <CardContent>
+        {loadingSecrets ? (
+          <span>Loading...</span>
+        ) : (
+          <>
+            {encryptedSecrets === null && (
+              <p>This path doesn't contain any data!</p>
+            )}
+            {(encryptedSecrets || decryptedSecrets) && renderSecrets()}
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }

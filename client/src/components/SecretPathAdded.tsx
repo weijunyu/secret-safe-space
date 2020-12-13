@@ -18,7 +18,7 @@ export default function SecretPathAdded({
   return (
     <div>
       <p>
-        <strong>Secret set!</strong>
+        <strong>Secret {encryptionDisabled ? "set!" : "encrypted!"}</strong>
       </p>
       <p>
         Your secret expires at{" "}

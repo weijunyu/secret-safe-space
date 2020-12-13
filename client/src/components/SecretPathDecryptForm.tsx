@@ -5,51 +5,39 @@ import { ToastContainer, toast } from "react-toastify";
 import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
 
-import { getSecretEncrypted } from "../lib";
-
 export default function SecretPathDecryptForm({
-  secretPath,
+  encryptedSecrets,
   onDecrypt,
 }: {
-  secretPath: string;
+  encryptedSecrets: string;
   onDecrypt: (plaintext: string) => any;
 }) {
   const [secretPassword, setSecretPassword] = useState("");
-  function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newPassword = e.target.value;
-    setSecretPassword(newPassword);
-  }
-  async function getSecretsAtPath(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
 
-    if (secretPath) {
-      const decryptedSecrets = await getDecryptedSecrets(
-        secretPath,
-        secretPassword
-      );
-      onDecrypt(decryptedSecrets);
-    }
+  function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSecretPassword(e.target.value);
   }
-  async function getDecryptedSecrets(secretPath: string, passphrase: string) {
+
+  async function decryptSecrets(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     try {
-      const secretData = await getSecretEncrypted(secretPath);
-      const decryptedBytes = AES.decrypt(secretData.value, passphrase);
+      const decryptedBytes = AES.decrypt(encryptedSecrets, secretPassword);
       if (decryptedBytes.sigBytes < 0) {
         throw new Error(
           "Decryption failed. Please check your passphrase and try again."
         );
       }
-      const decryptedSecret = decryptedBytes.toString(enc.Utf8);
-      return decryptedSecret;
+      onDecrypt(decryptedBytes.toString(enc.Utf8));
     } catch (err) {
       toast.error(err.message);
       return "";
     }
   }
+
   return (
     <div>
       <ToastContainer />
-      <form onSubmit={getSecretsAtPath}>
+      <form onSubmit={decryptSecrets}>
         <TextField>
           <label htmlFor="secret-password">
             Enter the passphrase you used to create this secret
