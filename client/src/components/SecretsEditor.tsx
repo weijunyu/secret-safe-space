@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
@@ -62,6 +63,10 @@ export default function SecretsEditor({
   }
 
   function onToggleEncryption() {
+    if (!encryptionDisabled) {
+      // clear passphrase if toggling from not disabled --> disabled
+      setSecretPassphrase("");
+    }
     setEncryptionDisabled(!encryptionDisabled);
   }
 
@@ -86,10 +91,11 @@ export default function SecretsEditor({
       <TextField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at{" "}
-          <code>/view/{secretPath}</code>
+          <Link to={"/view/" + secretPath}>/view/{secretPath}</Link>.
         </label>
         <SecretInputTextarea
           id="secret-text-input"
+          value={secretText}
           onChange={onSecretInputChange}
           disabled={!active}
           rows={20}
@@ -103,6 +109,7 @@ export default function SecretsEditor({
         <SecretPassphraseInput
           id="secret-passphrase-input"
           type="password"
+          value={secretPassphrase}
           onChange={onSecretPassphraseChange}
           disabled={encryptionDisabled}
         />
