@@ -88,12 +88,16 @@ export default function SecretPathSelectForm({
           autoCapitalize="off"
         ></input>
       </TextField>
-      <p>
-        <small>
-          Your secret text would be available at{" "}
-          <Link to={`/view/${secretPath}`}>{"/view/" + secretPath}</Link>.
-        </small>
-      </p>
+
+      {secretPath && secretPathAvailable && (
+        <p>
+          <small>
+            Your secret text would be available at{" "}
+            <Link to={`/view/${secretPath}`}>{"/view/" + secretPath}</Link>.
+          </small>
+        </p>
+      )}
+
       <AccentButton
         type="submit"
         disabled={!secretPathAvailable || !secretPath}
