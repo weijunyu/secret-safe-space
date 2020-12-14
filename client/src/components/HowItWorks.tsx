@@ -47,6 +47,7 @@ export default function HowItWorks() {
       <ul>
         <li>A quick way to copy and paste text between devices</li>
         <li>A secure way to store and retrieve short-term secrets</li>
+        <li>Transmit text or text-encoded data that cannot be parsed/read by intermediaries</li>
       </ul>
     </div>
   );
