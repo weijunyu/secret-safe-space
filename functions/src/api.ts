@@ -2,6 +2,7 @@ import * as express from "express";
 import * as cors from "cors";
 import * as expressValidator from "express-validator";
 import * as Pino from "pino-http";
+import { CorsOrigins } from "./config";
 
 import {
   checkSecretAvailability,
@@ -14,7 +15,7 @@ import { validateRequestParams } from "./lib/validation";
 const pino = Pino();
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: CorsOrigins }));
 app.use(pino);
 
 app.get("/", healthCheckRoute);
