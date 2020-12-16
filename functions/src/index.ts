@@ -1,3 +1,5 @@
+import { config } from "dotenv";
+config();
 import * as functions from "firebase-functions";
 import { removeExpiredSecrets } from "./scheduled/cleanUp";
 
