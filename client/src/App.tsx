@@ -2,7 +2,13 @@ import React from "react";
 
 import styled from "styled-components";
 
-import { BrowserRouter, Switch, Route, NavLink } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  NavLink,
+  Redirect,
+} from "react-router-dom";
 
 import { Light, Accent, Dark } from "./lib/colors";
 
@@ -94,6 +100,9 @@ function App() {
             </Route>
             <Route exact path="/">
               <HowItWorks />
+            </Route>
+            <Route path="/">
+              <Redirect to="/" />
             </Route>
           </Switch>
         </main>

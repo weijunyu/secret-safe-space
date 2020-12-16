@@ -18,7 +18,7 @@ export default function HowItWorks() {
         <li>Enter your text.</li>
         <li>
           Enter a passphrase. This would be used by <em>your browser</em> to
-          encrypt your text before it is stored on our servers.
+          encrypt your text before it is sent via an encrypted connection to be stored on our servers.
         </li>
         <li>
           (optional) Disable encryption. This means your text would no longer be
@@ -38,7 +38,7 @@ export default function HowItWorks() {
           target="_blank"
           rel="noreferrer"
         >
-          AES-256
+          AES-256 (GCM)
         </a>
         , a U.S. Federal Information Processing Standard (FIPS) to encrypt your
         text before storing it.
@@ -47,6 +47,7 @@ export default function HowItWorks() {
       <ul>
         <li>A quick way to copy and paste text between devices</li>
         <li>A secure way to store and retrieve short-term secrets</li>
+        <li>Transmit text or text-encoded data that cannot be parsed/read by intermediaries</li>
       </ul>
     </div>
   );
