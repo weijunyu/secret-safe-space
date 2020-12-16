@@ -18,7 +18,8 @@ export default function HowItWorks() {
         <li>Enter your text.</li>
         <li>
           Enter a passphrase. This would be used by <em>your browser</em> to
-          encrypt your text before it is sent via an encrypted connection to be stored on our servers.
+          encrypt your text before it is sent via an encrypted connection to be
+          stored on our servers.
         </li>
         <li>
           (optional) Disable encryption. This means your text would no longer be
@@ -28,6 +29,12 @@ export default function HowItWorks() {
         <li>
           (optional) Set how long it takes for your text to expire, after which
           it is no longer readable from our servers. Defaults to 5 minutes.
+        </li>
+        <li>Save the secret.</li>
+        <li>
+          You can then use your other device to access and decrypt it at{" "}
+          <em>https://luanloot.xyz/view/[your chosen path]</em> within the
+          expiry time you set.
         </li>
       </ol>
       <h2>How it works</h2>
@@ -43,11 +50,18 @@ export default function HowItWorks() {
         , a U.S. Federal Information Processing Standard (FIPS) to encrypt your
         text before storing it.
       </p>
+      <p>
+        Your data would be inaccessible once past expiry, and would be deleted
+        from our servers at most 1 hour past expiry time.
+      </p>
       <h2>What do I use this for?</h2>
       <ul>
         <li>A quick way to copy and paste text between devices</li>
         <li>A secure way to store and retrieve short-term secrets</li>
-        <li>Transmit text or text-encoded data that cannot be parsed/read by intermediaries</li>
+        <li>
+          Transmit text or text-encoded data that cannot be parsed/read by
+          intermediaries
+        </li>
       </ul>
     </div>
   );
