@@ -43,3 +43,11 @@ export const AccentButton = styled(Button)`
 export const AccentAltButton = styled(Button)`
   background-color: ${AccentAlt};
 `;
+
+export const BareButton = styled(Button)`
+  background: none;
+  border: none;
+  :hover {
+    background-color: transparent;
+  }
+`;
