@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+
+import Snackbar from "@material-ui/core/Snackbar";
 
 import { TextField } from "./common/FormField";
-import { AccentButton } from "./common/Button";
+import { AccentButton, BareButton } from "./common/Button";
 
 import { decrypt } from "../lib/cryptography";
 
@@ -15,6 +16,8 @@ export default function SecretPathDecryptForm({
 }) {
   const [secretPassword, setSecretPassword] = useState("");
 
+  const [showFailureSnackbar, setShowFailureSnackbar] = useState(false);
+
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSecretPassword(e.target.value);
   }
@@ -25,17 +28,36 @@ export default function SecretPathDecryptForm({
       const decrypted = decrypt(encryptedSecrets, secretPassword);
       onDecrypt(decrypted);
     } catch (err) {
-      toast.error(
-        "Decryption failed. Please check your passphrase and try again."
-      );
+      setShowFailureSnackbar(true);
       onDecrypt("");
       return "";
     }
   }
 
+  function closeFailureSnackbar(event: React.SyntheticEvent, reason: string) {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setShowFailureSnackbar(false);
+  }
+
   return (
     <div>
-      <ToastContainer />
+      <Snackbar
+        open={showFailureSnackbar}
+        autoHideDuration={2000}
+        onClose={closeFailureSnackbar}
+        message="Decryption failed. Please check your passphrase and try again."
+        action={
+          <BareButton
+            style={{ color: "white" }}
+            onClick={() => setShowFailureSnackbar(false)}
+          >
+            <i className="fas fa-times" />
+          </BareButton>
+        }
+      />
       <form onSubmit={decryptSecrets}>
         <TextField>
           <label htmlFor="secret-password">
