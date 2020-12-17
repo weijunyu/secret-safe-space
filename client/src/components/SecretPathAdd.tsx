@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -84,7 +83,6 @@ export default function SecretPathAdd() {
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
       console.error(err);
-      toast.error(err.message);
 
       reset();
     }
@@ -105,7 +103,6 @@ export default function SecretPathAdd() {
 
   return (
     <div>
-      <ToastContainer />
       <Accordion
         disabled={secretPathChosen}
         expanded={expandedAccordion === SecretPathAddAccordions.ReservePath}

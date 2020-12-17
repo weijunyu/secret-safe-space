@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 
 import "./styles/normalize.css";
 import "./styles/main.css";
-import "react-toastify/dist/ReactToastify.css";
 
 import App from "./App";
 
