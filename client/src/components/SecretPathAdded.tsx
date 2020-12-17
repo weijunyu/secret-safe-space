@@ -9,11 +9,13 @@ export default function SecretPathAdded({
   onAddNewSecret,
   encryptionDisabled,
   secretExpiryTime,
+  secretPassphrase,
 }: {
   secretPath: string;
   onAddNewSecret: () => void;
   encryptionDisabled: boolean;
   secretExpiryTime: number;
+  secretPassphrase: string;
 }) {
   return (
     <div>
@@ -29,19 +31,28 @@ export default function SecretPathAdded({
       {encryptionDisabled ? (
         <MessageForUnencryptedText secretPath={secretPath} />
       ) : (
-        <MessageForEncryptedText secretPath={secretPath} />
+        <MessageForEncryptedText
+          secretPath={secretPath}
+          secretPassphrase={secretPassphrase}
+        />
       )}
       <AccentButton onClick={onAddNewSecret}>Add another secret</AccentButton>
     </div>
   );
 }
 
-function MessageForEncryptedText({ secretPath }: { secretPath: string }) {
+function MessageForEncryptedText({
+  secretPath,
+  secretPassphrase,
+}: {
+  secretPath: string;
+  secretPassphrase: string;
+}) {
   return (
     <p>
       You can fetch and decrypt your secret text at{" "}
       <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link> using your
-      passphrase.
+      passphrase: <strong>{secretPassphrase}</strong>
     </p>
   );
 }

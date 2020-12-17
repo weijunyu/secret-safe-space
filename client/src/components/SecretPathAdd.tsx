@@ -28,8 +28,10 @@ export default function SecretPathAdd() {
 
   const [submittingSecret, setSubmittingSecret] = useState(false);
   const [hasSetSecret, setHasSetSecret] = useState(false);
+  const [secretPassphrase, setSecretPassphrase] = useState("");
 
   const [encryptionDisabledFinal, setEncryptionDisabledFinal] = useState(false);
+
   const [secretExpiryTime, setSecretExpiryTime] = useState(-1);
 
   const [expandedAccordion, setExpandedAccordion] = useState(
@@ -76,7 +78,7 @@ export default function SecretPathAdd() {
         expiryDuration: secretExpiryDuration,
         encryptionDisabled,
       });
-
+      setSecretPassphrase(passphrase);
       setSecretExpiryTime(secretDocument.expiryTime._seconds);
       setHasSetSecret(true);
     } catch (err) {
@@ -146,6 +148,7 @@ export default function SecretPathAdd() {
               onAddNewSecret={reset}
               encryptionDisabled={encryptionDisabledFinal}
               secretExpiryTime={secretExpiryTime}
+              secretPassphrase={secretPassphrase}
             />
           </CardContent>
         </Card>
