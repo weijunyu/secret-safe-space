@@ -1,0 +1,26 @@
+default:
+  image: node:lts-alpine
+  before_script:
+    - npm install --prefix client
+    - npm install --prefix functions
+
+test_app:
+  stage: test
+  script:
+    - npm --prefix client run build
+    - npm --prefix functions run build
+
+deploy_app:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  variables:
+    FIREBASE_TOKEN: $FIREBASE_CI_TOKEN
+    REACT_APP_API_BASE_URL: https://asia-southeast2-luan-loot.cloudfunctions.net/api
+    REACT_APP_FIREBASE_CONFIG: '{"apiKey":"AIzaSyCdjdzDShf1_uQsCeCjQfKew2YzlzgbRJM","authDomain":"luan-loot.firebaseapp.com","projectId":"luan-loot","storageBucket":"luan-loot.appspot.com","messagingSenderId":"139896930796","appId":"1:139896930796:web:1cf8564ae0bfc90223c0c9","measurementId":"G-NBBJWHQXNC"}'
+    REACT_APP_DEPLOYMENT_ENV: prod
+  script:
+    - npm install
+    - npm --prefix client run build
+    - npm --prefix functions run build
+    - npm run firebase -- deploy --only hosting,functions
