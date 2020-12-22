@@ -1,6 +1,7 @@
 import * as express from "express";
 
 import Secret from "../models/Secret";
+import * as Usage from "../models/Usage";
 
 import { SecretDocument } from "../interfaces";
 
@@ -60,12 +61,24 @@ export const setSecretAtPath: express.RequestHandler = async (
 
   try {
     const savedSecret: SecretDocument = await secret.saveIfValid();
+    Usage.increment().catch(console.error); // fire and forget
     return res.send(savedSecret);
   } catch (err) {
     console.error(err);
     return next({
       status: 500,
       message: "Couldn't create secret.",
+    });
+  }
+};
+
+export const getUsage: express.RequestHandler = async (req, res, next) => {
+  try {
+    return res.send({ total: await Usage.getTotal() });
+  } catch (err) {
+    return next({
+      status: 500,
+      message: "Couldn't retrieve usage stats",
     });
   }
 };

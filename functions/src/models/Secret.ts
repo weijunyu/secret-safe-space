@@ -93,7 +93,7 @@ class Secret {
           transaction.set(docRef, secretDocument);
           return secretDocument;
         } else {
-          throw new Error("Can't save secret - path already exists");
+          throw new Error("Can't save secret - path already used");
         }
       }
     );

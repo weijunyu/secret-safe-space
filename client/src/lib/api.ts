@@ -44,3 +44,7 @@ export async function setSecretAtPath({
     data: { secret, path, expiryDuration, encryptionDisabled },
   }).then((res) => res.data);
 }
+
+export async function getUsage(): Promise<{ total: number }> {
+  return httpClient("/usage").then((res) => res.data);
+}

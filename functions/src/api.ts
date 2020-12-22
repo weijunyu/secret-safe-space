@@ -8,6 +8,7 @@ import {
   checkSecretAvailability,
   getSecretAtPath,
   setSecretAtPath,
+  getUsage,
 } from "./controllers";
 import { healthCheckRoute } from "./controllers/health";
 import { validateRequestParams } from "./lib/validation";
@@ -40,6 +41,8 @@ app.post(
 );
 
 app.get("/secret", getSecretAtPath);
+
+app.get("/usage", getUsage);
 
 const requestErrorHandler: express.ErrorRequestHandler = (
   err,

@@ -1,8 +1,16 @@
 import React from "react";
+import styled from "styled-components";
 
-export default function HowItWorks() {
+import UsageCounter from "./UsageCounter";
+
+const HelpContainer = styled.section`
+  padding-bottom: 2rem;
+`;
+
+export default function Help() {
   return (
-    <div>
+    <HelpContainer>
+      <UsageCounter />
       <h2>Usage</h2>
       <p>
         This app lets you store text that is accessible from anywhere on the
@@ -63,6 +71,6 @@ export default function HowItWorks() {
           intermediaries
         </li>
       </ul>
-    </div>
+    </HelpContainer>
   );
 }
