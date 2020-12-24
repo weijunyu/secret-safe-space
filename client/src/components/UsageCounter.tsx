@@ -27,7 +27,11 @@ export default function UsageCounter() {
     } else if (usageCount === -1) {
       return null;
     } else {
-      return <small>{usageCount} secrets exchanged</small>;
+      return (
+        <small>
+          {usageCount} secret{usageCount === 1 ? null : "s"} exchanged
+        </small>
+      );
     }
   }
 

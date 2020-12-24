@@ -3,19 +3,17 @@ import { firestore, firebaseAdmin } from "../lib/firebase";
 import * as constants from "../lib/constants";
 
 export async function getTotal(): Promise<number> {
-  const usageDoc = await firestore
-    .collection(constants.USAGE_COLLECTION)
-    .doc(constants.USAGE_DOC)
-    .get();
+  const usageDocRef = await getUsageDocRef();
+  const usageDoc = await usageDocRef.get();
   const { total } = usageDoc.data() || {};
-  if (total != null) {
+  if (total !== null && total !== undefined) {
     return total;
   } else {
     throw new Error("Usage stats not found.");
   }
 }
 
-export async function increment() {
+export async function increment(): Promise<FirebaseFirestore.WriteResult> {
   const usageDocRef = await getUsageDocRef();
 
   const inc = firebaseAdmin.firestore.FieldValue.increment(1);

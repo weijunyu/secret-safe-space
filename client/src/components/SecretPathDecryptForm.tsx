@@ -48,7 +48,12 @@ export default function SecretPathDecryptForm({
         open={showFailureSnackbar}
         autoHideDuration={2000}
         onClose={closeFailureSnackbar}
-        message="Decryption failed. Please check your passphrase and try again."
+        message={
+          <>
+            <i className="fas fa-exclamation-triangle" /> Decryption failed.
+            Please check your passphrase and try again.
+          </>
+        }
         action={
           <BareButton
             style={{ color: "white" }}

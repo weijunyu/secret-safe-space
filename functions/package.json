@@ -4,8 +4,10 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
+    "build:watch": "tsc --watch",
     "deploy": "firebase deploy --only functions",
-    "dev": "concurrently 'tsc --watch' 'firebase emulators:start'",
+    "dev": "concurrently 'npm:build:watch' 'npm:emulators'",
+    "emulators": "firebase emulators:start",
     "lint": "eslint \"src/**/*\"",
     "logs": "firebase functions:log",
     "serve": "npm run build && firebase emulators:start --only functions",
