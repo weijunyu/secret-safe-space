@@ -74,7 +74,7 @@ function App() {
         <StyledHeader>
           <h1 style={{ textAlign: "center" }}>
             <StyledHeaderLink exact to="/">
-              <i className="fas fa-key" /> Luan Loot
+              <i className="fas fa-key" /> secretsafe.space
             </StyledHeaderLink>
           </h1>
           <StyledNav>
