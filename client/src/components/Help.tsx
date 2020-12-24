@@ -41,8 +41,10 @@ export default function Help() {
         <li>Save the secret.</li>
         <li>
           You can then use your other device to access and decrypt it at{" "}
-          <em>https://luanloot.xyz/view/[your chosen path]</em> within the
-          expiry time you set.
+          <strong>
+            <em>https://secretsafe.space/view/[your chosen path]</em>
+          </strong>
+          within the expiry time you set.
         </li>
       </ol>
       <h2>How it works</h2>
