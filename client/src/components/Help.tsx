@@ -17,9 +17,11 @@ export default function Help() {
         internet without needing to log in, for a short time.
       </p>
       <p>
-        This text is encrypted by your browser (by default) before being stored
-        on our servers. We do not store your encryption password so we would not
-        be able to decrypt and read the contents of your text.
+        This text is encrypted by your browser before being stored on our
+        servers. We do not store your encryption password so{" "}
+        <strong>
+          we would not be able to decrypt and read the contents of your text.
+        </strong>
       </p>
       <ol>
         <li>Select a path.</li>
@@ -43,7 +45,7 @@ export default function Help() {
           You can then use your other device to access and decrypt it at{" "}
           <strong>
             <em>https://secretsafe.space/view/[your chosen path]</em>
-          </strong>
+          </strong>{" "}
           within the expiry time you set.
         </li>
       </ol>
@@ -66,11 +68,14 @@ export default function Help() {
       </p>
       <h2>What do I use this for?</h2>
       <ul>
-        <li>A quick way to copy and paste text between devices</li>
-        <li>A secure way to store and retrieve short-term secrets</li>
+        <li>
+          A quick way to copy and paste text between devices without having to
+          log in to any service.
+        </li>
+        <li>A secure way to store and retrieve short-term secrets.</li>
         <li>
           Transmit text or text-encoded data that cannot be parsed/read by
-          intermediaries
+          intermediaries.
         </li>
       </ul>
     </HelpContainer>
