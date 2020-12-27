@@ -49,6 +49,7 @@ export default function SecretsEditor({
     Duration.fromObject(DefaultExpiryDuration).as("milliseconds")
   );
   const [encryptionDisabled, setEncryptionDisabled] = useState(false);
+  const [deleteOnLoad, setDeleteOnLoad] = useState(true);
 
   function onSecretInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     event.preventDefault();
@@ -62,12 +63,16 @@ export default function SecretsEditor({
     setSecretPassphrase(event.target.value);
   }
 
-  function onToggleEncryption() {
-    if (!encryptionDisabled) {
+  function onToggleEncryption(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.checked) {
       // clear passphrase if toggling from not disabled --> disabled
       setSecretPassphrase("");
     }
-    setEncryptionDisabled(!encryptionDisabled);
+    setEncryptionDisabled(e.target.checked);
+  }
+
+  function toggleDeleteOnLoad(e: React.ChangeEvent<HTMLInputElement>) {
+    setDeleteOnLoad(e.target.checked);
   }
 
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -125,6 +130,18 @@ export default function SecretsEditor({
             id="encryption-toggle"
           ></input>
           <label htmlFor="encryption-toggle">Do not encrypt</label>
+        </CheckField>
+
+        <CheckField>
+          <input
+            type="checkbox"
+            checked={deleteOnLoad}
+            onChange={toggleDeleteOnLoad}
+            id="delete-on-load-toggle"
+          ></input>
+          <label htmlFor="delete-on-load-toggle">
+            Delete secret link on first visit
+          </label>
         </CheckField>
 
         <div style={{ marginBottom: "0.5rem" }}>
