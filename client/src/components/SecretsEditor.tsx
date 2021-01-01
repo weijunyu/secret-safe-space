@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 import { AccentButton, Button } from "./common/Button";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
@@ -96,7 +96,7 @@ export default function SecretsEditor({
       <TextField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at{" "}
-          <Link to={"/view/" + secretPath}>/view/{secretPath}</Link>.
+          <SecretPathUrlDisplay path={secretPath} />.
         </label>
         <SecretInputTextarea
           id="secret-text-input"
