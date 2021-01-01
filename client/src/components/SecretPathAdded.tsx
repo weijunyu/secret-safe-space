@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { DateTime } from "luxon";
 
 import { AccentButton } from "./common/Button";
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
 export default function SecretPathAdded({
   secretPath,
@@ -51,8 +51,8 @@ function MessageForEncryptedText({
   return (
     <p>
       You can fetch and decrypt your secret text at{" "}
-      <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link> using your
-      passphrase: <strong>{secretPassphrase}</strong>
+      <SecretPathUrlDisplay path={secretPath} /> using your passphrase:{" "}
+      <strong>{secretPassphrase}</strong>
     </p>
   );
 }
@@ -61,7 +61,7 @@ function MessageForUnencryptedText({ secretPath }: { secretPath: string }) {
   return (
     <p>
       You can fetch your unencrypted text at{" "}
-      <Link to={`/view/${secretPath}`}>/view/{secretPath}</Link>.
+      <SecretPathUrlDisplay path={secretPath} />.
     </p>
   );
 }

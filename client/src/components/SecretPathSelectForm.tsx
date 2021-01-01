@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
-import { Link } from "react-router-dom";
 
 import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
+
 import { Success } from "../lib/colors";
 
 import { checkPathAvailability } from "../lib/api";
@@ -93,7 +94,7 @@ export default function SecretPathSelectForm({
         <p>
           <small>
             Your secret text would be available at{" "}
-            <Link to={`/view/${secretPath}`}>{"/view/" + secretPath}</Link>.
+            <SecretPathUrlDisplay path={secretPath} />.
           </small>
         </p>
       )}

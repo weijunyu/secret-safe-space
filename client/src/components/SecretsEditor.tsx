@@ -144,7 +144,7 @@ export default function SecretsEditor({
           </label>
         </CheckField>
 
-        <div style={{ marginBottom: "0.5rem" }}>
+        <div style={{ margin: "0.5rem 0" }}>
           <strong>Secret expiry time</strong>
         </div>
         {/* 1 - 60 min, 1 - 24 hrs */}
