@@ -10,6 +10,8 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import Container from "@material-ui/core/Container";
+
 import { Light, Accent, Dark } from "./lib/colors";
 
 import SecretPathAdd from "./components/SecretPathAdd";
@@ -91,20 +93,22 @@ function App() {
           </StyledNav>
         </StyledHeader>
         <main>
-          <Switch>
-            <Route path="/add">
-              <SecretPathAdd />
-            </Route>
-            <Route path="/view/:secretPath">
-              <SecretPathViewer />
-            </Route>
-            <Route exact path="/">
-              <Help />
-            </Route>
-            <Route path="/">
-              <Redirect to="/" />
-            </Route>
-          </Switch>
+          <Container maxWidth="md">
+            <Switch>
+              <Route path="/add">
+                <SecretPathAdd />
+              </Route>
+              <Route path="/view/:secretPath">
+                <SecretPathViewer />
+              </Route>
+              <Route exact path="/">
+                <Help />
+              </Route>
+              <Route path="/">
+                <Redirect to="/" />
+              </Route>
+            </Switch>
+          </Container>
         </main>
       </StyledApp>
     </BrowserRouter>

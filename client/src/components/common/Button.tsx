@@ -51,3 +51,9 @@ export const BareButton = styled(Button)`
     background-color: transparent;
   }
 `;
+
+export const LinkButton = styled(BareButton)`
+  background: none;
+  border: none;
+  text-decoration: underline;
+`;

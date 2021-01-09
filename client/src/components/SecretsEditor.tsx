@@ -5,6 +5,7 @@ import { Duration } from "luxon";
 import DurationPicker from "./DurationPicker";
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 import { AccentButton, Button } from "./common/Button";
+import { Form } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
 import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
@@ -88,7 +89,7 @@ export default function SecretsEditor({
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <div style={{ marginBottom: "1rem" }}>
         <Button type="button" onClick={onCancel}>
           <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
@@ -173,6 +174,6 @@ export default function SecretsEditor({
       >
         Save
       </AccentButton>
-    </form>
+    </Form>
   );
 }

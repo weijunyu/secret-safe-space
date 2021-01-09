@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from "react";
 import debounce from "lodash/debounce";
 
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
+import SecretPathSuggestor from "./SecretPathSuggestor";
+
 import { TextField } from "./common/FormField";
 import { AccentButton } from "./common/Button";
-import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
+import { Form, FormHint } from "./common/Form";
 
 import { Success } from "../lib/colors";
 
@@ -41,11 +44,15 @@ export default function SecretPathSelectForm({
 
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPath = e.target.value;
-    setSecretPath(newPath);
+    updateSecretPath(newPath);
+  }
 
-    if (newPath) {
+  function updateSecretPath(path: string) {
+    setSecretPath(path);
+
+    if (path) {
       setCheckingSecretPath(true);
-      debouncedPathCheck(newPath);
+      debouncedPathCheck(path);
     }
   }
 
@@ -54,14 +61,17 @@ export default function SecretPathSelectForm({
     onSubmit(secretPath);
   }
   return (
-    <form onSubmit={onSubmitForm}>
+    <Form onSubmit={onSubmitForm}>
       <TextField>
         <label htmlFor="secret-path">Enter the URL path for your secret.</label>
-        <p>
-          {secretPath &&
-            (checkingSecretPath ? (
+
+        {secretPath &&
+          (checkingSecretPath ? (
+            <FormHint>
               <small>checking path availability...</small>
-            ) : (
+            </FormHint>
+          ) : (
+            <FormHint>
               <small>
                 Path available:{" "}
                 {secretPathAvailable ? (
@@ -78,8 +88,14 @@ export default function SecretPathSelectForm({
                   </>
                 )}
               </small>
-            ))}
-        </p>
+            </FormHint>
+          ))}
+
+        {!secretPath && (
+          <FormHint>
+            <SecretPathSuggestor onConfirm={updateSecretPath} />
+          </FormHint>
+        )}
         <input
           id="secret-path"
           type="text"
@@ -88,16 +104,16 @@ export default function SecretPathSelectForm({
           disabled={!active}
           autoCapitalize="off"
         ></input>
-      </TextField>
 
-      {secretPath && secretPathAvailable && (
-        <p>
-          <small>
-            Your secret text would be available at{" "}
-            <SecretPathUrlDisplay path={secretPath} />.
-          </small>
-        </p>
-      )}
+        {secretPath && secretPathAvailable && (
+          <FormHint>
+            <small>
+              Your secret text would be available at{" "}
+              <SecretPathUrlDisplay path={secretPath} />.
+            </small>
+          </FormHint>
+        )}
+      </TextField>
 
       <AccentButton
         type="submit"
@@ -105,6 +121,6 @@ export default function SecretPathSelectForm({
       >
         Use this path
       </AccentButton>
-    </form>
+    </Form>
   );
 }

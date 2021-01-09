@@ -1,4 +1,5 @@
 import * as sjcl from "sjcl";
+import wordData, { CorpusSize } from "./wordData";
 
 /**
  * sjcl.encrypt and sjcl.decrypt actually return json strings of
@@ -20,4 +21,16 @@ export function decrypt(ciphertext: string, passphrase: string): string {
 
 export function getCiphertextFromCipher(cipher: string): string {
   return JSON.parse(cipher).ct;
+}
+
+export function generateWords(
+  wordCount = 2,
+  corpusSize = CorpusSize.Medium
+): string {
+  const words = wordData[corpusSize];
+  // array given as the parameter is filled with random numbers
+  const randArray = window.crypto.getRandomValues(new Uint16Array(wordCount));
+  return Array.from(randArray)
+    .map((randNum) => words[randNum % words.length])
+    .join("");
 }
