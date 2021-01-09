@@ -5,6 +5,8 @@ import * as Usage from "../models/Usage";
 
 import { SecretDocument } from "../interfaces";
 
+import { logger } from "../lib/logger";
+
 export const checkSecretAvailability: express.RequestHandler = async (
   req,
   res
@@ -63,10 +65,10 @@ export const setSecretAtPath: express.RequestHandler = async (
 
   try {
     const savedSecret: SecretDocument = await secret.saveIfValid();
-    Usage.increment().catch(console.error); // fire and forget
+    Usage.increment().catch(logger.error); // fire and forget
     return res.send(savedSecret);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return next({
       status: 500,
       message: "Couldn't create secret.",

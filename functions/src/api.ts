@@ -1,7 +1,8 @@
 import * as express from "express";
 import * as cors from "cors";
 import * as expressValidator from "express-validator";
-import * as Pino from "pino-http";
+import * as PinoHttp from "pino-http";
+import { logger } from "./lib/logger";
 import { CorsOrigins } from "./config";
 
 import {
@@ -10,16 +11,17 @@ import {
   setSecretAtPath,
   getUsage,
 } from "./controllers";
-import { healthCheckRoute } from "./controllers/health";
+
 import { validateRequestParams } from "./lib/validation";
 
-const pino = Pino();
+const appLogger = PinoHttp({
+  logger,
+});
+
 const app = express();
 
 app.use(cors({ origin: CorsOrigins }));
-app.use(pino);
-
-app.get("/", healthCheckRoute);
+app.use(appLogger);
 
 app.get(
   "/secret/availability",
@@ -52,7 +54,7 @@ const requestErrorHandler: express.ErrorRequestHandler = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next
 ) => {
-  console.error(err);
+  logger.error(err);
   res.status(err.status || err.statusCode || 500).send(err.message);
 };
 

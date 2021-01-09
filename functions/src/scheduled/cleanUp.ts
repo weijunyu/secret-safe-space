@@ -1,5 +1,6 @@
 import { firebaseAdmin, firestore } from "../lib/firebase";
 import { SECRET_PATH_COLLECTION } from "../lib/constants";
+import { logger } from "../lib/logger";
 
 export async function removeExpiredSecrets(): Promise<void> {
   const expiredDocs = await firestore
@@ -14,11 +15,11 @@ export async function removeExpiredSecrets(): Promise<void> {
   if (!expiredDocs.empty) {
     const batch = firestore.batch();
     expiredDocs.forEach((doc) => {
-      console.log(`Deleting expired doc: ${doc.id}`);
+      logger.info(`Deleting expired doc: ${doc.id}`);
       batch.delete(firestore.collection(SECRET_PATH_COLLECTION).doc(doc.id));
     });
     await batch.commit();
   } else {
-    console.log("No expired entries were deleted.");
+    logger.info("No expired entries were deleted.");
   }
 }

@@ -2,6 +2,7 @@ import { config } from "dotenv";
 config();
 import * as functions from "firebase-functions";
 import { removeExpiredSecrets } from "./scheduled/cleanUp";
+import { logger } from "./lib/logger";
 
 import apiApp from "./api";
 
@@ -11,9 +12,9 @@ export const scheduledCleanUp = functions
   .pubsub.schedule("0 * * * *") // m h d m d(w)
   .timeZone("Asia/Singapore")
   .onRun(async (ctx: functions.EventContext) => {
-    console.log(
+    logger.info(
       `[${ctx.eventType}] Removing expired secrets at ${ctx.timestamp}`
     );
-    await removeExpiredSecrets().catch(console.error);
+    await removeExpiredSecrets().catch(logger.error);
     return null;
   });

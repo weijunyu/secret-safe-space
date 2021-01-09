@@ -5,3 +5,4 @@ export const CorsOrigins = process.env.CORS_ORIGINS
       "https://secretsafe-space.web.app",
       "https://secretsafe.space",
     ];
+export const logLevel = process.env.LOG_LEVEL ?? "info";
