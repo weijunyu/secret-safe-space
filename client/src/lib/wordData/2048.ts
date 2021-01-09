@@ -1,4 +1,4 @@
-export default [
+const smallWordData = [
   "ability",
   "able",
   "about",
@@ -2048,3 +2048,4 @@ export default [
   "youth",
   "zeal",
 ];
+export default smallWordData;

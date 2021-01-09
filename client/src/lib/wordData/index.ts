@@ -1,7 +1,7 @@
 import small from "./2048";
 import medium from "./4096";
 import large from "./8192";
-export default {
+const wordData = {
   small,
   medium,
   large,
@@ -11,3 +11,4 @@ export enum CorpusSize {
   Medium = "medium",
   Large = "large",
 }
+export default wordData;

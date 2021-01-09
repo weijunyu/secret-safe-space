@@ -1,6 +1,5 @@
 import medium from "./4096";
-
-export default [
+const largeWordData = [
   ...medium,
   "aback",
   "abashed",
@@ -4099,3 +4098,4 @@ export default [
   "zip",
   "zone",
 ];
+export default largeWordData;

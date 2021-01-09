@@ -1,5 +1,5 @@
 import small from "./2048";
-export default [
+const mediumWordData = [
   ...small,
   "abandon",
   "abbey",
@@ -2050,3 +2050,4 @@ export default [
   "yoke",
   "zealous",
 ];
+export default mediumWordData;
