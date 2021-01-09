@@ -5,4 +5,5 @@ export interface SecretDocument extends admin.firestore.DocumentData {
   writeTime: admin.firestore.Timestamp;
   expiryTime: admin.firestore.Timestamp;
   encryptionDisabled: boolean;
+  deleteOnLoad: boolean;
 }

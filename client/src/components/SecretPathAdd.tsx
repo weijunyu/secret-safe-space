@@ -59,7 +59,8 @@ export default function SecretPathAdd() {
     secret: string,
     passphrase: string,
     secretExpiryDuration: number,
-    encryptionDisabled = false
+    encryptionDisabled = false,
+    deleteOnLoad = true
   ) {
     setEncryptionDisabledFinal(encryptionDisabled);
     // 1. encrypt secret with passphrase
@@ -76,6 +77,7 @@ export default function SecretPathAdd() {
         secret: ciphertext,
         expiryDuration: secretExpiryDuration,
         encryptionDisabled,
+        deleteOnLoad,
       });
       setSecretPassphrase(passphrase);
       setSecretExpiryTime(secretDocument.expiryTime._seconds);

@@ -35,6 +35,7 @@ app.post(
     expressValidator.body("secret").isString(),
     expressValidator.body("expiryDuration").isNumeric(),
     expressValidator.body("encryptionDisabled").isBoolean(),
+    expressValidator.body("deleteOnLoad").isBoolean(),
   ],
   validateRequestParams,
   setSecretAtPath

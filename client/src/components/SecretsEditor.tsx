@@ -38,7 +38,8 @@ export default function SecretsEditor({
     secret: string,
     passphrase: string,
     secretExpiryDuration: number,
-    encryptionDisabled: boolean
+    encryptionDisabled: boolean,
+    deleteOnLoad: boolean
   ) => Promise<any>;
   active: boolean;
   onCancel: () => void;
@@ -81,7 +82,8 @@ export default function SecretsEditor({
       secretText,
       secretPassphrase,
       secretExpiryDuration,
-      encryptionDisabled
+      encryptionDisabled,
+      deleteOnLoad
     );
   }
 

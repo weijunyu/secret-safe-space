@@ -33,15 +33,17 @@ export async function setSecretAtPath({
   path,
   expiryDuration,
   encryptionDisabled = false,
+  deleteOnLoad,
 }: {
   secret: string;
   path: string;
   expiryDuration: number;
   encryptionDisabled: boolean;
+  deleteOnLoad: boolean;
 }): Promise<SecretDocumentJsonResponse> {
   return httpClient("/secret", {
     method: "post",
-    data: { secret, path, expiryDuration, encryptionDisabled },
+    data: { secret, path, expiryDuration, encryptionDisabled, deleteOnLoad },
   }).then((res) => res.data);
 }
 

@@ -3,6 +3,7 @@ import {
   SECRET_PATH_COLLECTION,
   DEFAULT_SECRET_EXPIRY_DURATION,
   DEFAULT_ENCRYPTION_DISABLED,
+  DEFAULT_DELETE_ON_LOAD,
 } from "../lib/constants";
 import { SecretDocument } from "../interfaces";
 
@@ -11,6 +12,7 @@ class Secret {
   private value: string;
   private expiryDuration: number;
   private encryptionDisabled: boolean;
+  private deleteOnLoad: boolean;
 
   private document: SecretDocument | null = null;
 
@@ -53,16 +55,19 @@ class Secret {
     value,
     expiryDuration,
     encryptionDisabled,
+    deleteOnLoad,
   }: {
     path: string;
     value: string;
     expiryDuration: number;
     encryptionDisabled: boolean;
+    deleteOnLoad: boolean;
   }) {
     this.path = path;
     this.value = value;
     this.expiryDuration = expiryDuration || DEFAULT_SECRET_EXPIRY_DURATION;
     this.encryptionDisabled = encryptionDisabled || DEFAULT_ENCRYPTION_DISABLED;
+    this.deleteOnLoad = deleteOnLoad || DEFAULT_DELETE_ON_LOAD;
   }
 
   public async saveIfValid(): Promise<SecretDocument> {
@@ -89,6 +94,7 @@ class Secret {
               expiryTime
             ),
             encryptionDisabled: this.encryptionDisabled,
+            deleteOnLoad: this.deleteOnLoad,
           };
           transaction.set(docRef, secretDocument);
           return secretDocument;

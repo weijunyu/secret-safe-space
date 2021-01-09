@@ -39,6 +39,7 @@ export const setSecretAtPath: express.RequestHandler = async (
   const secretText: string = req.body.secret;
   const expiryDuration: number = req.body.expiryDuration;
   const encryptionDisabled: boolean = req.body.encryptionDisabled;
+  const deleteOnLoad: boolean = req.body.deleteOnLoad || true;
   if (
     !secretPath ||
     !secretText ||
@@ -57,6 +58,7 @@ export const setSecretAtPath: express.RequestHandler = async (
     value: secretText,
     expiryDuration,
     encryptionDisabled,
+    deleteOnLoad,
   });
 
   try {
