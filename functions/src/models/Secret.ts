@@ -33,21 +33,28 @@ class Secret {
   }
 
   static async fetch(path: string): Promise<SecretDocument | null> {
-    const secretDoc = await firestore
-      .collection(SECRET_PATH_COLLECTION)
-      .doc(path)
-      .get();
-    const secretDocData = secretDoc.data() as SecretDocument;
-    const validSecret =
-      secretDoc.exists &&
-      // current time not yet past expiry
-      secretDocData.expiryTime >
-        firebaseAdmin.firestore.Timestamp.fromDate(new Date());
-    if (validSecret) {
-      return secretDocData;
-    } else {
-      return null;
-    }
+    const secretDocRef = firestore.collection(SECRET_PATH_COLLECTION).doc(path);
+    const transactionResults = await firestore.runTransaction((transaction) => {
+      return transaction.get(secretDocRef).then((secretDoc) => {
+        const secretDocData = secretDoc.data() as SecretDocument;
+
+        const validSecret =
+          secretDoc.exists &&
+          // current time not yet past expiry
+          secretDocData.expiryTime >
+            firebaseAdmin.firestore.Timestamp.fromDate(new Date());
+        if (!validSecret) {
+          return null;
+        }
+
+        if (secretDocData.deleteOnLoad) {
+          transaction.delete(secretDocRef);
+        }
+
+        return secretDocData;
+      });
+    });
+    return transactionResults;
   }
 
   constructor({
@@ -65,9 +72,9 @@ class Secret {
   }) {
     this.path = path;
     this.value = value;
-    this.expiryDuration = expiryDuration || DEFAULT_SECRET_EXPIRY_DURATION;
-    this.encryptionDisabled = encryptionDisabled || DEFAULT_ENCRYPTION_DISABLED;
-    this.deleteOnLoad = deleteOnLoad || DEFAULT_DELETE_ON_LOAD;
+    this.expiryDuration = expiryDuration ?? DEFAULT_SECRET_EXPIRY_DURATION;
+    this.encryptionDisabled = encryptionDisabled ?? DEFAULT_ENCRYPTION_DISABLED;
+    this.deleteOnLoad = deleteOnLoad ?? DEFAULT_DELETE_ON_LOAD;
   }
 
   public async saveIfValid(): Promise<SecretDocument> {
