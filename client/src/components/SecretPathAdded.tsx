@@ -1,8 +1,13 @@
 import React from "react";
 import { DateTime } from "luxon";
+import styled from "styled-components";
 
 import { AccentButton } from "./common/Button";
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
+
+const StyledPassphraseDisplay = styled.strong`
+  overflow-wrap: break-word;
+`;
 
 export default function SecretPathAdded({
   secretPath,
@@ -52,7 +57,7 @@ function MessageForEncryptedText({
     <p>
       You can fetch and decrypt your secret text at{" "}
       <SecretPathUrlDisplay path={secretPath} /> using your passphrase:{" "}
-      <strong>{secretPassphrase}</strong>
+      <StyledPassphraseDisplay>{secretPassphrase}</StyledPassphraseDisplay>
     </p>
   );
 }
