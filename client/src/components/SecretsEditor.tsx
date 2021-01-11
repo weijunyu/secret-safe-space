@@ -5,7 +5,7 @@ import { Duration } from "luxon";
 import DurationPicker from "./DurationPicker";
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 import { AccentButton, Button } from "./common/Button";
-import { Form } from "./common/Form";
+import { Form, FormHint } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
 import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
@@ -121,6 +121,11 @@ export default function SecretsEditor({
           onChange={onSecretPassphraseChange}
           disabled={encryptionDisabled}
         />
+        {0 < secretPassphrase.length && secretPassphrase.length < 9 && (
+          <FormHint type="warn">
+            <small>A longer passphrase is recommended</small>
+          </FormHint>
+        )}
       </TextField>
 
       <FieldSet>

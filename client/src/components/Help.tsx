@@ -81,6 +81,11 @@ export default function Help() {
           intermediaries.
         </li>
       </ul>
+      <p style={{ textAlign: "center" }}>
+        <a href="https://gitlab.com/junyuwei/secret-space">
+          <i className="fab fa-gitlab" /> Source
+        </a>
+      </p>
     </HelpContainer>
   );
 }
