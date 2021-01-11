@@ -21,12 +21,16 @@ export default function Help() {
         </strong>
       </p>
       <ol>
-        <li>Select a path.</li>
-        <li>Enter your text.</li>
         <li>
-          Enter a passphrase. This would be used by <em>your browser</em> to
-          encrypt your text before it is sent via an encrypted connection to be
-          stored on our servers.
+          <strong>Select a path.</strong>
+        </li>
+        <li>
+          <strong>Enter your text.</strong>
+        </li>
+        <li>
+          <strong>Enter a passphrase.</strong> This would be used by{" "}
+          <em>your browser</em> to encrypt your text before it is sent via an
+          encrypted connection to be stored on our servers.
         </li>
         <li>
           (optional) Disable encryption. This means your text would no longer be
@@ -37,7 +41,9 @@ export default function Help() {
           (optional) Set how long it takes for your text to expire, after which
           it is no longer readable from our servers. Defaults to 5 minutes.
         </li>
-        <li>Save the secret.</li>
+        <li>
+          <strong>Save the secret.</strong>
+        </li>
         <li>
           You can then use your other device to access and decrypt it at{" "}
           <strong>
@@ -69,7 +75,7 @@ export default function Help() {
           A quick way to copy and paste text between devices without having to
           log in to any service.
         </li>
-        <li>A secure way to store and retrieve short-term secrets.</li>
+        <li>A secure way to store and retrieve short-lived secrets online.</li>
         <li>
           Transmit text or text-encoded data that cannot be parsed/read by
           intermediaries.
