@@ -44,7 +44,9 @@ app.post(
 
 app.get("/secret", getSecretAtPath);
 
-app.get("/usage", () => {});
+app.get("/usage", () => {
+  //  disabled; see controllers:getUsage
+});
 
 const requestErrorHandler: express.ErrorRequestHandler = (
   err,
