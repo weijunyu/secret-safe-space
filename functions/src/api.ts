@@ -9,7 +9,6 @@ import {
   checkSecretAvailability,
   getSecretAtPath,
   setSecretAtPath,
-  getUsage,
 } from "./controllers";
 
 import { validateRequestParams } from "./lib/validation";
@@ -45,7 +44,7 @@ app.post(
 
 app.get("/secret", getSecretAtPath);
 
-app.get("/usage", getUsage);
+app.get("/usage", () => {});
 
 const requestErrorHandler: express.ErrorRequestHandler = (
   err,
