@@ -147,13 +147,11 @@ export default function SecretsEditor({
             onChange={toggleDeleteOnLoad}
             id="delete-on-load-toggle"
           ></input>
-          <label htmlFor="delete-on-load-toggle">
-            Delete secret link on first visit
-          </label>
+          <label htmlFor="delete-on-load-toggle">One-time secret link </label>
         </CheckField>
 
         <div style={{ margin: "0.5rem 0" }}>
-          <strong>Secret expiry time</strong>
+          <strong>Secret expiry</strong>
         </div>
         {/* 1 - 60 min, 1 - 24 hrs */}
         <DurationPicker
