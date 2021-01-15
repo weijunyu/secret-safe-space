@@ -99,7 +99,7 @@ export default function SecretsEditor({
       <TextField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at{" "}
-          <SecretPathUrlDisplay path={secretPath} />.
+          <SecretPathUrlDisplay path={secretPath} link={false} />.
         </label>
         <SecretInputTextarea
           id="secret-text-input"

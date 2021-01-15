@@ -7,7 +7,24 @@ const StyledLink = styled.a`
   overflow-wrap: break-word;
 `;
 
-export default function SecretPathUrlDisplay({ path }: { path: string }) {
+const StyledSpan = styled.span`
+  overflow-wrap: break-word;
+`;
+
+export default function SecretPathUrlDisplay({
+  path,
+  link,
+}: {
+  path: string;
+  link?: boolean;
+}) {
   const url = new URL("/view/" + path, config.appUrl);
-  return <StyledLink href={url.href}>{url.href}</StyledLink>;
+  if (link) {
+    return <StyledLink href={url.href}>{url.href}</StyledLink>;
+  } else {
+    return <StyledSpan>{url.href}</StyledSpan>;
+  }
 }
+SecretPathUrlDisplay.defaultProps = {
+  link: true,
+};

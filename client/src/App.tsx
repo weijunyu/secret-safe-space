@@ -14,11 +14,13 @@ import Container from "@material-ui/core/Container";
 
 import { Light, Accent, Dark } from "./lib/colors";
 
+import Footer from "./components/Footer";
 import SecretPathAdd from "./components/SecretPathAdd";
 import SecretPathViewer from "./components/SecretPathViewer";
 import Help from "./components/Help";
 
 const StyledApp = styled.div`
+  position: relative;
   min-height: 100vh;
   padding: 0 15vw;
   @media screen and (max-width: 768px) {
@@ -27,10 +29,16 @@ const StyledApp = styled.div`
   background-color: ${Light};
   font-family: Courier Prime, monospace;
   color: ${Dark};
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledHeader = styled.header`
   padding: 1.5rem 0;
+`;
+
+const StyledMain = styled.main`
+  flex: 1 1 auto;
 `;
 
 const StyledLink = styled(NavLink)`
@@ -92,7 +100,7 @@ function App() {
             </ul>
           </StyledNav>
         </StyledHeader>
-        <main>
+        <StyledMain>
           <Container maxWidth="md">
             <Switch>
               <Route path="/add">
@@ -109,7 +117,8 @@ function App() {
               </Route>
             </Switch>
           </Container>
-        </main>
+        </StyledMain>
+        <Footer />
       </StyledApp>
     </BrowserRouter>
   );

@@ -110,7 +110,7 @@ export default function SecretPathSelectForm({
             <small style={{ width: "100%" }}>
               {/* <small> width 100% so inner url display would overflow-wrap: break-word properly */}
               Your secret text would be available at{" "}
-              <SecretPathUrlDisplay path={secretPath} />.
+              <SecretPathUrlDisplay path={secretPath} link={false} />.
             </small>
           </FormHint>
         )}

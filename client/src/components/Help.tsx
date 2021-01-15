@@ -1,25 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const HelpContainer = styled.section`
-  padding-bottom: 2rem;
-`;
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
+
+const HelpContainer = styled.section``;
 
 export default function Help() {
   return (
     <HelpContainer>
       <h2>Usage</h2>
-      <p>
-        This app lets you store text that is accessible from anywhere on the
-        internet without needing to log in, for a short time.
-      </p>
-      <p>
-        This text is encrypted by your browser before being stored on our
-        servers. We do not store your encryption password so{" "}
-        <strong>
-          we would not be able to decrypt and read the contents of your text.
-        </strong>
-      </p>
+
       <ol>
         <li>
           <strong>Select a path.</strong>
@@ -33,13 +23,14 @@ export default function Help() {
           encrypted connection to be stored on our servers.
         </li>
         <li>
-          (optional) Disable encryption. This means your text would no longer be
-          encrypted and anyone on the internet would be able to read it if they
-          knew the path you set for it!
+          <em>(optional)</em> Disable encryption. This means your text would no
+          longer be encrypted and anyone on the internet would be able to read
+          it if they knew the path you set for it!
         </li>
         <li>
-          (optional) Set how long it takes for your text to expire, after which
-          it is no longer readable from our servers. Defaults to 5 minutes.
+          <em>(optional)</em> Set how long it takes for your text to expire,
+          after which it is no longer readable from our servers. Defaults to 5
+          minutes.
         </li>
         <li>
           <strong>Save the secret.</strong>
@@ -47,12 +38,28 @@ export default function Help() {
         <li>
           You can then use your other device to access and decrypt it at{" "}
           <strong>
-            <em>https://secretsafe.space/view/[your chosen path]</em>
+            <em>
+              <SecretPathUrlDisplay
+                path="https://secretsafe.space/view/[your_chosen_path]"
+                link={false}
+              />
+            </em>
           </strong>{" "}
           within the expiry time you set.
         </li>
       </ol>
       <h2>How it works</h2>
+      <p>
+        This app lets you store text that is accessible from anywhere on the
+        internet without needing to log in, for a short time.
+      </p>
+      <p>
+        This text is encrypted by your browser before being stored on our
+        servers. We do not store your encryption password so{" "}
+        <strong>
+          we would not be able to decrypt and read the contents of your text.
+        </strong>
+      </p>
       <p>
         We use{" "}
         <a
@@ -81,10 +88,9 @@ export default function Help() {
           intermediaries.
         </li>
       </ul>
-      <p style={{ textAlign: "center" }}>
-        <a href="https://gitlab.com/junyuwei/secret-space">
-          <i className="fab fa-gitlab" /> Source
-        </a>
+      <p>
+        You can view the source code for this project{" "}
+        <a href="https://gitlab.com/junyuwei/secret-space">here</a>.
       </p>
     </HelpContainer>
   );
