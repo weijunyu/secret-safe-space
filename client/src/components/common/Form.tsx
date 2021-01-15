@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { Warn } from "../../lib/colors";
+import { Success, Warn } from "../../lib/colors";
 
 export const Form = styled.form`
   width: 100%;
@@ -19,6 +19,9 @@ export const FormHint = styled.span<FormHintProps>`
     switch (type) {
       case "warn": {
         return Warn;
+      }
+      case "success": {
+        return Success;
       }
       default: {
         return undefined;

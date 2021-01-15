@@ -121,9 +121,12 @@ export default function SecretsEditor({
           onChange={onSecretPassphraseChange}
           disabled={encryptionDisabled}
         />
-        {0 < secretPassphrase.length && secretPassphrase.length < 9 && (
-          <FormHint type="warn">
-            <small>A longer passphrase is recommended</small>
+        {0 < secretPassphrase.length && secretPassphrase.length < 10 && (
+          <FormHint type="success">
+            <small>
+              Recommended minimum passphrase length is 10 (current length is{" "}
+              {secretPassphrase.length})
+            </small>
           </FormHint>
         )}
       </TextField>
@@ -175,7 +178,7 @@ export default function SecretsEditor({
           secretExpiryDuration < MinimumExpiryDuration
         }
       >
-        Save
+        Encrypt and save
       </AccentButton>
     </Form>
   );
