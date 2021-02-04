@@ -25,27 +25,23 @@ export default function Help() {
         <li>
           <em>(optional)</em> Disable encryption. This means your text would no
           longer be encrypted and anyone on the internet would be able to read
-          it if they knew the path you set for it!
+          it if they knew the path to your secret!
         </li>
         <li>
           <em>(optional)</em> Set how long it takes for your text to expire,
-          after which it is no longer readable from our servers. Defaults to 5
-          minutes.
+          after which it can no longer be accessed. Defaults to 5 minutes.
         </li>
         <li>
           <strong>Save the secret.</strong>
         </li>
         <li>
-          You can then use your other device to access and decrypt it at{" "}
+          You can then use another device to access and decrypt it at{" "}
           <strong>
             <em>
-              <SecretPathUrlDisplay
-                path="https://secretsafe.space/view/[your_chosen_path]"
-                link={false}
-              />
+              <SecretPathUrlDisplay path="[your_chosen_path]" link={false} />
             </em>
           </strong>{" "}
-          within the expiry time you set.
+          within the expiry time.
         </li>
       </ol>
       <h2>How it works</h2>
@@ -54,8 +50,8 @@ export default function Help() {
         internet without needing to log in, for a short time.
       </p>
       <p>
-        This text is encrypted by your browser before being stored on our
-        servers. We do not store your encryption password so{" "}
+        The text you enter is encrypted by your browser before being stored on
+        our servers. We do not store your encryption password so{" "}
         <strong>
           we would not be able to decrypt and read the contents of your text.
         </strong>
