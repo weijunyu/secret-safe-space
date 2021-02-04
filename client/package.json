@@ -40,6 +40,8 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/sjcl": "^1.0.29",
     "@types/styled-components": "^5.1.7",
+    "@uppy/core": "^1.16.0",
+    "@uppy/drag-drop": "^1.4.24",
     "axios": "^0.21.1",
     "firebase": "^8.2.2",
     "lodash": "^4.17.20",

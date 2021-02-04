@@ -4,7 +4,7 @@ import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
-import { AccentButton, Button } from "./common/Button";
+import { AccentButton } from "./common/Button";
 import { Form, FormHint } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 
@@ -32,7 +32,6 @@ export default function SecretsEditor({
   secretPath,
   onSubmitSecret,
   active,
-  onCancel,
 }: {
   secretPath: string;
   onSubmitSecret: (
@@ -43,7 +42,6 @@ export default function SecretsEditor({
     deleteOnLoad: boolean
   ) => Promise<any>;
   active: boolean;
-  onCancel: () => void;
 }) {
   const [secretText, setSecretText] = useState("");
   const [secretPassphrase, setSecretPassphrase] = useState("");
@@ -90,12 +88,6 @@ export default function SecretsEditor({
 
   return (
     <Form onSubmit={onSubmit}>
-      <div style={{ marginBottom: "1rem" }}>
-        <Button type="button" onClick={onCancel}>
-          <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
-          Go back
-        </Button>
-      </div>
       <TextField>
         <label htmlFor="secret-text-input">
           Enter your secret text here. You will be able to access it at{" "}
