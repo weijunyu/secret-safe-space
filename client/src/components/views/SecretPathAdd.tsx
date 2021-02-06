@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import styled from "styled-components";
-
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -9,15 +7,16 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-import { PrimaryButton, Button } from "./common/Button";
+import { Button } from "../common/Button";
 
-import SecretsEditor from "./SecretsEditor";
-import SecretPathAdded from "./SecretPathAdded";
+import SecretsEditor from "../SecretsEditor";
 
-import { setSecretAtPath } from "../lib/api";
-import { encrypt } from "../lib/cryptography";
+import SecretPathAdded from "../SecretPathAdded";
 
-import SecretPathSelectForm from "./SecretPathSelectForm";
+import { setSecretAtPath } from "../../lib/api";
+import { encrypt } from "../../lib/cryptography";
+
+import SecretPathSelectForm from "../SecretPathSelectForm";
 
 enum SecretPathAddAccordions {
   None,
@@ -25,20 +24,9 @@ enum SecretPathAddAccordions {
   SetSecret,
 }
 
-enum SecretType {
-  Text,
-  File,
-}
-
-const AccordionSection = styled.section`
-  padding-bottom: 1rem;
-`;
-
 export default function SecretPathAdd() {
   const [secretPathChosen, setSecretPathChosen] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
-
-  const [secretType, setSecretType] = useState<SecretType>(SecretType.Text);
 
   const [submittingSecret, setSubmittingSecret] = useState(false);
   const [hasSetSecret, setHasSetSecret] = useState(false);
@@ -145,40 +133,16 @@ export default function SecretPathAdd() {
           2. Enter your secret(s)
         </AccordionSummary>
         <AccordionDetails style={{ flexDirection: "column" }}>
-          <AccordionSection>
-            <Button type="button" onClick={onCancelSecretEdit}>
-              <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
-              Go back
-            </Button>
-          </AccordionSection>
+          <Button type="button" onClick={onCancelSecretEdit}>
+            <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
+            Go back
+          </Button>
 
-          <AccordionSection>
-            <p>
-              <strong>Secret type</strong>
-            </p>
-            {secretType === SecretType.Text ? (
-              <PrimaryButton onClick={() => {}}>Text</PrimaryButton>
-            ) : (
-              <Button onClick={() => setSecretType(SecretType.Text)}>
-                Text
-              </Button>
-            )}
-            {secretType === SecretType.File ? (
-              <PrimaryButton onClick={() => {}}>File</PrimaryButton>
-            ) : (
-              <Button onClick={() => setSecretType(SecretType.File)}>
-                File
-              </Button>
-            )}
-          </AccordionSection>
-
-          {secretType === SecretType.Text && (
-            <SecretsEditor
-              secretPath={secretPathFinal}
-              onSubmitSecret={onSubmitSecret}
-              active={secretPathChosen && !hasSetSecret}
-            />
-          )}
+          <SecretsEditor
+            secretPath={secretPathFinal}
+            onSubmitSecret={onSubmitSecret}
+            active={secretPathChosen && !hasSetSecret}
+          />
         </AccordionDetails>
       </Accordion>
       {submittingSecret && <LinearProgress />}

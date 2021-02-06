@@ -15,8 +15,8 @@ import Container from "@material-ui/core/Container";
 import { Light, Accent, Dark } from "./lib/colors";
 
 import Footer from "./components/Footer";
-import SecretPathAdd from "./components/SecretPathAdd";
-import SecretPathViewer from "./components/SecretPathViewer";
+import SecretPathAdd from "./components/views/SecretPathAdd";
+import SecretPathViewer from "./components/views/SecretPathViewer";
 import Help from "./components/Help";
 
 const StyledApp = styled.div`

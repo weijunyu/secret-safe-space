@@ -4,13 +4,13 @@ import styled from "styled-components";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Divider from "./common/Divider";
+import Divider from "../common/Divider";
 
-import SecretPathDecryptForm from "./SecretPathDecryptForm";
-import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
+import SecretPathDecryptForm from "../SecretPathDecryptForm";
+import DecryptedSecretDisplay from "../DecryptedSecretDisplay";
 
-import { getSecretAtPath } from "../lib/api";
-import { getCiphertextFromCipher } from "../lib/cryptography";
+import { getSecretAtPath } from "../../lib/api";
+import { getCiphertextFromCipher } from "../../lib/cryptography";
 
 type SecretPathViewerParams = {
   secretPath: string;
