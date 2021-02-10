@@ -4,3 +4,7 @@ export interface SecretDocumentJsonResponse {
   value: string;
   writeTime: { _seconds: number; _nanoseconds: number };
 }
+export enum SecretType {
+  Text,
+  File,
+}

@@ -3,23 +3,18 @@ import styled from "styled-components";
 import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
-import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
-import { AccentButton, PrimaryButton, Button } from "./common/Button";
+import { AccentButton } from "./common/Button";
 import { Form, FormHint } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 import Divider from "./common/Divider";
+import SecretTextInput from "./SecretTextInput";
+import SecretFileInput from "./SecretFileInput";
+import SecretTypeToggle from "./SecretTypeToggle";
 
 import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
 import { Warn } from "../lib/colors";
 
-enum SecretType {
-  Text,
-  File,
-}
-
-const SecretInputTextarea = styled.textarea`
-  font-family: monospace;
-`;
+import { SecretType } from "../interfaces";
 
 const SecretPassphraseInput = styled.input`
   font-family: monospace;
@@ -98,16 +93,10 @@ export default function SecretsEditor({
       <p>
         <strong>Secret type</strong>
       </p>
-      {secretType === SecretType.Text ? (
-        <PrimaryButton onClick={() => {}}>Text</PrimaryButton>
-      ) : (
-        <Button onClick={() => setSecretType(SecretType.Text)}>Text</Button>
-      )}
-      {secretType === SecretType.File ? (
-        <PrimaryButton onClick={() => {}}>File</PrimaryButton>
-      ) : (
-        <Button onClick={() => setSecretType(SecretType.File)}>File</Button>
-      )}
+      <SecretTypeToggle
+        secretType={secretType}
+        onToggle={(newType: SecretType) => setSecretType(newType)}
+      />
 
       <Divider />
 
@@ -195,37 +184,4 @@ export default function SecretsEditor({
       </Form>
     </>
   );
-}
-
-function SecretTextInput({
-  secretPath,
-  value,
-  onChange,
-  disabled,
-}: {
-  secretPath: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  disabled: boolean;
-}) {
-  return (
-    <TextField>
-      <label htmlFor="secret-text-input">
-        Enter your secret text here. You will be able to access it at{" "}
-        <SecretPathUrlDisplay path={secretPath} link={false} />.
-      </label>
-      <SecretInputTextarea
-        id="secret-text-input"
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        rows={20}
-        autoCapitalize="off"
-      ></SecretInputTextarea>
-    </TextField>
-  );
-}
-
-function SecretFileInput() {
-  return <div>secret file input</div>;
 }
