@@ -43,6 +43,7 @@
     "@uppy/core": "^1.16.0",
     "@uppy/drag-drop": "^1.4.24",
     "axios": "^0.21.1",
+    "base64-arraybuffer": "^0.2.0",
     "firebase": "^8.2.2",
     "lodash": "^4.17.20",
     "luxon": "^1.25.0",
