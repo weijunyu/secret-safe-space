@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Duration } from "luxon";
 
@@ -10,6 +10,7 @@ import Divider from "./common/Divider";
 import SecretTextInput from "./SecretTextInput";
 import SecretFileInput from "./SecretFileInput";
 import SecretTypeToggle from "./SecretTypeToggle";
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
 import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
 import { Warn } from "../lib/colors";
@@ -58,6 +59,17 @@ export default function SecretsEditor({
     setSecretText(event.target.value);
   }
 
+  // useCallback on this function so SecretFileInput doesn't rerender unnecessarily
+  // important since uppy instance in SecretFileInput is instantiated during useEffect
+  const onSecretFileLoaded = useCallback((encodedFile: string) => {
+    setSecretText(encodedFile);
+  }, []);
+
+  const onSecretTypeToggle = (newType: SecretType) => {
+    setSecretText("");
+    setSecretType(newType);
+  };
+
   function onSecretPassphraseChange(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
@@ -93,23 +105,25 @@ export default function SecretsEditor({
       <p>
         <strong>Secret type</strong>
       </p>
-      <SecretTypeToggle
-        secretType={secretType}
-        onToggle={(newType: SecretType) => setSecretType(newType)}
-      />
+      <SecretTypeToggle secretType={secretType} onToggle={onSecretTypeToggle} />
 
       <Divider />
 
       <Form onSubmit={onSubmit}>
+        <p>
+          You will be able to access your secret at{" "}
+          <SecretPathUrlDisplay path={secretPath} link={false} />.
+        </p>
         {secretType === SecretType.Text && (
           <SecretTextInput
-            secretPath={secretPath}
             value={secretText}
             onChange={onSecretInputChange}
             disabled={!active}
           />
         )}
-        {secretType === SecretType.File && <SecretFileInput />}
+        {secretType === SecretType.File && (
+          <SecretFileInput onFileLoaded={onSecretFileLoaded} />
+        )}
 
         <TextField>
           <label htmlFor="secret-passphrase-input">
