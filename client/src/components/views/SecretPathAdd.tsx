@@ -91,7 +91,7 @@ export default function SecretPathAdd() {
   }
 
   return (
-    <div>
+    <section>
       <Stepper activeStep={activeStep}>
         {steps.map((label) => {
           return (
@@ -143,6 +143,6 @@ export default function SecretPathAdd() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </section>
   );
 }

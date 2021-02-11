@@ -76,19 +76,21 @@ export default function SecretPathViewer() {
   }
 
   return (
-    <Card>
-      <CardContent>
-        {loadingSecrets ? (
-          <span>Loading...</span>
-        ) : (
-          <>
-            {encryptedSecrets === null && (
-              <p>This path doesn't contain any data!</p>
-            )}
-            {(encryptedSecrets || decryptedSecrets) && renderSecrets()}
-          </>
-        )}
-      </CardContent>
-    </Card>
+    <section>
+      <Card>
+        <CardContent>
+          {loadingSecrets ? (
+            <span>Loading...</span>
+          ) : (
+            <>
+              {encryptedSecrets === null && (
+                <p>This path doesn't contain any data!</p>
+              )}
+              {(encryptedSecrets || decryptedSecrets) && renderSecrets()}
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </section>
   );
 }
