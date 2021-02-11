@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 
 import { Button } from "../common/Button";
 
@@ -17,12 +17,6 @@ import { setSecretAtPath } from "../../lib/api";
 import { encrypt } from "../../lib/cryptography";
 
 import { SecretType } from "../../interfaces";
-
-enum SecretPathAddAccordions {
-  None,
-  ReservePath,
-  SetSecret,
-}
 
 export default function SecretPathAdd() {
   const [secretPathChosen, setSecretPathChosen] = useState(false);
@@ -36,9 +30,8 @@ export default function SecretPathAdd() {
 
   const [secretExpiryTime, setSecretExpiryTime] = useState(-1);
 
-  const [expandedAccordion, setExpandedAccordion] = useState(
-    SecretPathAddAccordions.ReservePath
-  );
+  const [activeStep, setActiveStep] = useState(0);
+  const steps = ["Choose path", "Add secret"];
 
   function reset(): void {
     window.location.reload(); // works ¯\_(ツ)_/¯
@@ -48,14 +41,14 @@ export default function SecretPathAdd() {
     setSecretPathFinal(secretPath);
     setSecretPathChosen(true);
 
-    setExpandedAccordion(SecretPathAddAccordions.SetSecret);
+    setActiveStep((prev) => prev + 1);
   }
 
   const onCancelSecretEdit = () => {
     setSecretPathFinal("");
     setSecretPathChosen(false);
 
-    setExpandedAccordion(SecretPathAddAccordions.ReservePath);
+    setActiveStep((prev) => prev - 1);
   };
 
   async function onSubmitSecret(
@@ -72,7 +65,6 @@ export default function SecretPathAdd() {
       ? secret
       : encrypt(secret, passphrase);
     setSubmittingSecret(true);
-    setExpandedAccordion(SecretPathAddAccordions.None);
 
     // 2. set secret ciphertext at path
     try {
@@ -87,6 +79,7 @@ export default function SecretPathAdd() {
       setSecretPassphrase(passphrase);
       setSecretExpiryTime(secretDocument.expiryTime._seconds);
       setHasSetSecret(true);
+      setActiveStep((prev) => prev + 1);
     } catch (err) {
       // Couldn't set ciphertext, go back to path selection
       console.error(err);
@@ -97,57 +90,46 @@ export default function SecretPathAdd() {
     setSubmittingSecret(false);
   }
 
-  const onAccordionExpand = (accordionName: SecretPathAddAccordions) => (
-    event: React.ChangeEvent<{}>,
-    expanded: boolean
-  ) => {
-    if (expanded) {
-      setExpandedAccordion(accordionName);
-    } else {
-      setExpandedAccordion(SecretPathAddAccordions.None);
-    }
-  };
-
   return (
     <div>
-      <Accordion
-        disabled={secretPathChosen}
-        expanded={expandedAccordion === SecretPathAddAccordions.ReservePath}
-        onChange={onAccordionExpand(SecretPathAddAccordions.ReservePath)}
-      >
-        <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
-          1. Choose a path
-        </AccordionSummary>
-        <AccordionDetails>
-          <SecretPathSelectForm
-            onSubmit={onSelectSecretPath}
-            active={!secretPathChosen}
-          />
-        </AccordionDetails>
-      </Accordion>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label) => {
+          return (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
 
-      <Accordion
-        disabled={!secretPathChosen || hasSetSecret}
-        expanded={expandedAccordion === SecretPathAddAccordions.SetSecret}
-        onChange={onAccordionExpand(SecretPathAddAccordions.SetSecret)}
-      >
-        <AccordionSummary expandIcon={<i className="fas fa-chevron-down" />}>
-          2. Enter your secret(s)
-        </AccordionSummary>
-        <AccordionDetails style={{ flexDirection: "column" }}>
-          <Button type="button" onClick={onCancelSecretEdit}>
-            <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
-            Go back
-          </Button>
+      {activeStep === 0 && (
+        <Card>
+          <CardContent>
+            <SecretPathSelectForm
+              onSubmit={onSelectSecretPath}
+              active={!secretPathChosen}
+            />
+          </CardContent>
+        </Card>
+      )}
 
-          <SecretsEditor
-            secretPath={secretPathFinal}
-            onSubmitSecret={onSubmitSecret}
-            active={secretPathChosen && !hasSetSecret}
-          />
-        </AccordionDetails>
-      </Accordion>
+      {activeStep === 1 && (
+        <Card>
+          <CardContent>
+            <Button type="button" onClick={onCancelSecretEdit}>
+              <i className="fas fa-caret-left" /> Back
+            </Button>
+            <SecretsEditor
+              secretPath={secretPathFinal}
+              onSubmitSecret={onSubmitSecret}
+              active={secretPathChosen && !hasSetSecret}
+            />
+          </CardContent>
+        </Card>
+      )}
+
       {submittingSecret && <LinearProgress />}
+
       {hasSetSecret && (
         <Card>
           <CardContent>
