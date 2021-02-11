@@ -4,8 +4,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Snackbar from "@material-ui/core/Snackbar";
 
+import { saveAs } from "file-saver";
+
 import { Primary, SuccessLight } from "../lib/colors";
-import { BareButton } from "./common/Button";
+import { BareButton, Button } from "./common/Button";
 
 const StyledSuccessIcon = styled.i`
   color: ${Primary};
@@ -22,6 +24,9 @@ const StyledDecryptedSecretCard = styled(Card)`
   overflow-wrap: break-word;
 `;
 
+const b64toBlob = (base64: string, type = "application/octet-stream") =>
+  fetch(`data:${type};base64,${base64}`).then((res) => res.blob());
+
 export default function DecryptedSecretDisplay({
   decryptedSecrets,
 }: {
@@ -31,6 +36,9 @@ export default function DecryptedSecretDisplay({
   function onCopySecret() {
     navigator.clipboard.writeText(decryptedSecrets);
     setShowSnackbar(true);
+  }
+  function onDownloadSecret() {
+    b64toBlob(decryptedSecrets).then((b: Blob) => saveAs(b));
   }
   function closeSnackbar(event: React.SyntheticEvent, reason: string) {
     // reason can be 'clickaway' or 'timeout'
@@ -48,11 +56,18 @@ export default function DecryptedSecretDisplay({
             Your decrypted secrets:
           </span>
         )}
-        <BareButton onClick={onCopySecret}>
-          <small>
-            <i className="fas fa-copy" /> Copy
-          </small>
-        </BareButton>
+        <span>
+          <Button onClick={onCopySecret}>
+            <small>
+              <i className="fas fa-copy" /> Copy
+            </small>
+          </Button>{" "}
+          <Button onClick={onDownloadSecret}>
+            <small>
+              <i className="fas fa-download" /> Download as binary
+            </small>
+          </Button>
+        </span>
       </p>
       <StyledDecryptedSecretCard>
         <CardContent>{decryptedSecrets}</CardContent>

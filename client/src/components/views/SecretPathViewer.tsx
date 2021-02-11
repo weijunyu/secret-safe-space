@@ -12,6 +12,8 @@ import DecryptedSecretDisplay from "../DecryptedSecretDisplay";
 import { getSecretAtPath } from "../../lib/api";
 import { getCiphertextFromCipher } from "../../lib/cryptography";
 
+import { SecretType } from "../../interfaces";
+
 type SecretPathViewerParams = {
   secretPath: string;
 };
@@ -30,6 +32,7 @@ export default function SecretPathViewer() {
   const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
   const [encryptionDisabled, setEncryptionDisabled] = useState(false);
+  const [secretType, setSecretType] = useState(SecretType.Text);
 
   useEffect(() => {
     setLoadingSecrets(true);
@@ -49,7 +52,6 @@ export default function SecretPathViewer() {
 
   function onDecrypt(plaintext: string) {
     setDecryptedSecrets(plaintext);
-    // todo: one-time view option: call server to delete document?
   }
 
   function renderSecrets() {
