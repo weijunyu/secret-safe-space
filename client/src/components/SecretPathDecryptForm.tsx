@@ -35,10 +35,9 @@ export default function SecretPathDecryptForm({
   }
 
   function closeFailureSnackbar(event: React.SyntheticEvent, reason: string) {
-    if (reason === "clickaway") {
-      return;
-    }
-
+    // if (reason === "clickaway") {
+    //   return;
+    // }
     setShowFailureSnackbar(false);
   }
 

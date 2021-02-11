@@ -3,6 +3,7 @@ import Uppy, { UppyFile } from "@uppy/core";
 import DragDrop from "@uppy/drag-drop";
 import styled from "styled-components";
 import { encode } from "base64-arraybuffer";
+import Snackbar from "@material-ui/core/Snackbar";
 
 import { PrimaryButton } from "./common/Button";
 
@@ -62,12 +63,18 @@ function FileLoader({
 }: {
   onFileLoaded: (encodedFile: string, fileName: string) => void;
 }) {
+  const [showUploadNotification, setShowUploadNotification] = useState(false);
+  function closeSnackbar(event: React.SyntheticEvent, reason: string) {
+    setShowUploadNotification(false);
+  }
   useEffect(() => {
     Uppy({
-      restrictions: {
-        maxNumberOfFiles: 1,
-      },
       onBeforeFileAdded: function (currentFile: UppyFile) {
+        if (currentFile.data.size > 1024) {
+          // only accept files less than 1024kb
+          setShowUploadNotification(true);
+          return false;
+        }
         currentFile.data.arrayBuffer().then((buf) => {
           onFileLoaded(encode(buf), currentFile.name);
         });
@@ -75,5 +82,15 @@ function FileLoader({
       },
     }).use(DragDrop, { target: "#" + fileDragDropEl });
   }, [onFileLoaded]);
-  return <div id={fileDragDropEl} />;
+  return (
+    <>
+      <div id={fileDragDropEl} />
+      <Snackbar
+        open={showUploadNotification}
+        message="Your file must be less than 1MB."
+        autoHideDuration={2000}
+        onClose={closeSnackbar}
+      ></Snackbar>
+    </>
+  );
 }

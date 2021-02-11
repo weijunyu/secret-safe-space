@@ -41,10 +41,10 @@ export default function DecryptedSecretDisplay({
     b64toBlob(decryptedSecrets).then((b: Blob) => saveAs(b));
   }
   function closeSnackbar(event: React.SyntheticEvent, reason: string) {
-    // reason can be 'clickaway' or 'timeout'
-    if (reason === "clickaway") {
-      return;
-    }
+    // // reason can be 'clickaway' or 'timeout'
+    // if (reason === "clickaway") {
+    //   return;
+    // }
     setShowSnackbar(false);
   }
   return (
