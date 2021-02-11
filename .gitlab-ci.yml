@@ -1,6 +1,7 @@
 default:
   image: node:lts-alpine
   before_script:
+    - npm i -g npm@latest
     - npm install --prefix client
     - npm install --prefix functions
 
