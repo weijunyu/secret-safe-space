@@ -4,13 +4,13 @@ import styled from "styled-components";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Divider from "./common/Divider";
+import Divider from "../common/Divider";
 
-import SecretPathDecryptForm from "./SecretPathDecryptForm";
-import DecryptedSecretDisplay from "./DecryptedSecretDisplay";
+import SecretPathDecryptForm from "../SecretPathDecryptForm";
+import DecryptedSecretDisplay from "../DecryptedSecretDisplay";
 
-import { getSecretAtPath } from "../lib/api";
-import { getCiphertextFromCipher } from "../lib/cryptography";
+import { getSecretAtPath } from "../../lib/api";
+import { getCiphertextFromCipher } from "../../lib/cryptography";
 
 type SecretPathViewerParams = {
   secretPath: string;
@@ -49,7 +49,6 @@ export default function SecretPathViewer() {
 
   function onDecrypt(plaintext: string) {
     setDecryptedSecrets(plaintext);
-    // todo: one-time view option: call server to delete document?
   }
 
   function renderSecrets() {
@@ -77,19 +76,21 @@ export default function SecretPathViewer() {
   }
 
   return (
-    <Card>
-      <CardContent>
-        {loadingSecrets ? (
-          <span>Loading...</span>
-        ) : (
-          <>
-            {encryptedSecrets === null && (
-              <p>This path doesn't contain any data!</p>
-            )}
-            {(encryptedSecrets || decryptedSecrets) && renderSecrets()}
-          </>
-        )}
-      </CardContent>
-    </Card>
+    <section>
+      <Card>
+        <CardContent>
+          {loadingSecrets ? (
+            <span>Loading...</span>
+          ) : (
+            <>
+              {encryptedSecrets === null && (
+                <p>This path doesn't contain any data!</p>
+              )}
+              {(encryptedSecrets || decryptedSecrets) && renderSecrets()}
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </section>
   );
 }

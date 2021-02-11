@@ -10,13 +10,15 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 
-import { Light, Accent, Dark } from "./lib/colors";
+import * as colors from "./lib/colors";
 
 import Footer from "./components/Footer";
-import SecretPathAdd from "./components/SecretPathAdd";
-import SecretPathViewer from "./components/SecretPathViewer";
+import SecretPathAdd from "./components/views/SecretPathAdd";
+import SecretPathViewer from "./components/views/SecretPathViewer";
 import Help from "./components/Help";
 
 const StyledApp = styled.div`
@@ -26,9 +28,9 @@ const StyledApp = styled.div`
   @media screen and (max-width: 768px) {
     padding: 0 1rem;
   }
-  background-color: ${Light};
+  background-color: ${colors.Light};
   font-family: Courier Prime, monospace;
-  color: ${Dark};
+  color: ${colors.Dark};
   display: flex;
   flex-direction: column;
 `;
@@ -46,14 +48,14 @@ const StyledLink = styled(NavLink)`
   text-decoration: none;
   :link,
   :visited {
-    color: ${Dark};
+    color: ${colors.Dark};
   }
   :hover,
   :link:hover,
   :visited:hover,
   &.active {
     color: white;
-    background-color: ${Accent};
+    background-color: ${colors.Accent};
   }
 `;
 
@@ -61,7 +63,7 @@ const StyledHeaderLink = styled(NavLink)`
   text-decoration: none;
   :link,
   :visited {
-    color: ${Dark};
+    color: ${colors.Dark};
   }
 `;
 
@@ -77,49 +79,71 @@ const StyledNav = styled.nav`
   }
 `;
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: colors.Primary,
+    },
+    secondary: {
+      main: colors.Accent,
+    },
+    error: {
+      main: colors.Error,
+    },
+    warning: {
+      main: colors.Warn,
+    },
+    success: {
+      main: colors.Success,
+    },
+  },
+});
+
 function App() {
   return (
     <BrowserRouter>
-      <StyledApp>
-        <StyledHeader>
-          <h1 style={{ textAlign: "center" }}>
-            <StyledHeaderLink exact to="/">
-              <i className="fas fa-key" /> secretsafe.space
-            </StyledHeaderLink>
-          </h1>
-          <StyledNav>
-            <ul>
-              <li>
-                <StyledLink exact to="/">
-                  Help
-                </StyledLink>
-              </li>
-              <li>
-                <StyledLink to="/add">Add secrets</StyledLink>
-              </li>
-            </ul>
-          </StyledNav>
-        </StyledHeader>
-        <StyledMain>
-          <Container maxWidth="md">
-            <Switch>
-              <Route path="/add">
-                <SecretPathAdd />
-              </Route>
-              <Route path="/view/:secretPath">
-                <SecretPathViewer />
-              </Route>
-              <Route exact path="/">
-                <Help />
-              </Route>
-              <Route path="/">
-                <Redirect to="/" />
-              </Route>
-            </Switch>
-          </Container>
-        </StyledMain>
-        <Footer />
-      </StyledApp>
+      <ThemeProvider theme={theme}>
+        <StyledApp>
+          <StyledHeader>
+            <h1 style={{ textAlign: "center" }}>
+              <StyledHeaderLink exact to="/">
+                <i className="fas fa-key" /> secretsafe.space
+              </StyledHeaderLink>
+            </h1>
+            <StyledNav>
+              <ul>
+                <li>
+                  <StyledLink exact to="/">
+                    Help
+                  </StyledLink>
+                </li>
+                <li>
+                  <StyledLink to="/add">Add secrets</StyledLink>
+                </li>
+              </ul>
+            </StyledNav>
+          </StyledHeader>
+          <StyledMain>
+            <Container maxWidth="md">
+              <Switch>
+                <Route path="/add">
+                  <SecretPathAdd />
+                </Route>
+                <Route path="/view/:secretPath">
+                  <SecretPathViewer />
+                </Route>
+                <Route exact path="/">
+                  <Help />
+                </Route>
+                <Route path="/">
+                  <Redirect to="/" />
+                </Route>
+              </Switch>
+            </Container>
+          </StyledMain>
+          <Footer />
+        </StyledApp>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

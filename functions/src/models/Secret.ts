@@ -5,11 +5,12 @@ import {
   DEFAULT_ENCRYPTION_DISABLED,
   DEFAULT_DELETE_ON_LOAD,
 } from "../lib/constants";
-import { SecretDocument } from "../interfaces";
+import { SecretDocument, SecretType } from "../interfaces";
 
 class Secret {
   private path: string;
   private value: string;
+  private type: SecretType;
   private expiryDuration: number;
   private encryptionDisabled: boolean;
   private deleteOnLoad: boolean;
@@ -59,12 +60,14 @@ class Secret {
 
   constructor({
     path,
+    type,
     value,
     expiryDuration,
     encryptionDisabled,
     deleteOnLoad,
   }: {
     path: string;
+    type: SecretType;
     value: string;
     expiryDuration: number;
     encryptionDisabled: boolean;
@@ -72,6 +75,7 @@ class Secret {
   }) {
     this.path = path;
     this.value = value;
+    this.type = type;
     this.expiryDuration = expiryDuration ?? DEFAULT_SECRET_EXPIRY_DURATION;
     this.encryptionDisabled = encryptionDisabled ?? DEFAULT_ENCRYPTION_DISABLED;
     this.deleteOnLoad = deleteOnLoad ?? DEFAULT_DELETE_ON_LOAD;
@@ -96,6 +100,7 @@ class Secret {
           const expiryTime = writeTime + this.expiryDuration;
           const secretDocument: SecretDocument = {
             value: this.value,
+            type: this.type,
             writeTime: firebaseAdmin.firestore.Timestamp.fromMillis(writeTime),
             expiryTime: firebaseAdmin.firestore.Timestamp.fromMillis(
               expiryTime

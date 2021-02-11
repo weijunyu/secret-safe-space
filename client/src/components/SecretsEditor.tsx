@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
-import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
-import { AccentButton, Button } from "./common/Button";
+import { AccentButton } from "./common/Button";
 import { Form, FormHint } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
+import Divider from "./common/Divider";
+import SecretTextInput from "./SecretTextInput";
+import SecretFileInput from "./SecretFileInput";
+import SecretTypeToggle from "./SecretTypeToggle";
+import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
 import { DefaultExpiryDuration, MinimumExpiryDuration } from "../lib/constants";
 import { Warn } from "../lib/colors";
 
-const SecretInputTextarea = styled.textarea`
-  font-family: monospace;
-`;
+import { SecretType } from "../interfaces";
 
 const SecretPassphraseInput = styled.input`
   font-family: monospace;
@@ -32,20 +34,20 @@ export default function SecretsEditor({
   secretPath,
   onSubmitSecret,
   active,
-  onCancel,
 }: {
   secretPath: string;
   onSubmitSecret: (
     secret: string,
+    secretType: SecretType,
     passphrase: string,
     secretExpiryDuration: number,
     encryptionDisabled: boolean,
     deleteOnLoad: boolean
   ) => Promise<any>;
   active: boolean;
-  onCancel: () => void;
 }) {
   const [secretText, setSecretText] = useState("");
+  const [secretType, setSecretType] = useState<SecretType>(SecretType.Text);
   const [secretPassphrase, setSecretPassphrase] = useState("");
   const [secretExpiryDuration, setSecretExpiryDuration] = useState(
     Duration.fromObject(DefaultExpiryDuration).as("milliseconds")
@@ -57,6 +59,17 @@ export default function SecretsEditor({
     event.preventDefault();
     setSecretText(event.target.value);
   }
+
+  // useCallback on this function so SecretFileInput doesn't rerender unnecessarily
+  // important since uppy instance in SecretFileInput is instantiated during useEffect
+  const onSecretFileLoaded = useCallback((encodedFile: string) => {
+    setSecretText(encodedFile);
+  }, []);
+
+  const onSecretTypeToggle = (newType: SecretType) => {
+    setSecretText("");
+    setSecretType(newType);
+  };
 
   function onSecretPassphraseChange(
     event: React.ChangeEvent<HTMLInputElement>
@@ -81,6 +94,7 @@ export default function SecretsEditor({
     event.preventDefault();
     onSubmitSecret(
       secretText,
+      secretType,
       secretPassphrase,
       secretExpiryDuration,
       encryptionDisabled,
@@ -89,97 +103,101 @@ export default function SecretsEditor({
   }
 
   return (
-    <Form onSubmit={onSubmit}>
-      <div style={{ marginBottom: "1rem" }}>
-        <Button type="button" onClick={onCancel}>
-          <i className="fas fa-caret-up" style={{ marginRight: "10px" }} />
-          Go back
-        </Button>
-      </div>
-      <TextField>
-        <label htmlFor="secret-text-input">
-          Enter your secret text here. You will be able to access it at{" "}
+    <>
+      <p>
+        <strong>Secret type</strong>
+      </p>
+      <SecretTypeToggle secretType={secretType} onToggle={onSecretTypeToggle} />
+
+      <Divider />
+
+      <Form onSubmit={onSubmit}>
+        <p>
+          You will be able to access your secret at{" "}
           <SecretPathUrlDisplay path={secretPath} link={false} />.
-        </label>
-        <SecretInputTextarea
-          id="secret-text-input"
-          value={secretText}
-          onChange={onSecretInputChange}
-          disabled={!active}
-          rows={20}
-          autoCapitalize="off"
-        ></SecretInputTextarea>
-      </TextField>
-      <TextField>
-        <label htmlFor="secret-passphrase-input">
-          Enter the passphrase you would use to retrieve this secret:
-        </label>
-        <SecretPassphraseInput
-          id="secret-passphrase-input"
-          type="password"
-          value={secretPassphrase}
-          onChange={onSecretPassphraseChange}
-          disabled={encryptionDisabled}
-        />
-        {0 < secretPassphrase.length && secretPassphrase.length < 10 && (
-          <FormHint type="success">
-            <small>
-              Recommended minimum passphrase length is 10 (current length is{" "}
-              {secretPassphrase.length})
-            </small>
-          </FormHint>
+        </p>
+        {secretType === SecretType.Text && (
+          <SecretTextInput
+            value={secretText}
+            onChange={onSecretInputChange}
+            disabled={!active}
+          />
         )}
-      </TextField>
+        {secretType === SecretType.File && (
+          <SecretFileInput onFileLoaded={onSecretFileLoaded} />
+        )}
 
-      <FieldSet>
-        <Legend>Additional Options</Legend>
-        <CheckField>
-          <input
-            type="checkbox"
-            checked={encryptionDisabled}
-            onChange={onToggleEncryption}
-            id="encryption-toggle"
-          ></input>
-          <label htmlFor="encryption-toggle">Do not encrypt</label>
-        </CheckField>
+        <TextField>
+          <label htmlFor="secret-passphrase-input">
+            Enter the passphrase you would use to retrieve this secret:
+          </label>
+          <SecretPassphraseInput
+            id="secret-passphrase-input"
+            type="password"
+            value={secretPassphrase}
+            onChange={onSecretPassphraseChange}
+            disabled={encryptionDisabled}
+          />
+          {0 < secretPassphrase.length && secretPassphrase.length < 10 && (
+            <FormHint type="success">
+              <small>
+                Recommended minimum passphrase length is 10 (current length is{" "}
+                {secretPassphrase.length})
+              </small>
+            </FormHint>
+          )}
+        </TextField>
 
-        <CheckField>
-          <input
-            type="checkbox"
-            checked={deleteOnLoad}
-            onChange={toggleDeleteOnLoad}
-            id="delete-on-load-toggle"
-          ></input>
-          <label htmlFor="delete-on-load-toggle">One-time secret link </label>
-        </CheckField>
+        <FieldSet>
+          <Legend>Additional Options</Legend>
+          <CheckField>
+            <input
+              type="checkbox"
+              checked={encryptionDisabled}
+              onChange={onToggleEncryption}
+              id="encryption-toggle"
+            ></input>
+            <label htmlFor="encryption-toggle">Do not encrypt</label>
+          </CheckField>
 
-        <div style={{ margin: "0.5rem 0" }}>
-          <strong>Secret expiry</strong>
-        </div>
-        {/* 1 - 60 min, 1 - 24 hrs */}
-        <DurationPicker
-          initialDuration={DefaultExpiryDuration}
-          onChange={(durationInMs: number) =>
-            setSecretExpiryDuration(durationInMs)
+          <CheckField>
+            <input
+              type="checkbox"
+              checked={deleteOnLoad}
+              onChange={toggleDeleteOnLoad}
+              id="delete-on-load-toggle"
+            ></input>
+            <label htmlFor="delete-on-load-toggle">One-time secret link </label>
+          </CheckField>
+
+          <div style={{ margin: "0.5rem 0" }}>
+            <strong>Secret expiry</strong>
+          </div>
+          {/* 1 - 60 min, 1 - 24 hrs */}
+          <DurationPicker
+            initialDuration={DefaultExpiryDuration}
+            onChange={(durationInMs: number) =>
+              setSecretExpiryDuration(durationInMs)
+            }
+          />
+          {secretExpiryDuration < MinimumExpiryDuration && (
+            <FormHintWarning>
+              A minimum expiry duration of 1 minute is required.
+            </FormHintWarning>
+          )}
+        </FieldSet>
+
+        <AccentButton
+          type="submit"
+          disabled={
+            secretText === "" ||
+            (secretPassphrase === "" && !encryptionDisabled) ||
+            secretExpiryDuration < MinimumExpiryDuration
           }
-        />
-        {secretExpiryDuration < MinimumExpiryDuration && (
-          <FormHintWarning>
-            A minimum expiry duration of 1 minute is required.
-          </FormHintWarning>
-        )}
-      </FieldSet>
-
-      <AccentButton
-        type="submit"
-        disabled={
-          secretText === "" ||
-          (secretPassphrase === "" && !encryptionDisabled) ||
-          secretExpiryDuration < MinimumExpiryDuration
-        }
-      >
-        Encrypt and save
-      </AccentButton>
-    </Form>
+        >
+          Encrypt and save
+        </AccentButton>
+      </Form>
+    </>
   );
 }
