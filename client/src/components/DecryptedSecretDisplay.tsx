@@ -6,8 +6,10 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import { saveAs } from "file-saver";
 
-import { Primary, SuccessLight } from "../lib/colors";
 import { BareButton, Button } from "./common/Button";
+
+import { Primary, SuccessLight } from "../lib/colors";
+import { b64toBlob } from "../lib";
 
 const StyledSuccessIcon = styled.i`
   color: ${Primary};
@@ -23,9 +25,6 @@ const StyledDecryptedSecretCard = styled(Card)`
   }
   overflow-wrap: break-word;
 `;
-
-const b64toBlob = (base64: string, type = "application/octet-stream") =>
-  fetch(`data:${type};base64,${base64}`).then((res) => res.blob());
 
 export default function DecryptedSecretDisplay({
   decryptedSecrets,

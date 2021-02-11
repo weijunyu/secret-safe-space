@@ -12,8 +12,6 @@ import DecryptedSecretDisplay from "../DecryptedSecretDisplay";
 import { getSecretAtPath } from "../../lib/api";
 import { getCiphertextFromCipher } from "../../lib/cryptography";
 
-import { SecretType } from "../../interfaces";
-
 type SecretPathViewerParams = {
   secretPath: string;
 };

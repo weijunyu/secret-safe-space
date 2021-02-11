@@ -70,8 +70,8 @@ function FileLoader({
   useEffect(() => {
     Uppy({
       onBeforeFileAdded: function (currentFile: UppyFile) {
-        if (currentFile.data.size > 1024) {
-          // only accept files less than 1024kb
+        if (currentFile.data.size > 1_048_576) {
+          // only accept files less than 1 mib, ie 1024 * 1024 bytes
           setShowUploadNotification(true);
           return false;
         }
