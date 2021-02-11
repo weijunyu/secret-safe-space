@@ -24,7 +24,9 @@ const StyledFileLoadedDialog = styled.div`
 
 const fileDragDropEl = "secret-file-input";
 
-export default function SecretFileInput({
+export default React.memo(SecretFileInput);
+
+function SecretFileInput({
   onFileLoaded,
 }: {
   onFileLoaded: (encodedFile: string) => void;

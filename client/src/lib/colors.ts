@@ -9,4 +9,5 @@ export const Dark = "#373737";
 export const LightGrey = "#9e9e9e";
 export const Success = Primary;
 export const SuccessLight = "#d1e4e2";
+export const Error = "#b55252";
 export const Warn = "#b55252";
