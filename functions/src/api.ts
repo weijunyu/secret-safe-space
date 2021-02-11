@@ -34,6 +34,7 @@ app.post(
   [
     expressValidator.body("path").isAlphanumeric(),
     expressValidator.body("secret").isString(),
+    expressValidator.body("secretType").isString(),
     expressValidator.body("expiryDuration").isNumeric(),
     expressValidator.body("encryptionDisabled").isBoolean(),
     expressValidator.body("deleteOnLoad").isBoolean(),

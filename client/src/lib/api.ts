@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { apiBaseUrl } from "../config";
-import { SecretDocumentJsonResponse } from "../interfaces";
+import { SecretDocumentJsonResponse, SecretType } from "../interfaces";
 
 const httpClient = axios.create({
   baseURL: apiBaseUrl,
@@ -30,12 +30,14 @@ export async function getSecretAtPath(
 
 export async function setSecretAtPath({
   secret,
+  secretType,
   path,
   expiryDuration,
   encryptionDisabled = false,
   deleteOnLoad,
 }: {
   secret: string;
+  secretType: SecretType;
   path: string;
   expiryDuration: number;
   encryptionDisabled: boolean;
@@ -43,7 +45,14 @@ export async function setSecretAtPath({
 }): Promise<SecretDocumentJsonResponse> {
   return httpClient("/secret", {
     method: "post",
-    data: { secret, path, expiryDuration, encryptionDisabled, deleteOnLoad },
+    data: {
+      secret,
+      secretType,
+      path,
+      expiryDuration,
+      encryptionDisabled,
+      deleteOnLoad,
+    },
   }).then((res) => res.data);
 }
 

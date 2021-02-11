@@ -38,6 +38,7 @@ export default function SecretsEditor({
   secretPath: string;
   onSubmitSecret: (
     secret: string,
+    secretType: SecretType,
     passphrase: string,
     secretExpiryDuration: number,
     encryptionDisabled: boolean,
@@ -93,6 +94,7 @@ export default function SecretsEditor({
     event.preventDefault();
     onSubmitSecret(
       secretText,
+      secretType,
       secretPassphrase,
       secretExpiryDuration,
       encryptionDisabled,

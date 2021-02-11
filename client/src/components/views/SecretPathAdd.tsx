@@ -9,14 +9,14 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { Button } from "../common/Button";
 
+import SecretPathSelectForm from "../SecretPathSelectForm";
 import SecretsEditor from "../SecretsEditor";
-
 import SecretPathAdded from "../SecretPathAdded";
 
 import { setSecretAtPath } from "../../lib/api";
 import { encrypt } from "../../lib/cryptography";
 
-import SecretPathSelectForm from "../SecretPathSelectForm";
+import { SecretType } from "../../interfaces";
 
 enum SecretPathAddAccordions {
   None,
@@ -60,6 +60,7 @@ export default function SecretPathAdd() {
 
   async function onSubmitSecret(
     secret: string,
+    secretType: SecretType,
     passphrase: string,
     secretExpiryDuration: number,
     encryptionDisabled = false,
@@ -78,6 +79,7 @@ export default function SecretPathAdd() {
       const secretDocument = await setSecretAtPath({
         path: secretPathFinal,
         secret: ciphertext,
+        secretType,
         expiryDuration: secretExpiryDuration,
         encryptionDisabled,
         deleteOnLoad,
