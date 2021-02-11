@@ -32,7 +32,6 @@ export default function SecretPathViewer() {
   const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
   const [encryptionDisabled, setEncryptionDisabled] = useState(false);
-  const [secretType, setSecretType] = useState(SecretType.Text);
 
   useEffect(() => {
     setLoadingSecrets(true);
