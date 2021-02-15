@@ -26,6 +26,10 @@ const StyledDecryptedSecretCard = styled(Card)`
   overflow-wrap: break-word;
 `;
 
+const StyledDecryptedSecretFormatter = styled.pre`
+  overflow-x: auto;
+`;
+
 export default function DecryptedSecretDisplay({
   decryptedSecrets,
 }: {
@@ -69,7 +73,11 @@ export default function DecryptedSecretDisplay({
         </span>
       </p>
       <StyledDecryptedSecretCard>
-        <CardContent>{decryptedSecrets}</CardContent>
+        <CardContent>
+          <StyledDecryptedSecretFormatter>
+            {decryptedSecrets}
+          </StyledDecryptedSecretFormatter>
+        </CardContent>
       </StyledDecryptedSecretCard>
       <Snackbar
         open={showSnackbar}
