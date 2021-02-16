@@ -3,11 +3,11 @@ import styled from "styled-components";
 
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
-const HelpContainer = styled.section``;
+const StyledHelpSection = styled.section``;
 
 export default function Help() {
   return (
-    <HelpContainer>
+    <StyledHelpSection>
       <h2>Usage</h2>
 
       <ol>
@@ -15,17 +15,15 @@ export default function Help() {
           <strong>Select a path.</strong>
         </li>
         <li>
-          <strong>Enter your text.</strong>
+          <strong>Enter your secret and passphrase.</strong> Your{" "}
+          <em>browser</em> would use the passphrase to encrypt your secret
+          before it is sent via an encrypted connection to be stored on our
+          servers.
         </li>
         <li>
-          <strong>Enter a passphrase.</strong> This would be used by{" "}
-          <em>your browser</em> to encrypt your text before it is sent via an
-          encrypted connection to be stored on our servers.
-        </li>
-        <li>
-          <em>(optional)</em> Disable encryption. This means your text would no
-          longer be encrypted and anyone on the internet would be able to read
-          it if they knew the path to your secret!
+          <em>(optional)</em> Disable encryption. Your text would no longer be
+          encrypted and anyone on the internet would be able to read it if they
+          knew the path to your secret!
         </li>
         <li>
           <em>(optional)</em> Set how long it takes for your text to expire,
@@ -46,8 +44,8 @@ export default function Help() {
       </ol>
       <h2>How it works</h2>
       <p>
-        This app lets you store text that is accessible from anywhere on the
-        internet without needing to log in, for a short time.
+        This app lets you store and share anonymous secrets that are accessible
+        from anywhere on the internet without needing to log in.
       </p>
       <p>
         The text you enter is encrypted by your browser before being stored on
@@ -88,6 +86,6 @@ export default function Help() {
         You can view the source code for this project{" "}
         <a href="https://gitlab.com/junyuwei/secret-space">here</a>.
       </p>
-    </HelpContainer>
+    </StyledHelpSection>
   );
 }
