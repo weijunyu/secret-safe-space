@@ -5,7 +5,7 @@ import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 import SecretPathSuggestor from "./SecretPathSuggestor";
 
 import { TextField } from "./common/FormField";
-import { AccentButton } from "./common/Button";
+import { PrimaryButton } from "./common/Button";
 import { Form, FormHint } from "./common/Form";
 
 import { Success } from "../lib/colors";
@@ -116,12 +116,12 @@ export default function SecretPathSelectForm({
         )}
       </TextField>
 
-      <AccentButton
+      <PrimaryButton
         type="submit"
         disabled={!secretPathAvailable || !secretPath}
       >
         Use this path
-      </AccentButton>
+      </PrimaryButton>
     </Form>
   );
 }

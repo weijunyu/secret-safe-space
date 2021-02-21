@@ -55,7 +55,7 @@ const StyledLink = styled(NavLink)`
   :visited:hover,
   &.active {
     color: white;
-    background-color: ${colors.Accent};
+    background-color: ${colors.Primary};
   }
 `;
 
@@ -84,9 +84,7 @@ const theme = createMuiTheme({
     primary: {
       main: colors.Primary,
     },
-    secondary: {
-      main: colors.Accent,
-    },
+
     error: {
       main: colors.Error,
     },

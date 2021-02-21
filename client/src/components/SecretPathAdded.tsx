@@ -2,7 +2,7 @@ import React from "react";
 import { DateTime } from "luxon";
 import styled from "styled-components";
 
-import { AccentButton } from "./common/Button";
+import { PrimaryButton } from "./common/Button";
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
 const StyledPassphraseDisplay = styled.strong`
@@ -41,7 +41,7 @@ export default function SecretPathAdded({
           secretPassphrase={secretPassphrase}
         />
       )}
-      <AccentButton onClick={onAddNewSecret}>Add another secret</AccentButton>
+      <PrimaryButton onClick={onAddNewSecret}>Add another secret</PrimaryButton>
     </div>
   );
 }

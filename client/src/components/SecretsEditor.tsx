@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Duration } from "luxon";
 
 import DurationPicker from "./DurationPicker";
-import { AccentButton } from "./common/Button";
+import { PrimaryButton } from "./common/Button";
 import { Form, FormHint } from "./common/Form";
 import { CheckField, FieldSet, Legend, TextField } from "./common/FormField";
 import Divider from "./common/Divider";
@@ -107,6 +107,7 @@ export default function SecretsEditor({
       <p>
         <strong>Secret type</strong>
       </p>
+
       <SecretTypeToggle secretType={secretType} onToggle={onSecretTypeToggle} />
 
       <Divider />
@@ -187,7 +188,7 @@ export default function SecretsEditor({
           )}
         </FieldSet>
 
-        <AccentButton
+        <PrimaryButton
           type="submit"
           disabled={
             secretText === "" ||
@@ -196,7 +197,7 @@ export default function SecretsEditor({
           }
         >
           Encrypt and save
-        </AccentButton>
+        </PrimaryButton>
       </Form>
     </>
   );

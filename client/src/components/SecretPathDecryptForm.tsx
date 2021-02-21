@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 
 import { TextField } from "./common/FormField";
-import { AccentButton, BareButton } from "./common/Button";
+import { PrimaryButton, BareButton } from "./common/Button";
 
 import { decrypt } from "../lib/cryptography";
 
@@ -74,7 +74,7 @@ export default function SecretPathDecryptForm({
             onChange={onSecretPasswordChange}
           ></input>
         </TextField>
-        <AccentButton type="submit">Go</AccentButton>
+        <PrimaryButton type="submit">Go</PrimaryButton>
       </form>
     </div>
   );
