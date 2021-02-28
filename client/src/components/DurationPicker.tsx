@@ -20,7 +20,7 @@ for (let h = 0; h < 24; h++) {
   Hours.push(h + 1);
 }
 const Minutes: number[] = [0];
-for (let m = 0; m < 60; m++) {
+for (let m = 0; m < 59; m++) {
   Minutes.push(m + 1);
 }
 
