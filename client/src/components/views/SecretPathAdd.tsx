@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -19,6 +20,7 @@ import { encrypt } from "../../lib/cryptography";
 import { SecretType } from "../../interfaces";
 
 export default function SecretPathAdd() {
+  const { secretPath } = useParams<{ secretPath: string }>();
   const [secretPathChosen, setSecretPathChosen] = useState(false);
   const [secretPathFinal, setSecretPathFinal] = useState("");
 
@@ -108,6 +110,7 @@ export default function SecretPathAdd() {
             <SecretPathSelectForm
               onSubmit={onSelectSecretPath}
               active={!secretPathChosen}
+              preChosenPath={secretPath}
             />
           </CardContent>
         </Card>

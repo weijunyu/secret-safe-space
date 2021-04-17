@@ -24,7 +24,12 @@ app.use(appLogger);
 
 app.get(
   "/secret/availability",
-  [expressValidator.query("path").isAlphanumeric()],
+  [
+    expressValidator
+      .query("path")
+      .isAlphanumeric()
+      .withMessage("Path must be alphanumeric."),
+  ],
   validateRequestParams,
   checkSecretAvailability
 );
@@ -57,7 +62,9 @@ const requestErrorHandler: express.ErrorRequestHandler = (
   _next
 ) => {
   logger.error(err);
-  res.status(err.status || err.statusCode || 500).send(err.message);
+  res
+    .status(err.status || err.statusCode || 500)
+    .send({ errors: err.errors || [] });
 };
 
 app.use(requestErrorHandler);

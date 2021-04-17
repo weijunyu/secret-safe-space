@@ -6,10 +6,7 @@ export const validateRequestParams: RequestHandler = (req, res, next) => {
   if (!errors.isEmpty()) {
     return next({
       status: 400,
-      message: `Params invalid: ${errors
-        .array()
-        .map((err) => err.param)
-        .join(",")}`,
+      errors: errors.array().map((error) => ({ message: error.msg })),
     });
   }
   next();

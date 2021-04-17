@@ -124,6 +124,9 @@ function App() {
           <StyledMain>
             <Container maxWidth="md">
               <Switch>
+                <Route path="/add/:secretPath">
+                  <SecretPathAdd />
+                </Route>
                 <Route path="/add">
                   <SecretPathAdd />
                 </Route>

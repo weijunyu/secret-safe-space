@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import debounce from "lodash/debounce";
 
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
@@ -15,9 +15,11 @@ import { checkPathAvailability } from "../lib/api";
 export default function SecretPathSelectForm({
   onSubmit,
   active,
+  preChosenPath,
 }: {
   onSubmit: (secretPath: string) => void;
   active: boolean;
+  preChosenPath?: string;
 }) {
   const [secretPath, setSecretPath] = useState<string>("");
   const [checkingSecretPath, setCheckingSecretPath] = useState<boolean>(false);
@@ -25,41 +27,55 @@ export default function SecretPathSelectForm({
     false
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedPathCheck = useCallback(
-    debounce((newPath: string) => {
-      return checkPathAvailability(newPath)
-        .then((availability) => {
-          setSecretPathAvailable(availability);
-        })
-        .catch(() => {
-          setSecretPathAvailable(false); // rejected from BE. no need to notify for now
-        })
-        .finally(() => {
-          setCheckingSecretPath(false);
-        });
-    }, 500),
-    []
-  );
+  function pathCheck(path: string): Promise<void> {
+    return checkPathAvailability(path)
+      .then((availability) => {
+        setSecretPathAvailable(availability);
+      })
+      .catch(() => {
+        setSecretPathAvailable(false); // rejected from BE. no need to notify for now
+      })
+      .finally(() => {
+        setCheckingSecretPath(false);
+      });
+  }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedPathCheck = useCallback(debounce(pathCheck, 500), []);
+
+  // changes from typing; debounce this.
   function onSecretPathChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newPath = e.target.value;
-    updateSecretPath(newPath);
+    confirmSecretPathChange(newPath, { debounce: true });
   }
 
-  function updateSecretPath(path: string) {
-    setSecretPath(path);
+  const confirmSecretPathChange = useCallback(
+    function (path: string, options?: { debounce: boolean }) {
+      setSecretPath(path);
 
-    if (path) {
-      setCheckingSecretPath(true);
-      debouncedPathCheck(path);
-    }
-  }
+      if (path) {
+        setCheckingSecretPath(true);
+        if (options?.debounce) {
+          debouncedPathCheck(path);
+        } else {
+          pathCheck(path);
+        }
+      }
+    },
+    [debouncedPathCheck]
+  );
 
   function onSubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     onSubmit(secretPath);
   }
+
+  useEffect(() => {
+    if (preChosenPath) {
+      confirmSecretPathChange(preChosenPath);
+    }
+  }, [preChosenPath, confirmSecretPathChange]);
+
   return (
     <Form onSubmit={onSubmitForm}>
       <TextField>
@@ -93,7 +109,7 @@ export default function SecretPathSelectForm({
 
         {!secretPath && (
           <FormHint>
-            <SecretPathSuggestor onConfirm={updateSecretPath} />
+            <SecretPathSuggestor onConfirm={confirmSecretPathChange} />
           </FormHint>
         )}
         <input
