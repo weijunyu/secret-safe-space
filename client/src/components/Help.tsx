@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import SecretPathUrlDisplay from "./SecretPathUrlDisplay";
 
@@ -19,16 +20,19 @@ export default function Help() {
           <em>browser</em> would use the passphrase to encrypt your secret
           before it is sent via an encrypted connection to be stored on our
           servers.
+          <ul>
+            <li>
+              <em>(optional)</em> Disable encryption. Your text would no longer
+              be encrypted and anyone on the internet would be able to read it
+              if they knew the path to your secret!
+            </li>
+            <li>
+              <em>(optional)</em> Set how long it takes for your text to expire,
+              after which it can no longer be accessed. Defaults to 5 minutes.
+            </li>
+          </ul>
         </li>
-        <li>
-          <em>(optional)</em> Disable encryption. Your text would no longer be
-          encrypted and anyone on the internet would be able to read it if they
-          knew the path to your secret!
-        </li>
-        <li>
-          <em>(optional)</em> Set how long it takes for your text to expire,
-          after which it can no longer be accessed. Defaults to 5 minutes.
-        </li>
+
         <li>
           <strong>Save the secret.</strong>
         </li>
@@ -39,9 +43,14 @@ export default function Help() {
               <SecretPathUrlDisplay path="[your_chosen_path]" link={false} />
             </em>
           </strong>{" "}
-          within the expiry time.
+          within the expiry time, if set.
         </li>
       </ol>
+
+      <p>
+        <Link to="/add">Add a secret</Link>
+      </p>
+
       <h2>How it works</h2>
       <p>
         This app lets you store and share anonymous secrets that are accessible
