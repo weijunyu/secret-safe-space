@@ -1,7 +1,7 @@
-import * as express from "express";
-import * as cors from "cors";
+import express from "express";
+import cors from "cors";
 import * as expressValidator from "express-validator";
-import * as PinoHttp from "pino-http";
+import PinoHttp from "pino-http";
 import { logger } from "./lib/logger";
 import { CorsOrigins } from "./config";
 

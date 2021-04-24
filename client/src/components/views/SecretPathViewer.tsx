@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { DateTime } from "luxon";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -23,6 +24,17 @@ const CipherViewer = styled.span`
   display: block;
 `;
 
+function startSecretTimer(expiryTime: DateTime): number {
+  const interval = window.setInterval(() => {
+    const remainingTime = expiryTime.diffNow();
+    if (Math.sign(remainingTime.valueOf()) === -1) {
+      window.clearInterval(interval);
+      window.location.reload();
+    }
+  }, 1000);
+  return interval;
+}
+
 export default function SecretPathViewer() {
   const { secretPath } = useParams<SecretPathViewerParams>();
 
@@ -30,21 +42,35 @@ export default function SecretPathViewer() {
   const [encryptedSecrets, setEncryptedSecrets] = useState<string | null>("");
   const [decryptedSecrets, setDecryptedSecrets] = useState("");
   const [encryptionDisabled, setEncryptionDisabled] = useState(false);
+  const [secretDeleted, setSecretDeleted] = useState<boolean>(false);
 
   useEffect(() => {
+    let timer: number | null = null;
     setLoadingSecrets(true);
     getSecretAtPath(secretPath)
       .then((secretData) => {
-        if (!secretData.value) {
+        if (!secretData || !secretData.value) {
           setEncryptedSecrets(null);
-        } else if (secretData.encryptionDisabled) {
-          setDecryptedSecrets(secretData.value);
         } else {
-          setEncryptedSecrets(secretData.value);
+          setEncryptionDisabled(secretData.encryptionDisabled);
+          setSecretDeleted(secretData.deleteOnLoad);
+          timer = startSecretTimer(
+            DateTime.fromSeconds(secretData.expiryTime._seconds)
+          );
+
+          if (secretData.encryptionDisabled) {
+            setDecryptedSecrets(secretData.value);
+          } else {
+            setEncryptedSecrets(secretData.value);
+          }
         }
-        setEncryptionDisabled(secretData.encryptionDisabled);
       })
       .finally(() => setLoadingSecrets(false));
+    return () => {
+      if (typeof timer === "number") {
+        window.clearInterval(timer);
+      }
+    };
   }, [secretPath]);
 
   function onDecrypt(plaintext: string) {
@@ -52,27 +78,38 @@ export default function SecretPathViewer() {
   }
 
   function renderSecrets() {
-    if (encryptionDisabled && decryptedSecrets) {
-      return <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />;
-    } else if (!encryptionDisabled && encryptedSecrets) {
-      return (
-        <>
-          <CipherViewer>
-            Your encrypted secret: {getCiphertextFromCipher(encryptedSecrets)}
-          </CipherViewer>
+    return (
+      <>
+        {secretDeleted && (
+          <p>
+            <em>
+              This is a one-time secret. It has been deleted from our servers
+              and will no longer be available at this URL.
+            </em>
+          </p>
+        )}
+        {encryptionDisabled && decryptedSecrets && (
+          <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />
+        )}
+        {!encryptionDisabled && encryptedSecrets && (
+          <>
+            <CipherViewer>
+              Your encrypted secret: {getCiphertextFromCipher(encryptedSecrets)}
+            </CipherViewer>
 
-          <Divider />
+            <Divider />
 
-          <SecretPathDecryptForm
-            encryptedSecrets={encryptedSecrets}
-            onDecrypt={onDecrypt}
-          />
-          {decryptedSecrets && (
-            <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />
-          )}
-        </>
-      );
-    }
+            <SecretPathDecryptForm
+              encryptedSecrets={encryptedSecrets}
+              onDecrypt={onDecrypt}
+            />
+            {decryptedSecrets && (
+              <DecryptedSecretDisplay decryptedSecrets={decryptedSecrets} />
+            )}
+          </>
+        )}
+      </>
+    );
   }
 
   return (

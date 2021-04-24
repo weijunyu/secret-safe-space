@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import Snackbar from "@material-ui/core/Snackbar";
 
 import { TextField } from "./common/FormField";
@@ -15,7 +14,6 @@ export default function SecretPathDecryptForm({
   onDecrypt: (plaintext: string) => any;
 }) {
   const [secretPassword, setSecretPassword] = useState("");
-
   const [showFailureSnackbar, setShowFailureSnackbar] = useState(false);
 
   function onSecretPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,7 +72,7 @@ export default function SecretPathDecryptForm({
             onChange={onSecretPasswordChange}
           ></input>
         </TextField>
-        <PrimaryButton type="submit">Go</PrimaryButton>
+        <PrimaryButton type="submit">View secret</PrimaryButton>
       </form>
     </div>
   );

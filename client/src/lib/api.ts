@@ -24,7 +24,7 @@ export async function reserveSecretPath(path: string): Promise<any> {
 
 export async function getSecretAtPath(
   path: string
-): Promise<SecretDocumentJsonResponse> {
+): Promise<SecretDocumentJsonResponse | ""> {
   return httpClient("/secret", { params: { path } }).then((res) => res.data);
 }
 
