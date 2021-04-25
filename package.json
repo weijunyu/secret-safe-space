@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:client": "pushd client && npm run start",
-    "dev:functions": "pushd functions && npm run dev",
-    "build:client": "pushd client && npm run build",
+    "dev:client": "npm start --prefix client",
+    "dev:functions": "npm run dev --prefix functions",
+    "build:client": "npm run build --prefix client",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:client": "npm run build:client && firebase deploy --only hosting",
     "emulators": "firebase emulators:start",

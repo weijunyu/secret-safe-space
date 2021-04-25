@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DateTime } from "luxon";
 import styled from "styled-components";
 
@@ -22,6 +22,19 @@ export default function SecretPathAdded({
   secretExpiryTime: number;
   secretPassphrase: string;
 }) {
+  useEffect(() => {
+    const resetWatcher = window.setInterval(() => {
+      const expiryDateTime = DateTime.fromSeconds(secretExpiryTime);
+
+      if (expiryDateTime.diffNow().valueOf() < 0) {
+        window.clearInterval(resetWatcher);
+        window.location.reload();
+      }
+    }, 1000);
+    return () => {
+      window.clearInterval(resetWatcher);
+    };
+  }, [secretExpiryTime]);
   return (
     <div>
       <p>
