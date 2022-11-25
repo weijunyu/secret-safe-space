@@ -16,8 +16,8 @@ export default function Footer() {
         style={{ display: "flex", justifyContent: "flex-end" }}
       >
         <small>
-          <a href="https://gitlab.com/junyuwei/secret-space">
-            <i className="fab fa-gitlab" /> Source
+          <a href="https://github.com/weijunyu/secret-safe-space">
+            <i className="fab fa-github" /> Source
           </a>
         </small>
       </Container>

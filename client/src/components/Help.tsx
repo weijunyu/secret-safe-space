@@ -93,7 +93,7 @@ export default function Help() {
       </ul>
       <p>
         You can view the source code for this project{" "}
-        <a href="https://gitlab.com/junyuwei/secret-space">here</a>.
+        <a href="https://github.com/weijunyu/secret-safe-space">here</a>.
       </p>
     </StyledHelpSection>
   );
