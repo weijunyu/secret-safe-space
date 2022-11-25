@@ -50,8 +50,9 @@ app.post(
 
 app.get("/secret", getSecretAtPath);
 
-app.get("/usage", () => {
+app.get("/usage", (req, res) => {
   //  disabled; see controllers:getUsage
+  res.sendStatus(200);
 });
 
 const requestErrorHandler: express.ErrorRequestHandler = (

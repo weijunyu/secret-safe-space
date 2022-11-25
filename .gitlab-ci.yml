@@ -1,5 +1,5 @@
 default:
-  image: node:lts-alpine
+  image: node:16-alpine
   before_script:
     - npm i -g npm@latest
     - npm install --prefix client
@@ -21,7 +21,7 @@ deploy_app:
     REACT_APP_API_BASE_URL: https://asia-southeast2-secretsafe-space.cloudfunctions.net/api
     REACT_APP_FIREBASE_CONFIG: '{"apiKey":"AIzaSyBBv-G-znt7McpzqA2f-b3FqYjFDAOr6LU","authDomain":"secretsafe-space.firebaseapp.com","projectId":"secretsafe-space","storageBucket":"secretsafe-space.appspot.com","messagingSenderId":"994978588043","appId":"1:994978588043:web:e06505d458768f1827bb8e","measurementId":"G-0XTRDZVJPV"}'
     REACT_APP_DEPLOYMENT_ENV: prod
-    REACT_APP_URL: https://secretsafe.space
+    REACT_APP_URL: https://secretsafe-space.web.app
   script:
     - npm install
     - npm --prefix client run build

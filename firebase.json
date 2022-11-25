@@ -23,5 +23,10 @@
       }
     ],
     "predeploy": ["npm --prefix client run build"]
+  },
+  "emulators": {
+    "hosting": {
+      "port": 8001
+    }
   }
 }
