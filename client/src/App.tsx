@@ -20,6 +20,8 @@ import Footer from "./components/Footer";
 import SecretPathAdd from "./components/views/SecretPathAdd";
 import SecretPathViewer from "./components/views/SecretPathViewer";
 import Help from "./components/Help";
+import { SecretAdd } from "./pages/SecretAdd";
+import { Help as V2Help } from "./pages/Help";
 
 const StyledApp = styled.div`
   position: relative;
@@ -132,6 +134,12 @@ function App() {
                 </Route>
                 <Route path="/view/:secretPath">
                   <SecretPathViewer />
+                </Route>
+                <Route path="/v2/help">
+                  <V2Help />
+                </Route>
+                <Route path="/v2">
+                  <SecretAdd />
                 </Route>
                 <Route exact path="/">
                   <Help />
